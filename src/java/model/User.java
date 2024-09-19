@@ -17,8 +17,7 @@ public class User {
     private boolean activeStatus;
     private boolean isVerified;
     private String verificationCode;
-
-    private List<Role> roles; // A user can have multiple roles
+    private int roleId;
 
     // Constructors
     public User() {
@@ -121,11 +120,11 @@ public class User {
         this.verificationCode = verificationCode;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public int getRoleId() {
+        return roleId;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 }
