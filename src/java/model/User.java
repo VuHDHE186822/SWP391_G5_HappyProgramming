@@ -23,6 +23,22 @@ public class User {
     public User() {
     }
 
+    public User(String username, String password, String firstName, String lastName, Date dob, String mail, Date createdDate, String avatarPath, String cvPath, boolean activeStatus, boolean isVerified, String verificationCode, int roleId) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dob = dob;
+        this.mail = mail;
+        this.createdDate = createdDate;
+        this.avatarPath = avatarPath;
+        this.cvPath = cvPath;
+        this.activeStatus = activeStatus;
+        this.isVerified = isVerified;
+        this.verificationCode = verificationCode;
+        this.roleId = roleId;
+    }
+
     // Getters and Setters
     public String getUsername() {
         return username;
