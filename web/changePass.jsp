@@ -115,9 +115,6 @@
     <body>
         <!-- HEADER -->
         <jsp:include page="header.jsp"/>
-        <c:if test="${empty user}">
-            <c:redirect url="login.jsp"></c:redirect>
-        </c:if>
         <div class="changepass-form">
             <div class="changepass-form-left">
                 <h2>Change Password</h2>
