@@ -1,7 +1,7 @@
 <%-- 
-    Document   : homeuser.jsp
-    Created on : Sep 18, 2024, 4:25:30 PM
-    Author     : Admin
+   Document   : homementor
+   Created on : Sep 20, 2024, 3:35:01 PM
+   Author     : Admin
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -9,12 +9,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
         <link href="CSS/bootstrap.min.css" rel="stylesheet">
         <link href="CSS/home.css" rel="stylesheet">
+        <title>JSP Page</title>
     </head>
     <body>
-
         <!-- HEADER -->
         <jsp:include page="header.jsp"/>
 
@@ -66,7 +65,7 @@
             <!-- COURSES SLIDE -->
             <div class="course-content">
                 <div class="course-content-heading">
-                    <div class="course-heading">OUR COURSES</div>
+                    <div class="course-heading">YOUR CURRENT COURSES</div>
                 </div>
                 <div class="row course-cards">
                     <div class="course-card col-md-5">
@@ -110,6 +109,5 @@
 
             <!-- FOOTER -->
             <jsp:include page="footer.jsp"/>
-        </div>
     </body>
 </html>

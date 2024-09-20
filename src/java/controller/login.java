@@ -90,13 +90,10 @@ public class login extends HttpServlet {
                 } else if (u.getRoleId() == 3) {
                     session.setAttribute("user", u);
                     response.sendRedirect("homementee.jsp");
-                } else {
-                    session.setAttribute("user", u);
-                    response.sendRedirect("homeguest.jsp");
                 }
                 break;
             }
-            session.setAttribute("error", "CHECK YOUR USERNAME OR PASSWORD");
+            session.setAttribute("error", "*Check Your Username Or Password");
             response.sendRedirect("login.jsp");
         }
     }

@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -21,10 +22,10 @@
                 top: 0;
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
-                margin: 0 auto;
-                padding: 5px 10px;
+                justify-content: center;
+                padding: 5px;
                 background-color: #edf2fa;
+                gap: 30%;
             }
 
             .menu {
@@ -49,6 +50,30 @@
                 color: #007bff;
             }
 
+            .button-signup {
+                background-color: #fff;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                font-size: 14px;
+                transition: all 0.3s ease;
+            }
+
+            .button-signup:hover {
+                background-color: #edf2fa;
+            }
+
+            .button-signin {
+                background-color: #007bb5;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                color: white;
+                font-size: 14px;
+                transition: all 0.3s ease;
+            }
+
+            .button-signin:hover {
+                background-color: #002752;
+            }
         </style>
     </head>
     <body>
@@ -63,13 +88,22 @@
             <!-- MIDDLE -->
             <ul class="menu">
                 <li><a href="#">Courses</a></li>
-                <li><a href="#">My Courses</a></li>
-                <li><a href="#">Chat</a></li>
+                    <c:if test="${sessionScope.user != null}">
+                    <li><a href="#">My Courses</a></li>
+                    <li><a href="#">Chat</a></li>
+                    </c:if>
             </ul>
 
             <!-- USER AVATAR -->   
             <div>
-                <h2>USER</h2>
+                <c:if test="${sessionScope.user != null}">
+                    <c:set var="u" value="${sessionScope.user}"/>
+                    <h2>${u.username}</h2>
+                </c:if>
+                <c:if test="${sessionScope.user == null}">
+                    <input type="submit" value="Sign Up" class="button-signup">
+                    <input type="submit" value="Sign In" class="button-signin">
+                </c:if>  
             </div>
 
             <!-- SCOLL BAR FUNCTION -->    

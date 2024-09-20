@@ -1,6 +1,6 @@
 <%-- 
-    Document   : homeuser.jsp
-    Created on : Sep 18, 2024, 4:25:30 PM
+    Document   : homeguest
+    Created on : Sep 20, 2024, 1:06:46 AM
     Author     : Admin
 --%>
 
@@ -12,6 +12,59 @@
         <title>JSP Page</title>
         <link href="CSS/bootstrap.min.css" rel="stylesheet">
         <link href="CSS/home.css" rel="stylesheet">
+        <style>
+            .statistics {
+                background-color: #f7f7f7;
+                padding: 40px;
+                text-align: center;
+            }
+
+            .statistics-title {
+                font-size: 2rem;
+                margin-bottom: 30px;
+                font-weight: bold;
+            }
+
+            .statistics-cards {
+                display: flex;
+                justify-content: center;
+                gap: 50px;
+            }
+
+            .stat-card {
+                background-color: #ffffff;
+                border-radius: 10px;
+                padding: 20px;
+                width: 300px;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .view {
+                transition: all 1s ease;
+                font-weight: 600;
+            }
+
+            .view:hover {
+                text-decoration: none;
+                color: #0033cc;
+            }
+
+            .icon {
+                font-size: 40px;
+                color: #4CAF50;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+                font-weight: bold;
+                margin: 15px 0;
+            }
+
+            .stat-description {
+                font-size: 1.2rem;
+                color: #555555;
+            }
+        </style>
     </head>
     <body>
 
@@ -24,20 +77,37 @@
             <!-- HEAD CONTENT MIDDLE -->
             <div class="header-content-middle">
                 <!-- TEXT -->
-                <h1>In ???</h1>
-                <h1>Học gì cũng có</h1>
-                <p>Con đường hiệu quả nhất để bạn có thêm kiến thức và năng lực trong mọi lĩnh vực. Tham gia học cùng phương pháp học tập hoàn toàn mới từ FUNiX ngay!</p>
+                <h1>First time here with ???</h1>
+                <h1>Explore our courses from ??? right away</h1>
+                <p><a href="viewallcourse" class="view">View all courses now!</a></p>
 
-                <!-- SEARCH BAR -->
-                <form action="#" class="search-bar">
-                    <input type="text" class="input-submit" placeholder="Search a course" name="search">
-                    <input type="submit" class="button-submit" value="Search">
-                </form>
             </div>
 
             <!-- SALE -->
             <div class="sale">
                 <h1>SALE 30%</h1>
+            </div>
+
+            <!-- DASHBOARD -->
+            <div class="statistics">
+                <h2 class="statistics-title">SOME STATISTICS ABOUT US</h2>
+                <div class="statistics-cards">
+                    <div class="stat-card">
+                        <i class="icon fa fa-users"></i>
+                        <p class="stat-number">10,000</p>
+                        <p class="stat-description">NUMBER OF MENTEES</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="icon fa fa-book"></i>
+                        <p class="stat-number">150</p>
+                        <p class="stat-description">NUMBER OF COURSES</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="icon fa fa-chalkboard-teacher"></i>
+                        <p class="stat-number">500</p>
+                        <p class="stat-description">NUMBER OF MENTORS</p>
+                    </div>
+                </div>
             </div>
 
             <!-- MENTOR SLIDE -->
@@ -110,6 +180,5 @@
 
             <!-- FOOTER -->
             <jsp:include page="footer.jsp"/>
-        </div>
     </body>
 </html>
