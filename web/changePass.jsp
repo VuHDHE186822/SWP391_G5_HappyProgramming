@@ -100,7 +100,7 @@
                 var curPass = document.getElementById("curPass").value;
                 var newPassword = document.getElementById("newPass").value;
                 var confirmPassword = document.getElementById("confirmPass").value;
-                if (curPass == newPassword) {
+                if (curPass === newPassword) {
                     alert("New password is the same with current password.");
                     return false;
                 }
