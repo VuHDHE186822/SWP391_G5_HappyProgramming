@@ -100,7 +100,7 @@
                 var curPass = document.getElementById("curPass").value;
                 var newPassword = document.getElementById("newPass").value;
                 var confirmPassword = document.getElementById("confirmPass").value;
-                if (curPass == newPassword) {
+                if (curPass === newPassword) {
                     alert("New password is the same with current password.");
                     return false;
                 }
@@ -115,9 +115,6 @@
     <body>
         <!-- HEADER -->
         <jsp:include page="header.jsp"/>
-        <c:if test="${empty user}">
-            <c:redirect url="login.jsp"></c:redirect>
-        </c:if>
         <div class="changepass-form">
             <div class="changepass-form-left">
                 <h2>Change Password</h2>
