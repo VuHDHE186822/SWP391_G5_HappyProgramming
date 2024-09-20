@@ -9,8 +9,8 @@
         <servlet-class>controller.login</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>changepass</servlet-name>
-        <servlet-class>controller.changepass</servlet-class>
+        <servlet-name>changePass</servlet-name>
+        <servlet-class>controller.changePass</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
@@ -21,7 +21,7 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>changepass</servlet-name>
-        <url-pattern>/changepass</url-pattern>
+        <servlet-name>changePass</servlet-name>
+        <url-pattern>/changePass</url-pattern>
     </servlet-mapping>
 </web-app>
