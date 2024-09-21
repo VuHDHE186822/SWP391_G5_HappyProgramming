@@ -24,8 +24,13 @@
             <!-- HEAD CONTENT MIDDLE -->
             <div class="header-content-middle">
                 <!-- TEXT -->
+<<<<<<< Upstream, based on origin/master
                 <h1>In ???</h1>
                 <h1>Học gì cũng có</h1>
+=======
+                <h1>Ở ???</h1>
+                <h1><a href = "changePass.jsp">Học gì cũng có</a></h1>
+>>>>>>> 1b7536c 
                 <p>Con đường hiệu quả nhất để bạn có thêm kiến thức và năng lực trong mọi lĩnh vực. Tham gia học cùng phương pháp học tập hoàn toàn mới từ FUNiX ngay!</p>
 
                 <!-- SEARCH BAR -->
