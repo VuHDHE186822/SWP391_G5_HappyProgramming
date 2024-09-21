@@ -139,6 +139,24 @@ public class UserDAO extends DBContext {
         return false;
     }
 
+    public boolean resetPassWord(String veriCode, String newPass) {
+        boolean f = false;
+        try {
+            String sql = "update [User] set password = ? where [verification_code] = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, newPass);
+            ps.setString(2, veriCode);
+
+            int i = ps.executeUpdate();
+            if (i == 1) {
+                f = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return f;
+    }
+
     public void insertUser(String userName, String password, String firstName, String lastName,
             Date dob, String email, Date createdDate,
             String avatarPath, String cvPath, boolean activeStatus,
