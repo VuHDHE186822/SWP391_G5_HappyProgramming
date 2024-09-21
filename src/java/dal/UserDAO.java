@@ -271,4 +271,27 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
+    
+    public void registerUser(User user) {
+        String sql = "INSERT INTO [User] (username, [password], firstName, lastName, dob, mail, createdDate, avatarPath, CVPath, activeStatus,isVerified, roleId) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getFirstName());
+            statement.setString(4, user.getLastName());
+            statement.setDate(5, new java.sql.Date(user.getDob().getTime()));
+            statement.setString(6, user.getMail());
+            statement.setDate(7, new java.sql.Date(user.getCreatedDate().getTime()));
+            statement.setString(8, user.getAvatarPath());
+            statement.setString(9, user.getCvPath());
+            statement.setBoolean(10, user.isActiveStatus());
+            statement.setBoolean(11, user.isIsVerified());
+            statement.setInt(12, user.getRoleId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
