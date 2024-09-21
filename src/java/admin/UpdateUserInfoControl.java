@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@WebServlet(name = "UpdateUserInfoControl", urlPatterns = {"/updateUserInfo"})
 public class UpdateUserInfoControl extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -33,7 +32,7 @@ public class UpdateUserInfoControl extends HttpServlet {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date dob = dateFormat.parse(request.getParameter("dob")); // Date of birth
-        
+
         boolean activeStatus = request.getParameter("activeStatus") != null; // Checkbox
         boolean isVerified = request.getParameter("isVerified") != null; // Checkbox
 
@@ -42,18 +41,17 @@ public class UpdateUserInfoControl extends HttpServlet {
 
         UserDAO dao = new UserDAO();
         String msg;
-        PrintWriter out = response.getWriter();
-        out.println(username+firstName+lastName+email+avatarPath+cvPath+dob+activeStatus+isVerified+roleId);
-//        // Update user in the database
-//        boolean success = dao.updateUserInfo(username, firstName, lastName, dob, email, avatarPath, cvPath, activeStatus, isVerified, roleId);
-//        if (success) {
-//            msg = "User " + username + " updated successfully!";
-//        } else {
-//            msg = "Error updating user " + username + ".";
-//        }
-//        
-//        request.setAttribute("mess", msg);
-//        request.getRequestDispatcher("managerAccount").forward(request, response);
+
+        // Pass the `dob` as a `Date` to the DAO (since the DB should store it as a `Date`)
+        boolean success = dao.updateUserInfo(username, firstName, lastName, dob, email, avatarPath, cvPath, activeStatus, isVerified, roleId);
+        if (success) {
+            msg = "User " + username + " updated successfully!";
+        } else {
+            msg = "Error updating user " + username + ".";
+        }
+
+        request.setAttribute("mess", msg);
+        request.getRequestDispatcher("managerAccount").forward(request, response);
     }
 
     @Override
