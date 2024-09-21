@@ -4,6 +4,8 @@
  */
 package controller;
 
+import dal.CourseDAO;
+import dal.ParticipateDAO;
 import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,13 +15,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import model.Course;
+import model.Participate;
 import model.User;
 
 /**
  *
  * @author Admin
  */
-public class login extends HttpServlet {
+public class home extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +42,10 @@ public class login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet login</title>");
+            out.println("<title>Servlet home</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet home at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,7 +63,33 @@ public class login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        UserDAO daoU = new UserDAO();
+        CourseDAO daoC = new CourseDAO();
+        ParticipateDAO daoP = new ParticipateDAO();
+        List<User> mentor = daoU.getAllUserByRoleId(2);
+        List<Course> course = daoC.getAll();
+        List<Participate> participate = daoP.getAll();
+        session.setAttribute("mentor", mentor);
+        session.setAttribute("course", course);
+        session.setAttribute("participate", participate);
+        if (session.getAttribute("user") != null) {
+            User u = (User) session.getAttribute("user");
+            if (u.getRoleId() == 1) {
+                session.setAttribute("user", u);
+                response.sendRedirect("homeadmin.jsp");
+            } else if (u.getRoleId() == 2) {
+                session.setAttribute("user", u);
+                response.sendRedirect("homementor.jsp");
+            } else if (u.getRoleId() == 3) {
+                session.setAttribute("user", u);
+                response.sendRedirect("homementee.jsp");
+            }
+        } else {
+            List<User> mentee = daoU.getAllUserByRoleId(3);
+            session.setAttribute("mentee", mentee);
+            response.sendRedirect("homeguest.jsp");
+        }
     }
 
     /**
@@ -73,26 +103,7 @@ public class login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        UserDAO dao = new UserDAO();
-        List<User> users = dao.getAll();
-        User user = new User();
-        boolean found = false;
-        for (User u : users) {
-            if (username.equals(u.getUsername()) && password.equals(u.getPassword())) {
-                found = true;
-                session.setAttribute("user", u);
-                response.sendRedirect("home");
-                break; // Exit the loop once a match is found
-            }
-        }
-
-        if (!found) {
-            session.setAttribute("error", "*Check Your Username Or Password");
-            response.sendRedirect("login.jsp");
-        }
+        processRequest(request, response);
     }
 
     /**

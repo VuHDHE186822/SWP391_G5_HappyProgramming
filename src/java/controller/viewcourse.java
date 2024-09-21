@@ -4,7 +4,9 @@
  */
 package controller;
 
-import dal.UserDAO;
+import dal.CategoryDAO;
+import dal.CourseCategoryDAO;
+import dal.CourseDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,14 +14,17 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
-import model.User;
+import model.Category;
+import model.Course;
+import model.CourseCategory;
 
 /**
  *
  * @author Admin
  */
-public class login extends HttpServlet {
+public class viewcourse extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +43,10 @@ public class login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet login</title>");
+            out.println("<title>Servlet viewcourse</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet viewcourse at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,7 +64,60 @@ public class login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        CourseDAO daoC = new CourseDAO();
+        String courseId_str = request.getParameter("courseId");
+        CategoryDAO daoCt = new CategoryDAO();
+        CourseCategoryDAO daoCC = new CourseCategoryDAO();
+        List<Category> category = daoCt.getAll();
+        Course c = new Course();
+        try {
+            int courseId = Integer.parseInt(courseId_str);
+            int sameCate = daoCC.getCategoryIdByCourseId(courseId);
+            List<CourseCategory> courseCateHasSameCate = daoCC.getAllByCategoryId(sameCate);
+            List<Course> course = daoC.getAll();
+            for (Course co : course) {
+                if (co.getCourseId() == courseId) {
+                    c = co;
+                }
+            }
+            List<Course> sameCourse = new ArrayList<>();
+            for (CourseCategory cSame : courseCateHasSameCate) {
+                Course c1 = daoC.getCourseByCourseId(cSame.getCourseId());
+                sameCourse.add(c1);
+            }
+
+            Category cate = new Category();
+            for (Category ca : category) {
+                if (ca.getCategoryId() == sameCate) {
+                    cate = ca;
+                }
+            }
+            List<Course> allCoursesExceptSameCategory = new ArrayList<>();
+
+            for (Course co : course) {
+                boolean isSameCategory = false;
+
+                for (Course sameCo : sameCourse) {
+                    if (co.getCourseId() == sameCo.getCourseId()) {
+                        isSameCategory = true;
+                        break;
+                    }
+                }
+
+                if (!isSameCategory) {
+                    allCoursesExceptSameCategory.add(co);
+                }
+            }
+
+            session.setAttribute("otherCourse", allCoursesExceptSameCategory);
+            session.setAttribute("sameCourse", sameCourse);
+            session.setAttribute("category", cate);
+            session.setAttribute("courseDetail", c);
+            response.sendRedirect("viewcourse.jsp");
+        } catch (Exception e) {
+        }
+
     }
 
     /**
@@ -73,26 +131,7 @@ public class login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        UserDAO dao = new UserDAO();
-        List<User> users = dao.getAll();
-        User user = new User();
-        boolean found = false;
-        for (User u : users) {
-            if (username.equals(u.getUsername()) && password.equals(u.getPassword())) {
-                found = true;
-                session.setAttribute("user", u);
-                response.sendRedirect("home");
-                break; // Exit the loop once a match is found
-            }
-        }
-
-        if (!found) {
-            session.setAttribute("error", "*Check Your Username Or Password");
-            response.sendRedirect("login.jsp");
-        }
+        processRequest(request, response);
     }
 
     /**
