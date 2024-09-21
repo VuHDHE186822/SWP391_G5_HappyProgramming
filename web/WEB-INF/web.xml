@@ -13,6 +13,38 @@
         <servlet-class>controller.changePass</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>AddAccountControl</servlet-name>
+        <servlet-class>admin.AddAccountControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteAccountControl</servlet-name>
+        <servlet-class>admin.DeleteAccountControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManageSearchAccount</servlet-name>
+        <servlet-class>admin.ManageSearchAccount</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManagerAccount</servlet-name>
+        <servlet-class>admin.ManagerAccount</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateUserInfoControl</servlet-name>
+        <servlet-class>admin.UpdateUserInfoControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>resetPass</servlet-name>
+        <servlet-class>controller.resetPass</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>verifyServlet</servlet-name>
+        <servlet-class>controller.verifyServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addcourse</servlet-name>
+        <servlet-class>admin.addcourse</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>home</servlet-name>
         <servlet-class>controller.home</servlet-class>
     </servlet>
@@ -39,5 +71,17 @@
     <servlet-mapping>
         <servlet-name>viewcourse</servlet-name>
         <url-pattern>/viewcourse</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>resetPass</servlet-name>
+        <url-pattern>/resetPass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>verifyServlet</servlet-name>
+        <url-pattern>/verify</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addcourse</servlet-name>
+        <url-pattern>/addcourse</url-pattern>
     </servlet-mapping>
 </web-app>

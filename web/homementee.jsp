@@ -31,6 +31,7 @@
                 <h1>You can learn everything</h1>
                 <p>The most effective way for you to gain more knowledge and capacity in every field. Join the completely new learning method from ??? now!</p>
 
+
                 <!-- SEARCH BAR -->
                 <form action="#" class="search-bar">
                     <input type="text" class="input-submit" placeholder="Search a course" name="search">
