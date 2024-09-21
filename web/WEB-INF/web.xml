@@ -64,6 +64,10 @@
         <servlet-name>verifyServlet</servlet-name>
         <url-pattern>/verify</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addcourse</servlet-name>
+        <url-pattern>/addcourse</url-pattern>
+    </servlet-mapping>
 </web-app>
         <servlet-name>addcourse</servlet-name>
         <url-pattern>/addcourse</url-pattern>
