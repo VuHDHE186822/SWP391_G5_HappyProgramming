@@ -20,6 +20,10 @@
         <servlet-name>verifyServlet</servlet-name>
         <servlet-class>controller.verifiServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>addcourse</servlet-name>
+        <servlet-class>admin.addcourse</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
@@ -39,5 +43,9 @@
     <servlet-mapping>
         <servlet-name>verifyServlet</servlet-name>
         <url-pattern>/verify</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addcourse</servlet-name>
+        <url-pattern>/addcourse</url-pattern>
     </servlet-mapping>
 </web-app>

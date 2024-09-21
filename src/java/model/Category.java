@@ -9,6 +9,11 @@ public class Category {
     public Category() {
     }
 
+    public Category(int categoryId, String categoryName) {
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+    }
+
     // Getters and Setters
     public int getCategoryId() {
         return categoryId;
