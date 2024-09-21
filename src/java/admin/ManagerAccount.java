@@ -25,21 +25,6 @@ public class ManagerAccount extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        String txt = request.getParameter("valueSearch");
-        UserDAO dao = new UserDAO();
-
-        List<User> list = dao.getUsersBySearchName(txt);
-
-        request.setAttribute("listUser", list);
-
-        try (PrintWriter out = response.getWriter()) {
-            for (User user : list) {
-                out.println(user);
-            }
-        }
-//        request.getRequestDispatcher("dashboard/mngaccount.jsp").forward(request, response);
 
     }
 
