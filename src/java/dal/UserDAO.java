@@ -294,4 +294,34 @@ public class UserDAO extends DBContext {
             e.printStackTrace();
         }
     }
+    
+    public User getUserByMail(String mail) {
+        User u = null;
+        try {
+            String sql = "select * from [User] where mail = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, mail);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                Date dob = rs.getDate("dob");
+                Date createdDate = rs.getDate("createdDate");
+                String avatarPath = rs.getString("avatarPath");
+                String cvPath = rs.getString("cvPath");
+                boolean activeStatus = rs.getBoolean("activeStatus");
+                boolean isVerified = rs.getBoolean("isVerified");
+                String verificationCode = rs.getString("verification_code");
+                int roleId = rs.getInt("roleId");
+                u = new User(id, username, password, firstName, lastName, dob, mail, createdDate, avatarPath, cvPath, activeStatus, isVerified, verificationCode, roleId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return u;
+    }
 }

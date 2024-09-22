@@ -1,16 +1,11 @@
-<%-- 
-    Document   : signin
-    Created on : Sep 16, 2024, 3:32:12 PM
-    Author     : Admin
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Sign In</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -20,7 +15,6 @@
                 align-items: center;
                 height: 100vh;
             }
-
 
             .signin-form {
                 background-color: #fff;
@@ -38,7 +32,7 @@
                 width: 50%;
             }
 
-            .signin-form-left  h2 {
+            .signin-form-left h2 {
                 font-size: 2rem;
                 margin-bottom: 20px;
                 text-align: center;
@@ -90,6 +84,25 @@
                 text-decoration: none;
                 width: 150px;
                 margin: 0 auto;
+            }
+
+            .social-signin {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+                margin-top: 10px;
+            }
+
+            .social-signin i {
+                font-size: 2rem;
+                color: #5d3fd3;
+                cursor: pointer;
+                transition: transform 0.3s ease, color 0.3s ease;
+            }
+
+            .social-signin i:hover {
+                transform: scale(1.1);
+                color: #452cbf;
             }
 
             .signin-form-right {
@@ -154,6 +167,15 @@
                     </c:if>
                     <% session.removeAttribute("error"); %>
                     <button type="submit" class="button-signin">SIGN IN</button>
+
+                    <!-- Social Sign-in Icons -->
+                    <div class="social-signin">
+                        <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=http://localhost:9999/HappyProgramming/login&response_type=code&client_id=281001469062-sdlqscanrn8urvdd8at2540bq0u04mv2.apps.googleusercontent.com&approval_prompt=force">
+                            <i class="fa-brands fa-google"></i>
+                        </a>
+                        <i class="fa-brands fa-facebook"></i>
+                        <i class="fa-brands fa-apple"></i>
+                    </div>
                 </form>
             </div>
 

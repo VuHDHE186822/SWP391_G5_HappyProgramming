@@ -52,6 +52,10 @@
         <servlet-name>viewcourse</servlet-name>
         <servlet-class>controller.viewcourse</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>googlelogin</servlet-name>
+        <servlet-class>controller.googlelogin</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
@@ -95,5 +99,9 @@
     <servlet-mapping>
         <servlet-name>UpdateUserInfoControl</servlet-name>
         <url-pattern>/updateUserInfo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>googlelogin</servlet-name>
+        <url-pattern>/googlelogin</url-pattern>
     </servlet-mapping>
 </web-app>
