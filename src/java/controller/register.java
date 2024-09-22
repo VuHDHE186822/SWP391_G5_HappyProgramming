@@ -109,7 +109,7 @@ public class register extends HttpServlet {
         String email = request.getParameter("email");
         String role = request.getParameter("role");
 
-        Path avatarPath = Paths.get(getServletContext().getRealPath("/images/bc439871417621836a0eeea768d60944.jpg"));
+        Path avatarPath = Paths.get(getServletContext().getRealPath("/img/bc439871417621836a0eeea768d60944.jpg"));
         byte[] avatarBytes = Files.readAllBytes(avatarPath);
         String avatar = ImageConverter.gI().encode(avatarBytes);
 
