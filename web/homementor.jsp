@@ -5,6 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -23,9 +26,9 @@
             <!-- HEAD CONTENT MIDDLE -->
             <div class="header-content-middle">
                 <!-- TEXT -->
-                <h1>In ???</h1>
-                <h1>Học gì cũng có</h1>
-                <p>Con đường hiệu quả nhất để bạn có thêm kiến thức và năng lực trong mọi lĩnh vực. Tham gia học cùng phương pháp học tập hoàn toàn mới từ FUNiX ngay!</p>
+                <h1>Empower Your Journey</h1> 
+                <h1>Learning Made Accessible</h1> 
+                <p>Discover the most effective path to enhance your knowledge and skills across various fields. Join us at FUNiX for an innovative learning experience that transforms the way you teach and inspire others!</p>
 
                 <!-- SEARCH BAR -->
                 <form action="#" class="search-bar">
@@ -39,73 +42,98 @@
                 <h1>SALE 30%</h1>
             </div>
 
-            <!-- MENTOR SLIDE -->
-            <div class="mentor-content">
-                <div class="mentor-content-heading">
-                    <div class="mentor-heading">SEE OUR BEST MENTOR</div>
-                </div>
-                <div class="mentor-cards">
-                    <div class="mentor-card">
-                        <img class="mentor-image-icon" alt="" src="https://zpsocial2-f4-org.zadn.vn/9790ea297aa49bfac2b5.jpg">
-                        <div class="mentor-body">
-                            <div class="mentor-text">
-                                <div style="color: #ff9f46">Huy Vo</div>
-                                <div class="mentor-body-text">Best Mentor in Vietnam right now.</div>
-                            </div>
-                            <div class="button-group">
-                                <div class="button">
-                                    <div class="button1">More Detail</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>  
 
             <!-- COURSES SLIDE -->
             <div class="course-content">
                 <div class="course-content-heading">
-                    <div class="course-heading">YOUR CURRENT COURSES</div>
+                    <div class="course-heading">??? COURSES</div>
                 </div>
-                <div class="row course-cards">
-                    <div class="course-card col-md-5">
-                        <img class="course-image-icon" alt="" src="Image.png">
-                        <div class="course-body">
-                            <div class="course-text">
-                                <div>HTML5</div>
-                                <div class="course-body-text">Body text for whatever you’d like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story. </div>
-                            </div>
-                        </div>
+                <c:if test="${not empty sessionScope.course}">
+                    <div class="row course-cards">
+                        <c:forEach items="${sessionScope.course}" var="c" begin="0" end="3">
+                            <a href="viewcourse?courseId=${c.courseId}" class="col-md-5 course-card">
+                                <div class="course-body">
+                                    <div class="course-text">
+                                        <div>${c.courseName}</div>
+                                        <div class="course-body-text">${fn:substring(c.courseDescription, 0, 140)}<c:if test="${fn:length(c.courseDescription) > 140}">...</c:if></div>
+                                        </div>
+                                    </div>
+                                </a>
+                        </c:forEach>
                     </div>
-                    <div class="course-card col-md-5">
-                        <img class="course-image-icon" alt="" src="Image.png">
-                        <div class="course-body">
-                            <div class="course-text">
-                                <div>HTML5</div>
-                                <div class="course-body-text">Body text for whatever you’d like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story. </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="course-card col-md-5">
-                        <img class="course-image-icon" alt="" src="Image.png">
-                        <div class="course-body">
-                            <div class="course-text">
-                                <div>HTML5</div>
-                                <div class="course-body-text">Body text for whatever you’d like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story. </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="course-card col-md-5">
-                        <img class="course-image-icon" alt="" src="Image.png">
-                        <div class="course-body">
-                            <div class="course-text">
-                                <div>HTML5</div>
-                                <div class="course-body-text">Body text for whatever you’d like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story. </div>
-                            </div>
-                        </div>
-                    </div>
+                </c:if>
+                <a href="#" class="more-course-button">More Courses</a>
+            </div>
+
+            <!-- SPLIT -->
+            <div style="height: 100px; background-color: #edf2fa"></div>
+
+            <!-- MY COURSES SLIDE -->
+            <div class="mycourse-content">
+                <div class="mycourse-content-heading">
+                    <div class="mycourse-heading">YOUR CURRENT COURSES</div>
+                </div>
+                <c:set var="u" value="${sessionScope.user}"/>
+                <div class="row mycourse-cards">
+                    <c:forEach items="${sessionScope.participate}" var="p">
+                        <c:if test="${p.username == u.username}">
+                            <c:forEach items="${sessionScope.course}" var="c">
+                                <c:if test="${c.courseId == p.courseId}">
+                                    <a href="viewcourse?courseId=${c.courseId}" class="col-md-5 course-card">
+                                        <div class="mycourse-body">
+                                            <div class="mycourse-text">
+                                                <div>${c.courseName}</div>
+                                                <div class="mycourse-body-text">${fn:substring(c.courseDescription, 0, 120)}<c:if test="${fn:length(c.courseDescription) > 120}">...</c:if></div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                </c:if>
+                            </c:forEach>
+                        </c:if>
+                    </c:forEach>
+                </div>
+
+                <div class="col-md-12">
+                    <ul class="listPage"></ul>
                 </div>
             </div>
+            <script>
+                let thisPage = 1;
+                let limit = 4;
+                let list = document.querySelectorAll('.mycourse-card');
+
+                function loadItem() {
+                    let beginGet = limit * (thisPage - 1);
+                    let endGet = limit * thisPage - 1;
+                    list.forEach((item, key) => {
+                        item.style.display = (key >= beginGet && key <= endGet) ? 'block' : 'none';
+                    });
+                    listPage();
+                }
+
+                function listPage() {
+                    let count = Math.ceil(list.length / limit);
+                    document.querySelector('.listPage').innerHTML = '';
+                    for (let i = 1; i <= count; i++) {
+                        let newPage = document.createElement('li');
+                        newPage.innerText = i;
+                        if (i === thisPage) {
+                            newPage.classList.add('active');
+                        }
+                        newPage.setAttribute('onclick', "changePage(" + i + ")");
+                        document.querySelector('.listPage').appendChild(newPage);
+                    }
+                }
+
+                function changePage(i) {
+                    thisPage = i;
+                    loadItem();
+                }
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    loadItem();
+                });
+            </script>
 
             <!-- FOOTER -->
             <jsp:include page="footer.jsp"/>

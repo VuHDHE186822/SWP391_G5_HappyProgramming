@@ -55,11 +55,13 @@
                 border: 1px solid #ccc;
                 border-radius: 8px;
                 font-size: 14px;
+                font-weight: bold;
                 transition: all 0.3s ease;
             }
 
             .button-signup:hover {
-                background-color: #edf2fa;
+                background-color: black;
+                color: white;
             }
 
             .button-signin {
@@ -68,11 +70,35 @@
                 border-radius: 8px;
                 color: white;
                 font-size: 14px;
+                font-weight: bold;
                 transition: all 0.3s ease;
             }
 
             .button-signin:hover {
-                background-color: #002752;
+                background-color: black;
+                color: white;
+            }
+
+            .user {
+                font-size: 14px;
+                color: black;
+                transition: color 0.3s;
+                font-weight: 500;
+            }
+
+            .user:hover {
+                text-decoration: none;
+            }
+
+            .button-logout {
+                font-size: 14px;
+                color: black;
+                transition: color 0.3s;
+                font-weight: 500;
+            }
+            
+            .button-logout:hover {
+                text-decoration: none;
             }
         </style>
     </head>
@@ -98,12 +124,14 @@
             <div>
                 <c:if test="${sessionScope.user != null}">
                     <c:set var="u" value="${sessionScope.user}"/>
-                    <h2>${u.username}</h2>
+                    <a href="url" class="user">${u.lastName} ${u.firstName}</a>
+                    |
+                    <a href="logout.jsp" class="button-logout">Log Out</a>
                 </c:if>
                 <c:if test="${sessionScope.user == null}">
-                    <input type="submit" value="Sign Up" class="button-signup">
-                    <input type="submit" value="Sign In" class="button-signin">
-                </c:if>  
+                    <a href="register.jsp"><input type="submit" value="Sign Up" class="button-signup"></a>
+                    <a href="login.jsp"><input type="submit" value="Sign In" class="button-signin"></a>
+                    </c:if>  
             </div>
 
             <!-- SCOLL BAR FUNCTION -->    

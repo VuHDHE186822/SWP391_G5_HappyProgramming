@@ -49,12 +49,33 @@ public class UserDAO extends DBContext {
         return list;
     }
 
-    public static void main(String[] args) {
-        UserDAO dao = new UserDAO();
-        List<User> list = dao.getAll();
-        for (User l : list) {
-            System.out.println(l);
+    public List<User> getAllUserByRoleId(int roleId) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM [User] WHERE roleId = ?";
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setInt(1, roleId);
+            ResultSet rs = pre.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                Date dob = rs.getDate("dob");
+                String mail = rs.getString("mail");
+                Date createdDate = rs.getDate("createdDate");
+                String avatarPath = rs.getString("avatarPath");
+                String cvPath = rs.getString("cvPath");
+                boolean activeStatus = rs.getBoolean("activeStatus");
+                boolean isVerified = rs.getBoolean("isVerified");
+                String verificationCode = rs.getString("verification_code");
+                list.add(new User(id, username, password, firstName, lastName, dob, mail, createdDate, avatarPath, cvPath, activeStatus, isVerified, verificationCode, roleId));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
+        return list;
     }
 
     public boolean checkPassword(int id, String pass) {
@@ -250,5 +271,27 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
+    
+    public void registerUser(User user) {
+        String sql = "INSERT INTO [User] (username, [password], firstName, lastName, dob, mail, createdDate, avatarPath, CVPath, activeStatus,isVerified, roleId) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getFirstName());
+            statement.setString(4, user.getLastName());
+            statement.setDate(5, new java.sql.Date(user.getDob().getTime()));
+            statement.setString(6, user.getMail());
+            statement.setDate(7, new java.sql.Date(user.getCreatedDate().getTime()));
+            statement.setString(8, user.getAvatarPath());
+            statement.setString(9, user.getCvPath());
+            statement.setBoolean(10, user.isActiveStatus());
+            statement.setBoolean(11, user.isIsVerified());
+            statement.setInt(12, user.getRoleId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

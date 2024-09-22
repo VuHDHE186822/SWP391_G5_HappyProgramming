@@ -1,0 +1,181 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Sep 21, 2024, 4:24:27 PM
+    Author     : Admin
+*/
+
+/* DESCRIPTION*/
+.link {
+    color: black;
+}
+
+.link:hover {
+    text-decoration: none;
+}
+
+.description {
+    background-color: #f9f9f9;
+    padding: 80px 40px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.description h2 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.description p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    width: 60%;
+}
+
+.description h3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #444;
+    margin-top: 20px;
+}
+
+.stat-number {
+    font-size: 36px;
+    font-weight: bold;
+    color: #031b49;
+    margin-top: 10px;
+}
+
+/* MENTOR LIST */
+.list-mentor {
+    margin-left: 30px;
+    font-weight: bold;
+    margin-top: 50px;
+}
+
+.mentor-content {
+    width: 100%;
+    background-color: #edf2fa;
+    padding: 60px 0;
+    text-align: center;
+    padding: 0 auto;
+    font-family: Inter;
+}
+
+.mentor-heading {
+    align-self: stretch;
+    position: relative;
+    letter-spacing: -0.02em;
+    line-height: 120%;
+    font-weight: 600;
+    color: black;
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.mentor-cards {
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    gap: 20px;
+}
+
+.mentor-cards::-webkit-scrollbar {
+    height: 8px;
+}
+
+.mentor-cards::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.mentor-cards::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+.mentor-card {
+    flex: 0 0 auto;
+    width: 250px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.mentor-image-icon {
+    width: 100%;
+}
+
+.mentor-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.mentor-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* SAME COURSE */
+.same-course-cards-wrapper {
+    overflow-x: auto;
+    padding: 10px 0;
+    margin-left: 20px;
+    margin-right: 20px;
+    scroll-padding: 10px;
+    box-sizing: border-box;
+}
+
+.same-course-cards {
+    display: flex;
+    gap: 20px;
+}
+
+.same-course-card {
+    flex: 0 0 auto;
+    width: 400px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    color: black;
+}
+
+.same-course-card:hover {
+    transform: translateY(-5px);
+    text-decoration: none;
+    color: black;
+}
+
+.same-course-description {
+    color: black;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.same-course-cards-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.same-course-cards-wrapper::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.same-course-cards-wrapper::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
