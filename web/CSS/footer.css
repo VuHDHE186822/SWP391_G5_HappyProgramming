@@ -8,97 +8,56 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 */
 
 /* FOOTER */
-.icon {
-    width: 23.3px;
-    position: relative;
-    height: 35px;
+/* FOOTER */
+.footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    background-color: #edf2fa;
+    color: #fff;
+    padding: 40px 20px;
+    font-family: Arial, sans-serif;
 }
 
-.x-logo-icon {
-    width: 24px;
-    position: relative;
-    height: 24px;
-}
-.logo-instagram-icon {
-    width: 24px;
-    position: relative;
-    height: 24px;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-.button-list {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 16px;
-}
-.title {
-    width: 262px;
+.text-link-list {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 24px;
-    min-width: 240px;
+    gap: 15px;
 }
+
+.title1 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: black; 
+}
+
 .text-strong1 {
-    position: relative;
-    line-height: 140%;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.text-link-list-item {
+    font-size: 14px;
     font-weight: 600;
 }
-.text-strong {
-    align-self: stretch;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-.title1 {
-    align-self: stretch;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 0px 0px 16px;
-}
+
 .list-item {
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    line-height: 140%;
+    cursor: pointer;
+    color: black;
+    transition: color 0.3s ease;
 }
-.text-link-list-item {
-    width: 89px;
-    position: relative;
-    height: 22px;
+
+.list-item:hover {
+    color: #027bb5; 
 }
-.text-link-list {
-    width: 262px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 12px;
+
+.footer a {
+    text-decoration: none;
+    color: inherit;
 }
-.footer {
-    width: 100%;
-    position: relative;
-    background-color: #fff;
-    border-top: 1px solid #d9d9d9;
-    box-sizing: border-box;
-    overflow: hidden;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    align-content: center;
-    padding: 32px 32px 160px;
-    gap: 16px;
-    text-align: left;
-    font-size: 16px;
-    color: #1e1e1e;
-    font-family: Inter;
+
+.footer a:hover {
+    color: #ffcc00;
 }
 

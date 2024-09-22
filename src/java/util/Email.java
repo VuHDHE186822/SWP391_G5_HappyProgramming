@@ -61,7 +61,7 @@ public class Email {
             msg.setSentDate(new Date());
             //quy ddinhj emal nhan phan hoi(email khacs)
             //--  msg.setReplyTo(InternetAddress.parse(from,false));
-            String resetLink = "http://localhost:8080/HappyProgramming/verify.jsp"; // Thay đổi đường dẫn cho phù hợp
+            String resetLink = "http://localhost:9999/HappyProgramming/verify.jsp"; // Thay đổi đường dẫn cho phù hợp
             msg.setContent("Verification code: " + user.getVerificationCode() + ". Reset your password <a href=\"" + resetLink + "\">HERE</a>", "text/html");
             Transport.send(msg);
             test = true;

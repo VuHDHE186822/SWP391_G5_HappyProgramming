@@ -160,7 +160,7 @@
             <div class="signin-form-right">
                 <h2>Hello, New Member!</h2>
                 <p>Want to join us to use all of site features</p>
-                <a href="signup.jsp" class="button-signup">SIGN UP</a>
+                <a href="register.jsp" class="button-signup">SIGN UP</a>
             </div>
         </div>
     </body>

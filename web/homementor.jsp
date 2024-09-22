@@ -28,7 +28,7 @@
                 <!-- TEXT -->
                 <h1>Empower Your Journey</h1> 
                 <h1>Learning Made Accessible</h1> 
-                <p>Discover the most effective path to enhance your knowledge and skills across various fields. Join us at FUNiX for an innovative learning experience that transforms the way you teach and inspire others!</p>
+                <p>Discover the most effective path to enhance your knowledge and skills across various fields. Join us at ??? for an innovative learning experience that transforms the way you teach and inspire others!</p>
 
                 <!-- SEARCH BAR -->
                 <form action="#" class="search-bar">

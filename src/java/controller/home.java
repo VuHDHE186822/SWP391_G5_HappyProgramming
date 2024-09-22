@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.CategoryDAO;
 import dal.CourseDAO;
 import dal.ParticipateDAO;
 import dal.UserDAO;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import model.Category;
 import model.Course;
 import model.Participate;
 import model.User;
@@ -67,11 +69,16 @@ public class home extends HttpServlet {
         UserDAO daoU = new UserDAO();
         CourseDAO daoC = new CourseDAO();
         ParticipateDAO daoP = new ParticipateDAO();
+        CategoryDAO daoCt = new CategoryDAO();
         List<User> mentor = daoU.getAllUserByRoleId(2);
         List<Course> course = daoC.getAll();
+        List<Category> category = daoCt.getAll();
+        List<User> mentee = daoU.getAllUserByRoleId(3);
         List<Participate> participate = daoP.getAll();
+        session.setAttribute("categoryFooter", category);
         session.setAttribute("mentor", mentor);
         session.setAttribute("course", course);
+        session.setAttribute("mentee", mentee);
         session.setAttribute("participate", participate);
         if (session.getAttribute("user") != null) {
             User u = (User) session.getAttribute("user");
@@ -86,8 +93,6 @@ public class home extends HttpServlet {
                 response.sendRedirect("homementee.jsp");
             }
         } else {
-            List<User> mentee = daoU.getAllUserByRoleId(3);
-            session.setAttribute("mentee", mentee);
             response.sendRedirect("homeguest.jsp");
         }
     }

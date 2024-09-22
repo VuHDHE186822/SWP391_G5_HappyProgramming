@@ -4,9 +4,10 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="CSS/bootstrap.min.css" rel="stylesheet">
         <title>Change Password</title>
         <style>
-            body {
+            .middle {
                 font-family: Arial, sans-serif;
                 background-color: #f5f5f5;
                 display: flex;
@@ -81,6 +82,11 @@
                 margin: 0 auto;
             }
 
+            .forgot:hover {
+                text-decoration: none;
+            }
+
+
             .success-message {
                 color: green;
                 font-weight: bold;
@@ -115,34 +121,38 @@
     <body>
         <!-- HEADER -->
         <jsp:include page="header.jsp"/>
-        <div class="changepass-form">
-            <div class="changepass-form-left">
-                <h2>Change Password</h2>
-                <form action="changePass" method="post" onsubmit="return validateForm()">
-                    <input type="hidden" value="${user.id}" name="id">
-                    <input type="password" placeholder="Current password" id="curPass" name="curPass" required>
-                    <input type="password" placeholder="New password" id="newPass" name="newPass" required>
-                    <input type="password" placeholder="Confirm new password" id="confirmPass" name="confirmPass" required>
-                    <a href="forgetPass.jsp" class="forgot">Forgot Your Password?</a>
 
-                    <c:if test="${not empty succMsg}">
-                        <div class="success-message">
-                            ${succMsg}
-                        </div>
-                        <c:remove var="succMsg" scope="session"/>
-                    </c:if>
+        <div class="middle">
+            <div class="changepass-form">
+                <div class="changepass-form-left">
+                    <h2>Change Password</h2>
+                    <form action="changePass" method="post" onsubmit="return validateForm()">
+                        <input type="hidden" value="${user.id}" name="id">
+                        <input type="password" placeholder="Current password" id="curPass" name="curPass" required>
+                        <input type="password" placeholder="New password" id="newPass" name="newPass" required>
+                        <input type="password" placeholder="Confirm new password" id="confirmPass" name="confirmPass" required>
+                        <a href="forgetPass.jsp" class="forgot">Forgot Your Password?</a>
 
-                    <c:if test="${not empty failedMsg}">
-                        <div class="error-message">
-                            ${failedMsg}
-                        </div>
-                        <c:remove var="failedMsg" scope="session"/>
-                    </c:if>
+                        <c:if test="${not empty succMsg}">
+                            <div class="success-message">
+                                ${succMsg}
+                            </div>
+                            <c:remove var="succMsg" scope="session"/>
+                        </c:if>
 
-                    <button type="submit" class="button-changepass">CHANGE PASSWORD</button>
-                </form>
+                        <c:if test="${not empty failedMsg}">
+                            <div class="error-message">
+                                ${failedMsg}
+                            </div>
+                            <c:remove var="failedMsg" scope="session"/>
+                        </c:if>
+
+                        <button type="submit" class="button-changepass">CHANGE PASSWORD</button>
+                    </form>
+                </div>
+
             </div>
-
         </div>
+
     </body>
 </html>

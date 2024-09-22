@@ -76,7 +76,6 @@
                         </c:forEach>
                     </div>
                 </c:if>
-                <a href="#" class="more-mentor-button">More Mentors</a>
             </div>
 
             <!-- COURSES SLIDE -->
