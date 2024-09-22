@@ -69,4 +69,16 @@
         <servlet-name>addcourse</servlet-name>
         <url-pattern>/addcourse</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManagerAccount</servlet-name>
+        <url-pattern>/manageraccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageSearchAccount</servlet-name>
+        <url-pattern>/managesearchaccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateUserInfoControl</servlet-name>
+        <url-pattern>/updateUserInfo</url-pattern>
+    </servlet-mapping>
 </web-app>
