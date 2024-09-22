@@ -52,9 +52,6 @@
                     </div>
                 </div>
                 <div class="text-link-list-item">
-                    <div class="list-item">Blog</div>
-                </div>
-                <div class="text-link-list-item">
                     <div class="list-item">Support</div>
                 </div>
                 <div class="text-link-list-item">
