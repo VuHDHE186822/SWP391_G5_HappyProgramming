@@ -100,6 +100,16 @@
             .button-logout:hover {
                 text-decoration: none;
             }
+            
+            .icon {
+                color: black;
+                font-size: 16px;
+            }
+            
+            .icon:hover {
+                color: black;
+                text-decoration: none;
+            }
         </style>
     </head>
     <body>
@@ -108,7 +118,7 @@
 
             <!-- LOGO -->
             <div class="logo">
-                <span>???</span>
+                <a href="home" class="icon"><span>???</span></a>
             </div>
 
             <!-- MIDDLE -->

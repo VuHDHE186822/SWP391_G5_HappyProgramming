@@ -84,21 +84,44 @@
                     <div class="course-heading">??? COURSES</div>
                 </div>
                 <c:if test="${not empty sessionScope.course}">
-                    <div class="row course-cards">
-                        <c:forEach items="${sessionScope.course}" var="c" begin="0" end="3">
-                            <a href="viewcourse?courseId=${c.courseId}" class="col-md-5 course-card">
+                    <div class="row course-cards" id="course-container">
+                        <c:forEach items="${sessionScope.course}" var="c" varStatus="status">
+                            <a href="viewcourse?courseId=${c.courseId}" class="col-md-5 course-card"
+                               style="display: ${status.index < 4 ? 'block' : 'none'};">
                                 <div class="course-body">
                                     <div class="course-text">
                                         <div>${c.courseName}</div>
-                                        <div class="course-body-text">${fn:substring(c.courseDescription, 0, 140)}<c:if test="${fn:length(c.courseDescription) > 140}">...</c:if></div>
+                                        <div class="course-body-text">${fn:substring(c.courseDescription, 0, 140)}
+                                            <c:if test="${fn:length(c.courseDescription) > 140}">...</c:if>
+                                            </div>
                                         </div>
                                     </div>
                                 </a>
                         </c:forEach>
                     </div>
                 </c:if>
-                <a href="#" class="more-course-button">More Courses</a>
+                <a href="#" class="more-course-button" id="more-courses-button" onclick="showMoreCourses(event)">More Courses</a>
             </div>
+
+            <script>
+                let coursesShown = 4;
+
+                function showMoreCourses(event) {
+                    event.preventDefault();
+                    const allCourses = document.querySelectorAll('.course-card');
+                    const totalCourses = allCourses.length;
+                    const moreCoursesButton = document.getElementById('more-courses-button');
+                    if (coursesShown < 8) {
+                        for (let i = coursesShown; i < coursesShown + 4 && i < totalCourses; i++) {
+                            allCourses[i].style.display = 'block';
+                        }
+                        coursesShown += 4;
+                        moreCoursesButton.textContent = 'View All Courses';
+                    } else {
+                        window.location.href = 'allcourse.jsp';
+                    }
+                }
+            </script>
 
             <!-- FOOTER -->
             <jsp:include page="footer.jsp"/>
