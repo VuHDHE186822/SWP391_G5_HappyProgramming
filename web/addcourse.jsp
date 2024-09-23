@@ -11,7 +11,6 @@
         <link href="CSS/bootstrap.css" rel="stylesheet">
         <style>
             body {
-                font-family: Arial, sans-serif;
                 background-color: #f5f5f5;
                 display: flex;
                 justify-content: center;
@@ -27,7 +26,9 @@
             .modal-content {
                 border-radius: 10px;
                 display: flex;
-                box-shadow: 0 0 10px #888;
+                box-shadow: 0 0 15px #ccc;
+                border: none;
+                overflow: hidden;
             }
 
             .modal-body {
@@ -62,6 +63,7 @@
                 color: #5d3fd3;
                 text-align: center;
                 margin-bottom: 20px;
+                font-weight: bold;
             }
 
             .form-group label {

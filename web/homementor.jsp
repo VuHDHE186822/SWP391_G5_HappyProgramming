@@ -25,28 +25,23 @@
 
             <!-- HEAD CONTENT MIDDLE -->
             <div class="header-content-middle">
-                <!-- TEXT -->
-                <h1>Empower Your Journey</h1> 
-                <h1>Learning Made Accessible</h1> 
-                <p>Discover the most effective path to enhance your knowledge and skills across various fields. Join us at ??? for an innovative learning experience that transforms the way you teach and inspire others!</p>
-
-                <!-- SEARCH BAR -->
-                <form action="#" class="search-bar">
-                    <input type="text" class="input-submit" placeholder="Search a course" name="search">
-                    <input type="submit" class="button-submit" value="Search">
-                </form>
+                <div class="text-overlay">
+                    <!-- TEXT -->
+                    <h1>Empower Your Journey</h1> 
+                    <h1 style="margin-bottom: 20px; text-transform: capitalize">Learning Made Accessible</h1>
+                    <!-- SEARCH BAR -->
+                    <form action="#" class="search-bar">
+                        <input type="text" class="input-submit" placeholder="Search a course" name="search">
+                        <input type="submit" class="button-submit" value="Search">
+                    </form>
+                </div>
+                <img src="img/banner.jpg" alt="alt"/>
             </div>
-
-            <!-- SALE -->
-            <div class="sale">
-                <h1>SALE 30%</h1>
-            </div>
-
 
             <!-- COURSES SLIDE -->
             <div class="course-content">
                 <div class="course-content-heading">
-                    <div class="course-heading">??? COURSES</div>
+                    <div class="course-heading">COURSES</div>
                 </div>
                 <c:if test="${not empty sessionScope.course}">
                     <div class="row course-cards" id="course-container">
@@ -55,7 +50,7 @@
                                style="display: ${status.index < 4 ? 'block' : 'none'};">
                                 <div class="course-body">
                                     <div class="course-text">
-                                        <div>${c.courseName}</div>
+                                        <div class="course-name">${c.courseName}</div>
                                         <div class="course-body-text">${fn:substring(c.courseDescription, 0, 140)}
                                             <c:if test="${fn:length(c.courseDescription) > 140}">...</c:if>
                                             </div>
@@ -102,10 +97,10 @@
                         <c:if test="${p.username == u.username}">
                             <c:forEach items="${sessionScope.course}" var="c">
                                 <c:if test="${c.courseId == p.courseId}">
-                                    <a href="viewcourse?courseId=${c.courseId}" class="col-md-5 course-card">
+                                    <a href="viewcourse?courseId=${c.courseId}" class="col-md-5 mycourse-card">
                                         <div class="mycourse-body">
                                             <div class="mycourse-text">
-                                                <div>${c.courseName}</div>
+                                                <div class="course-name">${c.courseName}</div>
                                                 <div class="mycourse-body-text">${fn:substring(c.courseDescription, 0, 120)}<c:if test="${fn:length(c.courseDescription) > 120}">...</c:if></div>
                                                 </div>
                                             </div>

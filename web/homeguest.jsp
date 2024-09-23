@@ -31,6 +31,7 @@
                 display: flex;
                 justify-content: center;
                 gap: 50px;
+                margin-bottom: 30px;
             }
 
             .stat-card {
@@ -42,13 +43,18 @@
             }
 
             .view {
-                transition: all 1s ease;
+                transition: all 0.3s ease;
                 font-weight: 600;
+                background-color: white;
+                padding: 10px;
+                border-radius: 15px;
+                color: black;
             }
 
             .view:hover {
                 text-decoration: none;
-                color: #0033cc;
+                background-color: #541371;
+                color: white;
             }
 
             .icon {
@@ -79,15 +85,50 @@
             <!-- HEAD CONTENT MIDDLE -->
             <div class="header-content-middle">
                 <!-- TEXT -->
-                <h1>First time here with ???</h1>
-                <h1>Explore our courses from ??? right away</h1>
-                <p><a href="viewallcourse" class="view">View all courses now!</a></p>
-
+                <div class="text-overlay">
+                    <!-- TEXT -->
+                    <h1 style="text-transform: capitalize">First time here with us?</h1>
+                    <h1 style="margin-bottom: 20px; text-transform: capitalize">Explore our courses right away</h1>
+                    <form action="#" class="search-bar">
+                        <input type="text" class="input-submit" placeholder="Search a course" name="search">
+                        <input type="submit" class="button-submit" value="Search">
+                    </form>
+                </div>
+                <img src="img/banner.jpg" alt="alt"/>
             </div>
 
-            <!-- SALE -->
-            <div class="sale">
-                <h1>SALE 30%</h1>
+            <!-- MOST PARTICIPANTS COURSE SLIDE -->
+
+            <div class="best-course-list">
+                <div class="best-course-heading">MOST PARTICIPANTS COURSE</div>
+                <c:forEach items="${sortedCourses}" var="courseInfo" varStatus="status">
+                    <c:set var="courseId" value="${courseInfo[0]}" />
+                    <c:set var="menteeCount" value="${courseInfo[1]}" />
+
+                    <c:forEach items="${course}" var="c" begin="0" end="3">
+                        <c:if test="${c.courseId == courseId}">
+                            <a href="viewcourse?courseId=${c.courseId}" class="best-course-card">
+                                <h3 class="best-course-title">${c.courseName}</h3> 
+                                <div class="ranking">
+                                    <c:choose>
+                                        <c:when test="${status.index == 0}">
+                                            <span class="gold-rank">1</span>
+                                        </c:when>
+                                        <c:when test="${status.index == 1}">
+                                            <span class="silver-rank">2</span>
+                                        </c:when>
+                                        <c:when test="${status.index == 2}">
+                                            <span class="bronze-rank">3</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="default-rank">${status.index + 1}</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </a>
+                        </c:if>
+                    </c:forEach>
+                </c:forEach>
             </div>
 
             <!-- DASHBOARD -->
@@ -118,7 +159,7 @@
             <!-- MENTOR SLIDE -->
             <div class="mentor-content">
                 <div class="mentor-content-heading">
-                    <div class="mentor-heading">SEE ??? MENTORS</div>
+                    <div class="mentor-heading">SEE OUR MENTORS</div>
                 </div>
                 <c:if test="${not empty sessionScope.mentor}">
                     <div class="mentor-cards">
@@ -152,7 +193,7 @@
             <!-- COURSES SLIDE -->
             <div class="course-content">
                 <div class="course-content-heading">
-                    <div class="course-heading">??? COURSES</div>
+                    <div class="course-heading">COURSES</div>
                 </div>
                 <c:if test="${not empty sessionScope.course}">
                     <div class="row course-cards" id="course-container">
@@ -161,7 +202,7 @@
                                style="display: ${status.index < 4 ? 'block' : 'none'};">
                                 <div class="course-body">
                                     <div class="course-text">
-                                        <div>${c.courseName}</div>
+                                        <div class="course-name">${c.courseName}</div>
                                         <div class="course-body-text">${fn:substring(c.courseDescription, 0, 140)}
                                             <c:if test="${fn:length(c.courseDescription) > 140}">...</c:if>
                                             </div>

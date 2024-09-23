@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import model.Category;
 import model.Course;
@@ -80,6 +81,26 @@ public class home extends HttpServlet {
         session.setAttribute("course", course);
         session.setAttribute("mentee", mentee);
         session.setAttribute("participate", participate);
+        List<int[]> courseMenteeCount = new ArrayList<>();
+
+        for (Course c : course) {
+            int menteeCount = 0;
+            for (Participate p : participate) {
+                if (p.getCourseId() == c.getCourseId()) {
+                    for (User m : mentee) {
+                        if (p.getUsername().equals(m.getUsername())) {
+                            menteeCount++;
+                            break;
+                        }
+                    }
+                }
+            }
+            courseMenteeCount.add(new int[]{c.getCourseId(), menteeCount});
+        }
+
+        courseMenteeCount.sort((a, b) -> Integer.compare(b[1], a[1]));
+        session.setAttribute("sortedCourses", courseMenteeCount);
+
         if (session.getAttribute("user") != null) {
             User u = (User) session.getAttribute("user");
             if (u.getRoleId() == 1) {

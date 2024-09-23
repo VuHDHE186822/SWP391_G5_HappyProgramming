@@ -26,28 +26,56 @@
 
             <!-- HEAD CONTENT MIDDLE -->
             <div class="header-content-middle">
-                <!-- TEXT -->
-                <h1>In ???</h1>
-                <h1>You can learn everything</h1>
-                <p>The most effective way for you to gain more knowledge and capacity in every field. Join the completely new learning method from ??? now!</p>
-
-
-                <!-- SEARCH BAR -->
-                <form action="#" class="search-bar">
-                    <input type="text" class="input-submit" placeholder="Search a course" name="search">
-                    <input type="submit" class="button-submit" value="Search">
-                </form>
+                <div class="text-overlay">
+                    <!-- TEXT -->
+                    <h1 style="margin-bottom: 20px; text-transform: capitalize">Welcome back, want to discover new thing?</h1>
+                    <!-- SEARCH BAR -->
+                    <form action="#" class="search-bar">
+                        <input type="text" class="input-submit" placeholder="Search a course" name="search">
+                        <input type="submit" class="button-submit" value="Search">
+                    </form>
+                </div>
+                <img src="img/banner.jpg" alt="alt"/>
             </div>
 
-            <!-- SALE -->
-            <div class="sale">
-                <h1>SALE 30%</h1>
+            <!-- MOST PARTICIPANTS COURSE SLIDE -->
+
+            <div class="best-course-list">
+                <div class="best-course-heading">MOST PARTICIPANTS COURSE</div>
+                <c:forEach items="${sortedCourses}" var="courseInfo" varStatus="status">
+                    <c:set var="courseId" value="${courseInfo[0]}" />
+                    <c:set var="menteeCount" value="${courseInfo[1]}" />
+
+                    <c:forEach items="${course}" var="c" begin="0" end="3">
+                        <c:if test="${c.courseId == courseId}">
+                            <div class="best-course-card">
+                                <h3 class="best-course-title">${c.courseName}</h3> 
+                                <div class="ranking">
+                                    <c:choose>
+                                        <c:when test="${status.index == 0}">
+                                            <span class="gold-rank">1</span>
+                                        </c:when>
+                                        <c:when test="${status.index == 1}">
+                                            <span class="silver-rank">2</span>
+                                        </c:when>
+                                        <c:when test="${status.index == 2}">
+                                            <span class="bronze-rank">3</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="default-rank">${status.index + 1}</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+                        </c:if>
+                    </c:forEach>
+                </c:forEach>
             </div>
 
             <!-- MENTOR SLIDE -->
             <div class="mentor-content">
                 <div class="mentor-content-heading">
-                    <div class="mentor-heading">SEE ??? MENTORS</div>
+                    <div class="mentor-heading">SEE OUR MENTORS</div>
                 </div>
                 <c:if test="${not empty sessionScope.mentor}">
                     <div class="mentor-cards">
@@ -81,7 +109,7 @@
             <!-- COURSES SLIDE -->
             <div class="course-content">
                 <div class="course-content-heading">
-                    <div class="course-heading">??? COURSES</div>
+                    <div class="course-heading">COURSES</div>
                 </div>
                 <c:if test="${not empty sessionScope.course}">
                     <div class="row course-cards" id="course-container">
@@ -90,7 +118,7 @@
                                style="display: ${status.index < 4 ? 'block' : 'none'};">
                                 <div class="course-body">
                                     <div class="course-text">
-                                        <div>${c.courseName}</div>
+                                        <div class="course-name">${c.courseName}</div>
                                         <div class="course-body-text">${fn:substring(c.courseDescription, 0, 140)}
                                             <c:if test="${fn:length(c.courseDescription) > 140}">...</c:if>
                                             </div>
