@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,69 +17,33 @@
 
         <!-- FOOTER -->
         <div class="footer">
-            <div class="title">
-                <div class="button-list">
-                    <img class="x-logo-icon" alt="" src="X Logo.svg">
-                    <img class="logo-instagram-icon" alt="" src="Logo Instagram.svg">
-                    <img class="logo-instagram-icon" alt="" src="Logo YouTube.svg">
-                    <img class="logo-instagram-icon" alt="" src="LinkedIn.svg">
+            <div class="text-link-list">
+                <div class="title1">
+                    <div class="text-strong">
+                        <div class="text-strong1">???</div>
+                    </div>
+                </div>
+                <div class="text-link-list-item">
+                    <div class="list-item">About</div>
+                </div>
+                <div class="text-link-list-item">
+                    <div class="list-item">???</div>
+                </div>
+                <div class="text-link-list-item">
+                    <div class="list-item">???</div>
                 </div>
             </div>
             <div class="text-link-list">
                 <div class="title1">
                     <div class="text-strong">
-                        <div class="text-strong1">Use cases</div>
+                        <div class="text-strong1">Course Category</div>
                     </div>
                 </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">UI design</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">UX design</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Wireframing</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Diagramming</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Brainstorming</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Online whiteboard</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Team collaboration</div>
-                </div>
-            </div>
-            <div class="text-link-list">
-                <div class="title1">
-                    <div class="text-strong">
-                        <div class="text-strong1">Explore</div>
+                <c:forEach items="${sessionScope.categoryFooter}" var="cF">
+                    <div class="text-link-list-item">
+                        <div class="list-item">${cF.categoryName}</div>
                     </div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Design</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Prototyping</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Development features</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Design systems</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Collaboration features</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Design process</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">FigJam</div>
-                </div>
+                </c:forEach>
             </div>
             <div class="text-link-list">
                 <div class="title1">
@@ -87,25 +52,10 @@
                     </div>
                 </div>
                 <div class="text-link-list-item">
-                    <div class="list-item">Blog</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Best practices</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Colors</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Color wheel</div>
-                </div>
-                <div class="text-link-list-item">
                     <div class="list-item">Support</div>
                 </div>
                 <div class="text-link-list-item">
                     <div class="list-item">Developers</div>
-                </div>
-                <div class="text-link-list-item">
-                    <div class="list-item">Resource library</div>
                 </div>
             </div>
         </div>

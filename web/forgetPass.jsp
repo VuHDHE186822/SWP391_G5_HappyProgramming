@@ -138,7 +138,7 @@
             <h2>Forget Password</h2>
             <form action="resetPass" method="post">
                 <input type="text" placeholder="Your Username" id="username" name="username" required>
-                <input type="text" placeholder="Your email" id="email" name="email" required>
+                <input type="text" placeholder="Your Email" id="email" name="email" required>
                 <div class="input-group">
                     <!--<input type="password" placeholder="Your verification code" id="verificationCode" name="verificationCode" required>-->
                     <button type="submit" class="button-changepass">SEND</button>

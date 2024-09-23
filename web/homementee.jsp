@@ -5,11 +5,14 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>home</title>
         <link href="CSS/bootstrap.min.css" rel="stylesheet">
         <link href="CSS/home.css" rel="stylesheet">
     </head>
@@ -24,14 +27,10 @@
             <!-- HEAD CONTENT MIDDLE -->
             <div class="header-content-middle">
                 <!-- TEXT -->
-<<<<<<< Upstream, based on origin/master
                 <h1>In ???</h1>
-                <h1>Học gì cũng có</h1>
-=======
-                <h1>Ở ???</h1>
-                <h1><a href = "changePass.jsp">Học gì cũng có</a></h1>
->>>>>>> 1b7536c 
-                <p>Con đường hiệu quả nhất để bạn có thêm kiến thức và năng lực trong mọi lĩnh vực. Tham gia học cùng phương pháp học tập hoàn toàn mới từ FUNiX ngay!</p>
+                <h1>You can learn everything</h1>
+                <p>The most effective way for you to gain more knowledge and capacity in every field. Join the completely new learning method from ??? now!</p>
+
 
                 <!-- SEARCH BAR -->
                 <form action="#" class="search-bar">
@@ -48,70 +47,81 @@
             <!-- MENTOR SLIDE -->
             <div class="mentor-content">
                 <div class="mentor-content-heading">
-                    <div class="mentor-heading">SEE OUR BEST MENTOR</div>
+                    <div class="mentor-heading">SEE ??? MENTORS</div>
                 </div>
-                <div class="mentor-cards">
-                    <div class="mentor-card">
-                        <img class="mentor-image-icon" alt="" src="https://zpsocial2-f4-org.zadn.vn/9790ea297aa49bfac2b5.jpg">
-                        <div class="mentor-body">
-                            <div class="mentor-text">
-                                <div style="color: #ff9f46">Huy Vo</div>
-                                <div class="mentor-body-text">Best Mentor in Vietnam right now.</div>
-                            </div>
-                            <div class="button-group">
-                                <div class="button">
-                                    <div class="button1">More Detail</div>
+                <c:if test="${not empty sessionScope.mentor}">
+                    <div class="mentor-cards">
+                        <c:forEach items="${sessionScope.mentor}" var="m" begin="0" end="3">
+                            <div class="mentor-card">
+                                <img class="mentor-image-icon" alt="" src="https://zpsocial2-f4-org.zadn.vn/9790ea297aa49bfac2b5.jpg">
+                                <div class="mentor-body">
+                                    <div class="mentor-text">
+                                        <div style="color: black">${m.lastName} ${m.firstName}</div>
+                                        <c:set var="courseCount" value="0" />
+                                        <c:forEach items="${sessionScope.participate}" var="p">
+                                            <c:if test="${p.username == m.username}">
+                                                <c:forEach items="${sessionScope.course}" var="c">
+                                                    <c:if test="${c.courseId == p.courseId}">
+                                                        <c:if test="${courseCount < 2}">
+                                                            <a href="viewcourse?courseId=${c.courseId}" class="mentor-course"><p>${c.courseName}</p></a>
+                                                                    <c:set var="courseCount" value="${courseCount + 1}"/>
+                                                                </c:if>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </c:if>
+                                                </c:forEach>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </c:forEach>
                     </div>
-                </div>
-            </div>  
+                </c:if>
+            </div>
 
             <!-- COURSES SLIDE -->
             <div class="course-content">
                 <div class="course-content-heading">
-                    <div class="course-heading">OUR COURSES</div>
+                    <div class="course-heading">??? COURSES</div>
                 </div>
-                <div class="row course-cards">
-                    <div class="course-card col-md-5">
-                        <img class="course-image-icon" alt="" src="Image.png">
-                        <div class="course-body">
-                            <div class="course-text">
-                                <div>HTML5</div>
-                                <div class="course-body-text">Body text for whatever you’d like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story. </div>
-                            </div>
-                        </div>
+                <c:if test="${not empty sessionScope.course}">
+                    <div class="row course-cards" id="course-container">
+                        <c:forEach items="${sessionScope.course}" var="c" varStatus="status">
+                            <a href="viewcourse?courseId=${c.courseId}" class="col-md-5 course-card"
+                               style="display: ${status.index < 4 ? 'block' : 'none'};">
+                                <div class="course-body">
+                                    <div class="course-text">
+                                        <div>${c.courseName}</div>
+                                        <div class="course-body-text">${fn:substring(c.courseDescription, 0, 140)}
+                                            <c:if test="${fn:length(c.courseDescription) > 140}">...</c:if>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                        </c:forEach>
                     </div>
-                    <div class="course-card col-md-5">
-                        <img class="course-image-icon" alt="" src="Image.png">
-                        <div class="course-body">
-                            <div class="course-text">
-                                <div>HTML5</div>
-                                <div class="course-body-text">Body text for whatever you’d like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story. </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="course-card col-md-5">
-                        <img class="course-image-icon" alt="" src="Image.png">
-                        <div class="course-body">
-                            <div class="course-text">
-                                <div>HTML5</div>
-                                <div class="course-body-text">Body text for whatever you’d like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story. </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="course-card col-md-5">
-                        <img class="course-image-icon" alt="" src="Image.png">
-                        <div class="course-body">
-                            <div class="course-text">
-                                <div>HTML5</div>
-                                <div class="course-body-text">Body text for whatever you’d like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story. </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </c:if>
+                <a href="#" class="more-course-button" id="more-courses-button" onclick="showMoreCourses(event)">More Courses</a>
             </div>
+
+            <script>
+                let coursesShown = 4;
+
+                function showMoreCourses(event) {
+                    event.preventDefault();
+                    const allCourses = document.querySelectorAll('.course-card');
+                    const totalCourses = allCourses.length;
+                    const moreCoursesButton = document.getElementById('more-courses-button');
+                    if (coursesShown < 8) {
+                        for (let i = coursesShown; i < coursesShown + 4 && i < totalCourses; i++) {
+                            allCourses[i].style.display = 'block';
+                        }
+                        coursesShown += 4;
+                        moreCoursesButton.textContent = 'View All Courses';
+                    } else {
+                        window.location.href = 'allcourse.jsp';
+                    }
+                }
+            </script>
 
             <!-- FOOTER -->
             <jsp:include page="footer.jsp"/>

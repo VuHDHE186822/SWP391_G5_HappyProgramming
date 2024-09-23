@@ -1,15 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import constant.Iconstant;
 import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,70 +18,58 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.UUID;
+import model.GoogleAccount;
 import model.User;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.fluent.Form;
+import org.apache.http.client.fluent.Request;
 import service.FileConverter;
 import service.ImageConverter;
 
-/**
- *
- * @author Huy Võ
- */
-@MultipartConfig
-public class register extends HttpServlet {
+public class googlelogin extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet register</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet register at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+    public static String getToken(String code) throws ClientProtocolException, IOException {
+
+        String response = Request.Post(Iconstant.GOOGLE_LINK_GET_TOKEN)
+                .bodyForm(
+                        Form.form()
+                                .add("client_id", Iconstant.GOOGLE_CLIENT_ID)
+                                .add("client_secret", Iconstant.GOOGLE_CLIENT_SECRET)
+                                .add("redirect_uri", Iconstant.GOOGLE_REDIRECT_URI)
+                                .add("code", code)
+                                .add("grant_type", Iconstant.GOOGLE_GRANT_TYPE)
+                                .build()
+                )
+                .execute().returnContent().asString();
+
+        JsonObject jobj = new Gson().fromJson(response, JsonObject.class);
+
+        String accessToken = jobj.get("access_token").toString().replaceAll("\"", "");
+
+        return accessToken;
+
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    public static GoogleAccount getUserInfo(final String accessToken) throws ClientProtocolException, IOException {
+
+        String link = Iconstant.GOOGLE_LINK_GET_USER_INFO + accessToken;
+
+        String response = Request.Get(link).execute().returnContent().asString();
+
+        GoogleAccount googlePojo = new Gson().fromJson(response, GoogleAccount.class);
+
+        return googlePojo;
+
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -92,12 +77,10 @@ public class register extends HttpServlet {
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String repassword = request.getParameter("repassword");
+        String password = UUID.randomUUID().toString();;
         String dobString = request.getParameter("dob");
         Date dob = null;
 
-        // Parse date
         if (dobString != null && !dobString.isEmpty()) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             try {
@@ -132,12 +115,6 @@ public class register extends HttpServlet {
         String redString = "";
         String greenString = "";
 
-        if (!password.equals(repassword)) {
-            session.setAttribute("error", "*Passwords do not match");
-            response.sendRedirect("register.jsp");
-            return;
-        }
-
         for (User u : users) {
             if (username.equals(u.getUsername())) {
                 redString += "*Username has been used<br>";
@@ -148,24 +125,16 @@ public class register extends HttpServlet {
         }
         if (!redString.isEmpty()) {
             session.setAttribute("error", redString);
+            response.sendRedirect("googlelogin.jsp");
+
         } else {
             Date doc = new Date();
             int roleId = role.equals("mentor") ? 2 : 3;
-            User user = new User(username, password, firstName, lastName, dob, email, doc, "ok", cvBase64, true, false, roleId);
+            User user = new User(username, password, firstName, lastName, dob, email, doc, "ok", cvBase64, true, true, roleId);
             dao.registerUser(user);
             greenString = "Register Successfully!";
-            session.setAttribute("note", greenString);
+            session.setAttribute("user", user);
+            response.sendRedirect("home");
         }
-        response.sendRedirect("register.jsp");
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 }

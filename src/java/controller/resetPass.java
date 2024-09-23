@@ -26,7 +26,11 @@ public class resetPass extends HttpServlet {
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
+<<<<<<< HEAD
      *
+=======
+     *  
+>>>>>>> 40c94f28736ae32f75d643b7591a89e796317341
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs

@@ -4,6 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="CSS/bootstrap.min.css" rel="stylesheet">
         <title>Change Password</title>
         <style>
             body {
@@ -80,7 +81,11 @@
                 width: 150px;
                 margin: 0 auto;
             }
-
+            
+            .forgot:hover {
+                text-decoration: none;
+            }
+            
             .success-message {
                 color: green;
                 font-weight: bold;

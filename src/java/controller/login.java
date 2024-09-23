@@ -4,7 +4,6 @@
  */
 package controller;
 
-import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,6 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.User;
+import dal.UserDAO;
+import model.GoogleAccount;
 
 /**
  *
@@ -21,57 +22,32 @@ import model.User;
  */
 public class login extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet login</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet login at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        response.setContentType("text/html;charset=UTF-8");
+        String code = request.getParameter("code");
+        googlelogin gg = new googlelogin();
+        String accessToken = gg.getToken(code);
+        GoogleAccount acc = gg.getUserInfo(accessToken);
+
+        UserDAO dao = new UserDAO();
+        User user = dao.getUserByMail(acc.getEmail());
+
+        if (user != null) {
+            session.setAttribute("user", user);
+            response.sendRedirect("home");
+        } else {
+            session.setAttribute("email", acc.getEmail());
+            session.setAttribute("firstName", acc.getGiven_name());
+            session.setAttribute("lastName", acc.getFamily_name());
+            response.sendRedirect("googlelogin.jsp");
+        }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         String username = request.getParameter("username");
@@ -79,22 +55,13 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         UserDAO dao = new UserDAO();
         List<User> users = dao.getAll();
         User user = new User();
-
         boolean found = false;
         for (User u : users) {
             if (username.equals(u.getUsername()) && password.equals(u.getPassword())) {
                 found = true;
-                if (u.getRoleId() == 1) {
-                    session.setAttribute("user", u);
-                    response.sendRedirect("homeadmin.jsp");
-                } else if (u.getRoleId() == 2) {
-                    session.setAttribute("user", u);
-                    response.sendRedirect("homementor.jsp");
-                } else if (u.getRoleId() == 3) {
-                    session.setAttribute("user", u);
-                    response.sendRedirect("homementee.jsp");
-                }
-                break; // Exit the loop once a match is found
+                session.setAttribute("user", u);
+                response.sendRedirect("home");
+                break;
             }
         }
 
@@ -104,11 +71,6 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

@@ -48,6 +48,22 @@
         <servlet-name>viewAllCourse</servlet-name>
         <servlet-class>controller.viewAllCourse</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>home</servlet-name>
+        <servlet-class>controller.home</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>viewcourse</servlet-name>
+        <servlet-class>controller.viewcourse</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>googlelogin</servlet-name>
+        <servlet-class>controller.googlelogin</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteUserInfoControl</servlet-name>
+        <servlet-class>admin.DeleteUserInfoControl</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
@@ -59,6 +75,14 @@
     <servlet-mapping>
         <servlet-name>changePass</servlet-name>
         <url-pattern>/changePass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>home</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>viewcourse</servlet-name>
+        <url-pattern>/viewcourse</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>resetPass</servlet-name>
@@ -75,5 +99,25 @@
     <servlet-mapping>
         <servlet-name>viewAllCourse</servlet-name>
         <url-pattern>/allCourse</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>   
+        <servlet-name>ManagerAccount</servlet-name>
+        <url-pattern>/manageraccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageSearchAccount</servlet-name>
+        <url-pattern>/managesearchaccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateUserInfoControl</servlet-name>
+        <url-pattern>/updateUserInfo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>googlelogin</servlet-name>
+        <url-pattern>/googlelogin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteUserInfoControl</servlet-name>
+        <url-pattern>/DeleteUserInfoControl</url-pattern>
     </servlet-mapping>
 </web-app>
