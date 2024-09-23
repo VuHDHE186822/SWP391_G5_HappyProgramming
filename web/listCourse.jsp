@@ -8,7 +8,6 @@
         <title>Cửa Hàng Trực Tuyến</title>
         <style>
             body {
-                font-family: Arial, sans-serif;
                 margin: 0;
                 padding: 0;
                 background-color: #f9f9f9;
@@ -278,7 +277,7 @@
                                     <h6>Category: ${cat.categoryName}</h6> <!-- Hiển thị tên danh mục -->
                                     <h6 class="course-description">${cou.courseDescription}</h6>
                                     <h6>Created at: ${cou.createdAt}</h6>
-                                    <button>Eroll</button>
+                                    <button>Enroll</button>
                                 </div>
                             </c:if>
                         </c:forEach>
@@ -289,10 +288,6 @@
 
         <div class="pagination" id="pagination"></div>
     </section>
-
-    <footer>
-        <p>© 2024 Cửa Hàng Trực Tuyến. Tất cả quyền được bảo lưu.</p>
-    </footer>
 
     <jsp:include page="footer.jsp"/>
 

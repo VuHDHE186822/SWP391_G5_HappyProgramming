@@ -52,6 +52,7 @@
                 font-size: 14px;
                 font-weight: bold;
                 transition: all 0.3s ease;
+                text-decoration: none;
             }
 
             .icon:hover {
