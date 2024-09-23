@@ -208,21 +208,21 @@ public class UserDAO extends DBContext {
     }
 
     public boolean updateUserInfo(String username, String firstName, String lastName, Date dob, String email, String avatarPath, String cvPath, boolean activeStatus, boolean isVerified, int roleId) {
-        String sql = "UPDATE users SET firstName = ?, lastName = ?, dob = ?, email = ?, avatarPath = ?, cvPath = ?, activeStatus = ?, isVerified = ?, roleId = ? WHERE username = ?";
+        String sql = "UPDATE [user] SET firstName = ?, lastName = ?, dob = ?, mail = ?, avatarPath = ?, cvPath = ?, activeStatus = ?, isVerified = ?, roleId = ? WHERE username = ?";
         try {
-            PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, firstName);
-            pstmt.setString(2, lastName);
-            pstmt.setDate(3, new java.sql.Date(dob.getTime())); // Convert java.util.Date to java.sql.Date
-            pstmt.setString(4, email);
-            pstmt.setString(5, avatarPath);
-            pstmt.setString(6, cvPath);
-            pstmt.setBoolean(7, activeStatus);
-            pstmt.setBoolean(8, isVerified);
-            pstmt.setInt(9, roleId);
-            pstmt.setString(10, username);
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, firstName);
+            st.setString(2, lastName);
+            st.setDate(3, new java.sql.Date(dob.getTime())); // Convert java.util.Date to java.sql.Date
+            st.setString(4, email);
+            st.setString(5, avatarPath);
+            st.setString(6, cvPath);
+            st.setBoolean(7, activeStatus);
+            st.setBoolean(8, isVerified);
+            st.setInt(9, roleId);
+            st.setString(10, username);
 
-            int rowsUpdated = pstmt.executeUpdate();
+            int rowsUpdated = st.executeUpdate();
             return rowsUpdated > 0; // Return true if the update was successful
         } catch (SQLException e) {
             e.printStackTrace();
@@ -230,13 +230,17 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public void deleteUser(String username) {
-        String sql = "update User set activeStatus = 0 where UserName= ?";
+    public boolean deactivateUser(String username) {
+        String sql = "UPDATE [user] SET activeStatus = 0 WHERE username = ?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, username);
-            st.executeUpdate();
-        } catch (Exception e) {
+
+            int rowsUpdated = st.executeUpdate();
+            return rowsUpdated > 0; // Return true if the update was successful
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Handle the exception as needed
         }
     }
 
@@ -271,7 +275,7 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
-    
+
     public void registerUser(User user) {
         String sql = "INSERT INTO [User] (username, [password], firstName, lastName, dob, mail, createdDate, avatarPath, CVPath, activeStatus,isVerified, roleId) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -294,7 +298,7 @@ public class UserDAO extends DBContext {
             e.printStackTrace();
         }
     }
-    
+
     public User getUserByMail(String mail) {
         User u = null;
         try {

@@ -162,26 +162,34 @@
                                     <tbody>
                                         <c:forEach items="${requestScope.listUsers}" var="t">
                                             <tr>
-                                                <td class="text_page"  style="font-weight: 500">${t.username}</td>
-                                                <td class="text_page"  style="font-weight: 500">${t.firstName}</td>
-                                                <td class="text_page"  style="font-weight: 500">${t.lastName}</td>
-                                                <td class="text_page"  style="font-weight: 500">${t.dob}</td>
-                                                <td class="text_page"  style="font-weight: 500">${t.mail}</td>
-                                                <td class="text_page"  style="font-weight: 500">${t.createdDate}</td>
-                                                <td class="text_page"  style="font-weight: 500">${t.avatarPath}</td>
-                                                <td class="text_page"  style="font-weight: 500">${t.cvPath}</td>
-                                                <td class="text_page"  style="font-weight: 500">${t.activeStatus}</td>
-                                                <td class="text_page"  style="font-weight: 500">${t.isVerified}</td>
-                                                <td class="text_page"  style="font-weight: 500">${t.roleId}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.username}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.firstName}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.lastName}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.dob}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.mail}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.createdDate}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.avatarPath}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.cvPath}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.activeStatus}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.isVerified}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.roleId}</td>
                                                 <td>
+                                                    <!-- Update Button -->
                                                     <button type="button" class="btn btn-primary" 
                                                             data-toggle="modal" 
                                                             data-target="#updateUserModal" 
                                                             onclick="populateUpdateModal('${t.username}', '${t.firstName}', '${t.lastName}', '${t.dob}', '${t.mail}', '${t.avatarPath}', '${t.cvPath}', ${t.activeStatus}, ${t.isVerified}, ${t.roleId})">
                                                         <i class="fa-solid fa-edit"></i>
                                                     </button>
-                                                </td>
 
+                                                    <!-- Delete Button -->
+                                                    <button type="button" class="btn btn-danger" 
+                                                            data-toggle="modal" 
+                                                            data-target="#deleteUserModal" 
+                                                            onclick="populateDeleteModal('${t.username}')">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         </c:forEach>
                                     </tbody>
@@ -351,6 +359,28 @@
             </div>
         </div>
 
+        <!-- Delete Modal HTML -->
+        <div id="deleteUserModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="deleteForm" action="<%= request.getContextPath() %>/DeleteUserInfoControl" method="post">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Deactivate User</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <input name="username" type="hidden" id="deleteUsername">
+                            <p>Are you sure you want to deactivate this user?</p>
+                            <p class="text-warning"><small>The user will be marked as inactive.</small></p>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-danger" value="Deactivate">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
 
 
@@ -384,6 +414,25 @@
                                                                     document.getElementById('updateIsVerified').checked = isVerified;
                                                                     document.getElementById('updateRoleId').value = roleId;
                                                                 }
+                                                                // Function to populate the update modal
+                                                                function populateUpdateModal(username, firstName, lastName, dob, mail, avatarPath, cvPath, activeStatus, isVerified, roleId) {
+                                                                    document.getElementById('updateUsername').value = username;
+                                                                    document.getElementById('updateFirstName').value = firstName;
+                                                                    document.getElementById('updateLastName').value = lastName;
+                                                                    document.getElementById('updateDob').value = dob;
+                                                                    document.getElementById('updateEmail').value = mail;
+                                                                    document.getElementById('updateAvatarPath').value = avatarPath;
+                                                                    document.getElementById('updateCvPath').value = cvPath;
+                                                                    document.getElementById('updateActiveStatus').checked = activeStatus;
+                                                                    document.getElementById('updateIsVerified').checked = isVerified;
+                                                                    document.getElementById('updateRoleId').value = roleId;
+                                                                }
+
+                                                                // Function to populate the delete modal
+                                                                function populateDeleteModal(username) {
+                                                                    document.getElementById('deleteUsername').value = username;
+                                                                }
+
         </script>
     </body>
 </html>
