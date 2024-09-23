@@ -127,7 +127,6 @@
         </script>
     </head>
     <body>
-        <!-- HEADER -->
         <jsp:include page="header.jsp"/>
 
         <div class="changepass-form">

@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import model.Course;
 import model.User;
 
 /**
@@ -244,6 +245,40 @@ public class UserDAO extends DBContext {
                 int roleId = rs.getInt("roleId");
                 User u = new User(id, username, password, firstName, lastName, dob, mail, createdDate, avatarPath, cvPath, activeStatus, isVerified, verificationCode, roleId);
                 list.add(u);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Course> getCourseByQuantityEnroll() {
+        List<Course> list = new ArrayList<>();
+        String sql = "SELECT c.courseId, c.courseName, \n"
+                + "       CAST(c.courseDescription AS NVARCHAR(MAX)) AS courseDescription, \n"
+                + "       c.createdAt, \n"
+                + "       COUNT(p.username) AS user_count\n"
+                + "FROM Course c\n"
+                + "JOIN Participate p ON c.courseId = p.courseId\n"
+                + "JOIN [User] u ON p.username = u.username\n"
+                + "JOIN Status s ON p.statusId = s.statusId\n"
+                + "WHERE p.participateRole = 3 AND p.statusId = 1\n"
+                + "GROUP BY c.courseId, c.courseName, \n"
+                + "         CAST(c.courseDescription AS NVARCHAR(MAX)), \n"
+                + "         c.createdAt\n"
+                + "ORDER BY user_count DESC;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("courseId");
+                String name = rs.getString("courseName");
+                String des = rs.getString("courseDescription");
+                Date date = rs.getDate("createdAt");
+                int count  = rs.getInt("user_count");
+                Course e = new Course(id, name, des, date);
+                list.add(e);
             }
         } catch (Exception e) {
             e.printStackTrace();

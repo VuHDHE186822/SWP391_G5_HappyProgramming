@@ -9,6 +9,7 @@ public class Course {
     private String courseName;
     private String courseDescription;
     private Date createdAt;
+//    private int userCount;
 
     private List<Category> categories;  // A course can belong to multiple categories
 
@@ -16,11 +17,34 @@ public class Course {
     public Course() {
     }
 
+//    public int getUserCount() {
+//        return userCount;
+//    }
+//
+//    public void setUserCount(int userCount) {
+//        this.userCount = userCount;
+//    }
+
+//    public Course(int courseId, String courseName, String courseDescription, Date createdAt, int userCount) {
+//        this.courseId = courseId;
+//        this.courseName = courseName;
+//        this.courseDescription = courseDescription;
+//        this.createdAt = createdAt;
+//        this.userCount = userCount;
+//    }
+    
+
     public Course(int courseId, String courseName, String courseDescription, Date createdAt) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.courseDescription = courseDescription;
         this.createdAt = createdAt;
+    }
+
+    public Course(int courseId, String courseName, String courseDescription) {
+        this.courseId = courseId;
+        this.courseName = courseName;
+        this.courseDescription = courseDescription;
     }
 
     // Getters and Setters

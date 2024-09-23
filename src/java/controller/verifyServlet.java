@@ -20,7 +20,7 @@ import util.Email;
  *
  * @author mONESIUU
  */
-public class verifiServlet extends HttpServlet {
+public class verifyServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

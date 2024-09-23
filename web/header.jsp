@@ -87,7 +87,7 @@
 
             <!-- MIDDLE -->
             <ul class="menu">
-                <li><a href="#">Courses</a></li>
+                <li><a href="allCourse">Courses</a></li>
                     <c:if test="${sessionScope.user != null}">
                     <li><a href="#">My Courses</a></li>
                     <li><a href="#">Chat</a></li>
