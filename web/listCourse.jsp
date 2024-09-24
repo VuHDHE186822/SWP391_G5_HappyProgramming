@@ -166,41 +166,49 @@
                 font-weight: bold;
             }
             .nav-link {
-                color: white; 
-                text-decoration: none; 
+                color: white;
+                text-decoration: none;
             }
 
             .nav-link:hover {
                 text-decoration: underline;
             }
             .featured-product2 {
-                background-color: black; 
-                color: white; 
-                padding: 20px; 
+                background-color: black;
+                color: white;
+                padding: 20px;
             }
 
             .product-list2 {
                 display: flex;
                 overflow-x: auto;
-                padding: 10px 0; 
-                gap: 20px; 
-                scrollbar-width: thin; 
+                padding: 10px 0;
+                gap: 20px;
+                scrollbar-width: thin;
             }
 
             .product-item2 {
                 background: white;
                 border: 2px solid gold;
-                border-radius: 10px; 
-                padding: 15px; 
+                border-radius: 10px;
+                padding: 15px;
                 text-align: center;
-                color: black; 
-                flex: 0 0 auto; 
-                min-width: 250px; 
+                color: black;
+                flex: 0 0 auto;
+                min-width: 250px;
             }
 
             .product-item2 img {
-                max-width: 100%; 
-                border-radius: 10px; 
+                max-width: 100%;
+                border-radius: 10px;
+            }
+            .mentor-course {
+                text-decoration: none;
+                color: #3498db;
+            }
+
+            .mentor-course:hover {
+                color: #2980b9;
             }
         </style>
     </head>
@@ -247,7 +255,7 @@
                             <c:forEach items="${listCategory}" var="cat">
                                 <c:if test="${cat.categoryId == cocat.categoryId}"> <!-- Kiểm tra nếu categoryId khớp -->
                                     <div class="product-item2">
-                                        <h3>${cou.courseName}</h3>
+                                       <a href="viewcourse?courseId=${cou.courseId}" class="mentor-course"> <h3>${cou.courseName}</h3></a>
                                         <h6>Category: ${cat.categoryName}</h6> <!-- Hiển thị tên danh mục -->
                                         <h6 class="course-description">${cou.courseDescription}</h6>
                                         <p>Created at: ${cou.createdAt}</p>
@@ -273,7 +281,7 @@
                         <c:forEach items="${listCategory}" var="cat">
                             <c:if test="${cat.categoryId == cocat.categoryId}"> <!-- Kiểm tra nếu categoryId khớp -->
                                 <div class="product-item">
-                                    <h3>${cou.courseName}</h3>
+                                    <a href="viewcourse?courseId=${cou.courseId}" class="mentor-course"><h3>${cou.courseName}</h3></a>
                                     <h6>Category: ${cat.categoryName}</h6> <!-- Hiển thị tên danh mục -->
                                     <h6 class="course-description">${cou.courseDescription}</h6>
                                     <h6>Created at: ${cou.createdAt}</h6>
