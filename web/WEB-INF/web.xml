@@ -64,6 +64,10 @@
         <servlet-name>ManagerAccount</servlet-name>
         <servlet-class>admin.ManagerAccount</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UpdateUserInfoControl</servlet-name>
+        <servlet-class>admin.UpdateUserInfoControl</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
@@ -127,5 +131,9 @@
     <servlet-mapping>
         <servlet-name>ManagerAccount</servlet-name>
         <url-pattern>/ManagerAccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateUserInfoControl</servlet-name>
+        <url-pattern>/UpdateUserInfoControl</url-pattern>
     </servlet-mapping>
 </web-app>
