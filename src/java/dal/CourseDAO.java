@@ -13,7 +13,15 @@ import model.Course_Category;
 import model.User;
 
 public class CourseDAO extends DBContext {
-
+    public static void main(String[] args) {
+        CourseDAO dao = new CourseDAO();
+        int count = dao.findTotalRecordAllCourses();
+        List<Course> list = dao.getAllCourse2(1);
+        for (Course course : list) {
+            System.out.println(course);
+        }
+        System.out.println(count);
+    }
     public List<Category> getAllCategories() {
         List<Category> list = new ArrayList<>();
         String sql = "SELECT * FROM Category";
@@ -206,13 +214,7 @@ public class CourseDAO extends DBContext {
         return list;
     }
 
-    public static void main(String[] args) {
-        CourseDAO dao = new CourseDAO();
-        List<Category> list = dao.getAllCategories();
-        for (Category l : list) {
-            System.out.println(l);
-        }
-    }
+   
 
     public int findTotalRecordByName(String keyword) {
         String sql = "SELECT count(*)\n"
@@ -366,4 +368,50 @@ public class CourseDAO extends DBContext {
         return courses;
     }
 
+    public int findTotalRecordByCategory(String categoryId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public int findTotalRecordAllCourses() {
+        String sql = "SELECT count(*) FROM [Course]";
+        int totalRecord = 0;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                totalRecord = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exceptions appropriately
+        }
+
+        return totalRecord;
+    }
+
+    public List<Course> getAllCourse2(int page) {
+    List<Course> list = new ArrayList<>();
+    String sql = "SELECT * FROM [Course] "
+                + "ORDER BY courseId "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        int recordsPerPage = 5;
+        int offset = (page - 1) * recordsPerPage;
+        st.setInt(1, offset); // Corrected: set offset first
+        st.setInt(2, recordsPerPage);
+        ResultSet rs = st.executeQuery();
+        while (rs.next()) {
+            int id = rs.getInt("courseId");
+            String name = rs.getString("courseName");
+            String des = rs.getString("courseDescription");
+            Date date = rs.getDate("createdAt");
+            Course e = new Course(id, name, des, date);
+            list.add(e);
+        }
+    } catch (SQLException ex) {
+        System.out.println(ex);
+    }
+    return list;
+}
+   
 }
