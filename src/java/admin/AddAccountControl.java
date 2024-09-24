@@ -24,6 +24,7 @@ public class AddAccountControl extends HttpServlet {
 
         
         
+        
         // Retrieve form parameters from the request
         String username = request.getParameter("username");
         String password = request.getParameter("password");
