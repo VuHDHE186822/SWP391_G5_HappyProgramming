@@ -143,24 +143,6 @@ public class UserDAO extends DBContext {
         return u;
     }
 
-    public boolean checkUserNameDuplicate(String username) {
-        String sql = "SELECT * FROM [dbo].[User] WHERE username = ? AND [activeStatus] = 1";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, username); // Set the username parameter
-            ResultSet rs = st.executeQuery();
-
-            if (rs.next()) {
-
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
     public boolean resetPassWord(String veriCode, String newPass) {
         boolean f = false;
         try {
@@ -179,103 +161,7 @@ public class UserDAO extends DBContext {
         return f;
     }
 
-    public void insertUser(String userName, String password, String firstName, String lastName,
-            Date dob, String email, Date createdDate,
-            String avatarPath, String cvPath, boolean activeStatus,
-            boolean isVerified, String verificationCode, int roleId) {
-        String sql = "INSERT INTO [dbo].[User] (username, password, firstName, lastName, dob, mail, createdDate, avatarPath, CVPath, activeStatus, isVerified, verification_code, roleId) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, userName);  // Username
-            st.setString(2, password);   // Password
-            st.setString(3, firstName);  // First Name
-            st.setString(4, lastName);   // Last Name
-            st.setDate(5, new java.sql.Date(dob.getTime()));  // Date of Birth
-            st.setString(6, email);      // Email
-            st.setDate(7, new java.sql.Date(createdDate.getTime()));  // Created Date
-            st.setString(8, avatarPath);  // Avatar Path
-            st.setString(9, cvPath);      // CV Path
-            st.setBoolean(10, activeStatus); // Active Status
-            st.setBoolean(11, isVerified);   // Is Verified
-            st.setString(12, verificationCode); // Verification Code
-            st.setInt(13, roleId); // Role ID
-
-            // Execute the insert
-            st.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace(); // Consider logging the error for better tracking
-        }
-    }
-
-    public boolean updateUserInfo(String username, String firstName, String lastName, Date dob, String email, String avatarPath, String cvPath, boolean activeStatus, boolean isVerified, int roleId) {
-        String sql = "UPDATE [user] SET firstName = ?, lastName = ?, dob = ?, mail = ?, avatarPath = ?, cvPath = ?, activeStatus = ?, isVerified = ?, roleId = ? WHERE username = ?";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, firstName);
-            st.setString(2, lastName);
-            st.setDate(3, new java.sql.Date(dob.getTime())); // Convert java.util.Date to java.sql.Date
-            st.setString(4, email);
-            st.setString(5, avatarPath);
-            st.setString(6, cvPath);
-            st.setBoolean(7, activeStatus);
-            st.setBoolean(8, isVerified);
-            st.setInt(9, roleId);
-            st.setString(10, username);
-
-            int rowsUpdated = st.executeUpdate();
-            return rowsUpdated > 0; // Return true if the update was successful
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false; // Handle the exception as needed
-        }
-    }
-
-    public boolean deactivateUser(String username) {
-        String sql = "UPDATE [user] SET activeStatus = 0 WHERE username = ?";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, username);
-
-            int rowsUpdated = st.executeUpdate();
-            return rowsUpdated > 0; // Return true if the update was successful
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false; // Handle the exception as needed
-        }
-    }
-
-    public List<User> getUsersBySearchName(String txt) {
-        List<User> list = new ArrayList<>();
-        String sql = "SELECT * FROM [dbo].[User] WHERE [firstName] LIKE ? or [lastName] LIKE ? ";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, "%" + txt + "%");
-            st.setString(2, "%" + txt + "%");
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String username = rs.getString("username");
-                String password = rs.getString("password");
-                String firstName = rs.getString("firstName");
-                String lastName = rs.getString("lastName");
-                Date dob = rs.getDate("dob");
-                String mail = rs.getString("mail");
-                Date createdDate = rs.getDate("createdDate");
-                String avatarPath = rs.getString("avatarPath");
-                String cvPath = rs.getString("cvPath");
-                boolean activeStatus = rs.getBoolean("activeStatus");
-                boolean isVerified = rs.getBoolean("isVerified");
-                String verificationCode = rs.getString("verification_code");
-                int roleId = rs.getInt("roleId");
-                User u = new User(id, username, password, firstName, lastName, dob, mail, createdDate, avatarPath, cvPath, activeStatus, isVerified, verificationCode, roleId);
-                list.add(u);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
+  
 
     public List<Course> getCourseByQuantityEnroll() {
         List<Course> list = new ArrayList<>();
