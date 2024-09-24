@@ -13,22 +13,6 @@
         <servlet-class>controller.changePass</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AddAccountControl</servlet-name>
-        <servlet-class>admin.AddAccountControl</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ManageSearchAccount</servlet-name>
-        <servlet-class>admin.ManageSearchAccount</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ManagerAccount</servlet-name>
-        <servlet-class>admin.ManagerAccount</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>UpdateUserInfoControl</servlet-name>
-        <servlet-class>admin.UpdateUserInfoControl</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>resetPass</servlet-name>
         <servlet-class>controller.resetPass</servlet-class>
     </servlet>
@@ -55,10 +39,6 @@
     <servlet>
         <servlet-name>googlelogin</servlet-name>
         <servlet-class>controller.googlelogin</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>DeleteUserInfoControl</servlet-name>
-        <servlet-class>admin.DeleteUserInfoControl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>userProfile</servlet-name>
@@ -105,24 +85,8 @@
         <url-pattern>/allCourse</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ManagerAccount</servlet-name>
-        <url-pattern>/manageraccount</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ManageSearchAccount</servlet-name>
-        <url-pattern>/managesearchaccount</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UpdateUserInfoControl</servlet-name>
-        <url-pattern>/updateUserInfo</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>googlelogin</servlet-name>
         <url-pattern>/googlelogin</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>DeleteUserInfoControl</servlet-name>
-        <url-pattern>/DeleteUserInfoControl</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>userProfile</servlet-name>
