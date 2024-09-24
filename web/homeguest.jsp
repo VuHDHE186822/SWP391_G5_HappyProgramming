@@ -98,7 +98,6 @@
             </div>
 
             <!-- MOST PARTICIPANTS COURSE SLIDE -->
-
             <div class="best-course-list">
                 <div class="best-course-heading">MOST PARTICIPANTS COURSE</div>
                 <c:forEach items="${sortedCourses}" var="courseInfo" varStatus="status">
@@ -175,13 +174,15 @@
                                                 <c:forEach items="${sessionScope.course}" var="c">
                                                     <c:if test="${c.courseId == p.courseId}">
                                                         <c:if test="${courseCount < 2}">
-                                                            <a href="viewcourse?courseId=${c.courseId}" class="mentor-course"><p>${c.courseName}</p></a>
-                                                                    <c:set var="courseCount" value="${courseCount + 1}"/>
-                                                                </c:if>
-                                                            </c:if>
-                                                        </c:forEach>
+                                                            <a href="viewcourse?courseId=${c.courseId}" class="mentor-course">
+                                                                <p>${c.courseName}</p>
+                                                            </a>
+                                                            <c:set var="courseCount" value="${courseCount + 1}"/>
+                                                        </c:if>
                                                     </c:if>
                                                 </c:forEach>
+                                            </c:if>
+                                        </c:forEach>
                                     </div>
                                 </div>
                             </div>

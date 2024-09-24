@@ -14,7 +14,6 @@
             }
 
             .banner {
-                width: 100%;
                 height: 200px;
                 background-color: grey;
                 color: white;
@@ -141,14 +140,6 @@
             .product-item img {
                 max-width: 100%;
                 border-radius: 10px;
-            }
-
-            footer {
-                text-align: center;
-                padding: 20px;
-                background-color: #800080;
-                color: white;
-                position: relative;
             }
 
             .pagination {
