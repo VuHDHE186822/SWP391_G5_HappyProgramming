@@ -48,6 +48,10 @@
         <servlet-name>changeAvatar</servlet-name>
         <servlet-class>controller.changeAvatar</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddAccountControl</servlet-name>
+        <servlet-class>admin.AddAccountControl</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
@@ -95,5 +99,9 @@
     <servlet-mapping>
         <servlet-name>changeAvatar</servlet-name>
         <url-pattern>/changeAvatar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddAccountControl</servlet-name>
+        <url-pattern>/AddAccountControl</url-pattern>
     </servlet-mapping>
 </web-app>
