@@ -60,6 +60,14 @@
         <servlet-name>DeleteUserInfoControl</servlet-name>
         <servlet-class>admin.DeleteUserInfoControl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>userProfile</servlet-name>
+        <servlet-class>controller.userProfile</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>changeAvatar</servlet-name>
+        <servlet-class>controller.changeAvatar</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
@@ -115,5 +123,13 @@
     <servlet-mapping>
         <servlet-name>DeleteUserInfoControl</servlet-name>
         <url-pattern>/DeleteUserInfoControl</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>userProfile</servlet-name>
+        <url-pattern>/userProfile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>changeAvatar</servlet-name>
+        <url-pattern>/changeAvatar</url-pattern>
     </servlet-mapping>
 </web-app>
