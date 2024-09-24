@@ -120,7 +120,7 @@
                                 </div>
                                 <div class="col-lg-2"></div>
                                 <div class="col-lg-6" style="text-align: center; margin-top: 20px; margin-bottom: 20px;padding-top: 20px"F>
-                                    <form action="<%= request.getContextPath() %>/manageraccount" method="post" style="display: flex; justify-content: center">
+                                    <form action="<%= request.getContextPath() %>/ManagerAccount" method="post" style="display: flex; justify-content: center">
                                     <input name="valueSearch" value="${requestScope.searchValue != null ? requestScope.searchValue : ""}" id="searchId" type="text" placeholder="Search user name" style="width: 60%; padding: 4px 10px; border-radius: 15px">
                                     <button type="submit" style="border-radius: 50%; width: 40px; font-size: 18px; margin-left: 10px"><i class="fa fa-search"></i></button>
                                 </form>
@@ -206,7 +206,7 @@
         <div id="updateUserModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form id="updateForm" action="<%= request.getContextPath() %>/updateUserInfo" method="post">
+                    <form id="updateForm" action="<%= request.getContextPath() %>/UpdateUserInfoControl" method="post">
                         <div class="modal-header">
                             <h4 class="modal-title">Update User Info</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -279,7 +279,7 @@
         <div id="addEmployeeModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form id="form" action="<%= request.getContextPath() %>/addaccount" method="post">
+                    <form id="form" action="<%= request.getContextPath() %>/AddAccountControl" method="post">
                         <div class="modal-header">
                             <h4 class="modal-title">Add Account</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

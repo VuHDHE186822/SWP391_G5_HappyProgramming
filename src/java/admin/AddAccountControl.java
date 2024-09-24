@@ -21,10 +21,6 @@ public class AddAccountControl extends HttpServlet {
             throws ServletException, IOException, ParseException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-  
-        
-        
-        
         
         // Retrieve form parameters from the request
         String username = request.getParameter("username");
