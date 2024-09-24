@@ -79,7 +79,7 @@
                         coursesShown += 4;
                         moreCoursesButton.textContent = 'View All Courses';
                     } else {
-                        window.location.href = 'allcourse.jsp';
+                        window.location.href = 'allcourse';
                     }
                 }
             </script>

@@ -260,6 +260,21 @@
                     }
                 });
             });
+
+            function validateFileSize() {
+                const fileInput = document.getElementById("cvContainer");
+                const file = fileInput.files[0];
+                const maxSize = 5 * 1024 * 1024;
+
+                if (file) {
+                    if (file.size > maxSize) {
+                        alert("CV must be less than 5MB!");
+                        fileInput.value = "";
+                        return false;
+                    }
+                }
+                return true;
+            }
         </script>
 
         <c:set var="showRegistrationForm" value="${empty sessionScope.error and empty sessionScope.note}" />
@@ -289,7 +304,7 @@
                             <input type="text" name="dob" placeholder="Date Of Birth" required onfocus="(this.type = 'date')" max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
                         <input type="email" placeholder="Email" name="email" required>
                         <input type="hidden" name="role" id="selectedRole" value="" required>
-                        <input type="text" id="cvContainer" class="hidden" name="cv" accept=".doc,.pdf,.jpg,.jpeg,.png" onfocus="(this.type = 'file')" placeholder="Your CV">
+                        <input type="text" id="cvContainer" class="hidden" name="cv" accept="*" onfocus="(this.type = 'file')" placeholder="Your CV (<5MB)" onchange="validateFileSize()">
 
                         <c:if test="${not empty sessionScope.error}">
                             <div class="error-message">
