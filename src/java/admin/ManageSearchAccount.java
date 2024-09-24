@@ -1,21 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 
 package admin;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.User;
 
-/**
- *
- * @author Sapphire
- */
 public class ManageSearchAccount extends HttpServlet {
    
     /** 
@@ -53,7 +49,16 @@ public class ManageSearchAccount extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        String txtSearch = request.getParameter("txt");
+        UserDAO dao = new UserDAO();
+
+        List<User> list = dao.getUsersBySearchName(txtSearch);
+
+        request.setAttribute("listUser", list);
+        request.setAttribute("searchValue", txtSearch);
+        request.getRequestDispatcher("dashboard/search_account_ajax.jsp").forward(request, response);
     } 
 
     /** 
