@@ -44,6 +44,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     margin-top: 20px;
 }
 
+.button-enroll {
+    padding: 10px 20px;
+    background-color: #5d3fd3;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.button-enroll:hover {
+    background-color: #541371;
+    color: white;
+}
+
 .stat-number {
     font-size: 36px;
     font-weight: bold;
