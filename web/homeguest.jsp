@@ -90,7 +90,8 @@
                     <h1 style="text-transform: capitalize">First time here with us?</h1>
                     <h1 style="margin-bottom: 20px; text-transform: capitalize">Explore our courses right away</h1>
                     <form action="allCourse" method="get" class="search-bar">
-                        <input type="text" class="input-submit" placeholder="Search a course" name="search">
+                        <input type="hidden" name="search" value="searchByName"/>
+                        <input type="text" class="input-submit" placeholder="Search a course" name="keyword">
                         <input type="submit" class="button-submit" value="Search">
                     </form>
                 </div>
@@ -98,7 +99,6 @@
             </div>
 
             <!-- MOST PARTICIPANTS COURSE SLIDE -->
-
             <div class="best-course-list">
                 <div class="best-course-heading">MOST PARTICIPANTS COURSE</div>
                 <c:forEach items="${sortedCourses}" var="courseInfo" varStatus="status">
@@ -175,13 +175,15 @@
                                                 <c:forEach items="${sessionScope.course}" var="c">
                                                     <c:if test="${c.courseId == p.courseId}">
                                                         <c:if test="${courseCount < 2}">
-                                                            <a href="viewcourse?courseId=${c.courseId}" class="mentor-course"><p>${c.courseName}</p></a>
-                                                                    <c:set var="courseCount" value="${courseCount + 1}"/>
-                                                                </c:if>
-                                                            </c:if>
-                                                        </c:forEach>
+                                                            <a href="viewcourse?courseId=${c.courseId}" class="mentor-course">
+                                                                <p>${c.courseName}</p>
+                                                            </a>
+                                                            <c:set var="courseCount" value="${courseCount + 1}"/>
+                                                        </c:if>
                                                     </c:if>
                                                 </c:forEach>
+                                            </c:if>
+                                        </c:forEach>
                                     </div>
                                 </div>
                             </div>

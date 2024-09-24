@@ -39,9 +39,9 @@
                         <div class="text-strong1">Course Category</div>
                     </div>
                 </div>
-                <c:forEach items="${sessionScope.categoryFooter}" var="cF">
+                <c:forEach items="${listCategory}" var ="cate">
                     <div class="text-link-list-item">
-                        <div class="list-item">${cF.categoryName}</div>
+                        <a href="allCourse?search=category&categoryId=${cate.categoryId}"><div class="list-item">${cate.categoryName}</div></a>
                     </div>
                 </c:forEach>
             </div>

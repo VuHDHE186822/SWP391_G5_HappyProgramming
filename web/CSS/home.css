@@ -84,21 +84,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 .gold-rank {
     color: #FFD700;
     font-size: 28px;
+    font-weight: bold;
 }
 
 .silver-rank {
     color: #C0C0C0;
     font-size: 26px;
+    font-weight: bold;
 }
 
 .bronze-rank {
     color: #CD7F32;
     font-size: 24px;
+    font-weight: bold;
 }
 
 .default-rank {
     color: #777;
     font-size: 22px;
+    font-weight: bold;
 }
 
 .best-course-heading {

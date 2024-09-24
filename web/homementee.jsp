@@ -31,7 +31,8 @@
                     <h1 style="margin-bottom: 20px; text-transform: capitalize">Welcome back, want to discover new thing?</h1>
                     <!-- SEARCH BAR -->
                     <form action="allCourse" method="get" class="search-bar">
-                        <input type="text" class="input-submit" placeholder="Search a course" name="search">
+                        <input type="hidden" name="search" value="searchByName"/>
+                        <input type="text" class="input-submit" placeholder="Search a course" name="keyword">
                         <input type="submit" class="button-submit" value="Search">
                     </form>
                 </div>
@@ -39,7 +40,6 @@
             </div>
 
             <!-- MOST PARTICIPANTS COURSE SLIDE -->
-
             <div class="best-course-list">
                 <div class="best-course-heading">MOST PARTICIPANTS COURSE</div>
                 <c:forEach items="${sortedCourses}" var="courseInfo" varStatus="status">
