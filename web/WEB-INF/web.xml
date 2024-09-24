@@ -17,10 +17,6 @@
         <servlet-class>admin.AddAccountControl</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>DeleteAccountControl</servlet-name>
-        <servlet-class>admin.DeleteAccountControl</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ManageSearchAccount</servlet-name>
         <servlet-class>admin.ManageSearchAccount</servlet-class>
     </servlet>
@@ -100,7 +96,7 @@
         <servlet-name>viewAllCourse</servlet-name>
         <url-pattern>/allCourse</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>   
+    <servlet-mapping>
         <servlet-name>ManagerAccount</servlet-name>
         <url-pattern>/manageraccount</url-pattern>
     </servlet-mapping>
