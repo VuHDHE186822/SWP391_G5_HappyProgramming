@@ -170,7 +170,7 @@
                                         
                     <!-- Social Sign-in Icons -->
                     <div class="social-signin">
-                        <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=http://localhost:8080/HappyProgramming/login&response_type=code&client_id=281001469062-sdlqscanrn8urvdd8at2540bq0u04mv2.apps.googleusercontent.com&approval_prompt=force">
+                        <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=http://localhost:9999/HappyProgramming/login&response_type=code&client_id=281001469062-sdlqscanrn8urvdd8at2540bq0u04mv2.apps.googleusercontent.com&approval_prompt=force">
                             <i class="fa-brands fa-google"></i>
                         </a>
 <!--                        <i class="fa-brands fa-facebook"></i>

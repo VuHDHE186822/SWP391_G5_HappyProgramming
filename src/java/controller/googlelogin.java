@@ -7,6 +7,7 @@ import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,9 +19,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.GoogleAccount;
 import model.User;
 import org.apache.http.client.ClientProtocolException;
@@ -29,6 +33,7 @@ import org.apache.http.client.fluent.Request;
 import service.FileConverter;
 import service.ImageConverter;
 
+@MultipartConfig
 public class googlelogin extends HttpServlet {
 
     public static String getToken(String code) throws ClientProtocolException, IOException {
@@ -63,11 +68,6 @@ public class googlelogin extends HttpServlet {
 
         return googlePojo;
 
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
     }
 
     @Override
@@ -113,14 +113,10 @@ public class googlelogin extends HttpServlet {
         UserDAO dao = new UserDAO();
         List<User> users = dao.getAll();
         String redString = "";
-        String greenString = "";
 
         for (User u : users) {
-            if (username.equals(u.getUsername())) {
+            if (u.getUsername().equals(username)) {
                 redString += "*Username has been used<br>";
-            }
-            if (email.equals(u.getMail())) {
-                redString += "*Email has been used<br>";
             }
         }
         if (!redString.isEmpty()) {
@@ -129,10 +125,9 @@ public class googlelogin extends HttpServlet {
 
         } else {
             Date doc = new Date();
-            int roleId = role.equals("mentor") ? 2 : 3;
+            int roleId = "mentor".equals(role) ? 2 : 3;
             User user = new User(username, password, firstName, lastName, dob, email, doc, "ok", cvBase64, true, true, roleId);
             dao.registerUser(user);
-            greenString = "Register Successfully!";
             session.setAttribute("user", user);
             response.sendRedirect("home");
         }

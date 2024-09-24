@@ -9,6 +9,7 @@
         <title>Add New Course</title>
         <link href="CSS/bootstrap.min.css" rel="stylesheet">
         <link href="CSS/bootstrap.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
         <style>
             body {
                 background-color: #f5f5f5;
@@ -29,6 +30,8 @@
                 box-shadow: 0 0 15px #ccc;
                 border: none;
                 overflow: hidden;
+                z-index: 1;
+                position: relative;
             }
 
             .modal-body {
@@ -80,8 +83,8 @@
                 margin-bottom: 15px;
                 font-size: 0.9rem;
                 color: #555;
-                resize: none; 
-                overflow-y: auto; 
+                resize: none;
+                overflow-y: auto;
             }
 
             .btn-reset, .btn-confirm {
@@ -122,7 +125,26 @@
             }
 
             #description, #category {
-                height: 100px; 
+                height: 100px;
+            }
+            
+            .close {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                font-size: 24px;
+                cursor: pointer;
+                transition: transform 0.3s ease, color 0.3s ease;
+                z-index: 2;
+            }
+
+            .close:hover {
+                color: #5d3fd3;
+                transform: scale(1.1);
+            }
+
+            .material-symbols-outlined{
+                color: #452cbf;
             }
         </style>
     </head>
@@ -138,6 +160,11 @@
                     </div>
                     <!-- Form Area -->
                     <div class="form-area">
+                        <a href="home" class="close">
+                            <span class="material-symbols-outlined">
+                                close
+                            </span>
+                        </a>
                         <h5 class="modal-title">Add New Course</h5>
                         <form action="addcourse" method="post" id="addCourseForm">
                             <div class="form-group">

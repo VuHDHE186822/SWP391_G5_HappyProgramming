@@ -1,9 +1,3 @@
-<%-- 
-    Document   : register
-    Created on : Sep 20, 2024, 8:31:11 AM
-    Author     : Huy Võ
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -281,13 +275,13 @@
                         <form id="registerForm" action="googlelogin" method="post">
                             <div class="name-container">
                                 <input class="nameInput" type="hidden" name="firstName" value="${sessionScope.firstName}" required>
-                                <input class="nameInput" type="hidden" name="lastName" value="${sessionScope.lastName}" required>
-                            </div>
-                            <input type="text" placeholder="Username" name="username" required>
-                            <input type="text" name="dob" placeholder="Date Of Birth" required onfocus="(this.type = 'date')" max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
+                            <input class="nameInput" type="hidden" name="lastName" value="${sessionScope.lastName}" required>
+                        </div>
+                        <input type="text" placeholder="Username" name="username" required>
+                        <input type="text" name="dob" placeholder="Date Of Birth" required onfocus="(this.type = 'date')" max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
                         <input type="hidden" name="email" value="${sessionScope.email}" required>
                         <input type="hidden" name="role" id="selectedRole" value="" required>
-                        <input type="text" id="cvContainer" class="hidden" name="cv" accept=".doc,.pdf,.jpg,.jpeg,.png" onfocus="(this.type = 'file')" placeholder="Your CV">
+                        <input type="text" id="cvContainer" class="hidden" name="cv" accept=".docx,.pdf,.jpg,.jpeg,.png" onfocus="(this.type = 'file')" placeholder="Your CV">
 
                         <c:if test="${not empty sessionScope.error}">
                             <div class="error-message">
