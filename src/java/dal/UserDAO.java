@@ -271,7 +271,7 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
-    
+
     public void registerUser(User user) {
         String sql = "INSERT INTO [User] (username, [password], firstName, lastName, dob, mail, createdDate, avatarPath, CVPath, activeStatus,isVerified, roleId) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -289,6 +289,34 @@ public class UserDAO extends DBContext {
             statement.setBoolean(10, user.isActiveStatus());
             statement.setBoolean(11, user.isIsVerified());
             statement.setInt(12, user.getRoleId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateProfile(String username, User user) {
+        String sql = "UPDATE [User] SET firstName = ?, lastName = ?, dob = ?, mail = ?, CVPath = ? WHERE username = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getFirstName());
+            statement.setString(2, user.getLastName());
+            statement.setDate(3, new java.sql.Date(user.getDob().getTime()));
+            statement.setString(4, user.getMail());
+            statement.setString(5, user.getCvPath());
+            statement.setString(6, username);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateUserAvatarPath(String username, String avatarPath) {
+        String sql = "UPDATE [User] SET avatarPath = ? WHERE username = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, avatarPath);
+            statement.setString(2, username);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

@@ -124,7 +124,7 @@
             <div>
                 <c:if test="${sessionScope.user != null}">
                     <c:set var="u" value="${sessionScope.user}"/>
-                    <a href="url" class="user">${u.lastName} ${u.firstName}</a>
+                    <a href="userProfile.jsp" class="user">${u.lastName} ${u.firstName}</a>
                     |
                     <a href="logout.jsp" class="button-logout">Log Out</a>
                 </c:if>

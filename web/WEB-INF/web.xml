@@ -52,6 +52,14 @@
         <servlet-name>viewcourse</servlet-name>
         <servlet-class>controller.viewcourse</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>userProfile</servlet-name>
+        <servlet-class>controller.userProfile</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>changeAvatar</servlet-name>
+        <servlet-class>controller.changeAvatar</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
@@ -83,5 +91,14 @@
     <servlet-mapping>
         <servlet-name>addcourse</servlet-name>
         <url-pattern>/addcourse</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>userProfile</servlet-name>
+        <url-pattern>/userProfile</url-pattern>
+    </servlet-mapping>
+    <Connector connectionTimeout="20000" maxHttpHeaderSize="65536" port="8080" protocol="HTTP/1.1" redirectPort="8443"/>
+    <servlet-mapping>
+        <servlet-name>changeAvatar</servlet-name>
+        <url-pattern>/changeAvatar</url-pattern>
     </servlet-mapping>
 </web-app>
