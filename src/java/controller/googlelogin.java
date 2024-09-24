@@ -77,7 +77,7 @@ public class googlelogin extends HttpServlet {
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String username = request.getParameter("username");
-        String password = UUID.randomUUID().toString();;
+        String password = UUID.randomUUID().toString();
         String dobString = request.getParameter("dob");
         Date dob = null;
 

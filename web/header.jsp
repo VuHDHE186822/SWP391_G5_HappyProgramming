@@ -196,6 +196,7 @@
             <div>
                 <c:if test="${sessionScope.user != null}">
                     <c:set var="u" value="${sessionScope.user}"/>
+
                     <div class="user-dropdown">
                         <c:if test="${u.avatarPath != null}">
                             <a href="javascript:void(0);" class="user-logo" onclick="toggleDropdown()">
@@ -209,6 +210,10 @@
                             <a href="logout.jsp"><i class="fas fa-sign-out-alt"></i> Log Out</a>
                         </div>
                     </div>
+
+                    <a href="userProfile.jsp" class="user">${u.lastName} ${u.firstName}</a>
+                    |
+                    <a href="logout.jsp" class="button-logout">Log Out</a>
                 </c:if>
 
                 <script>

@@ -2,14 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dal.UserDAO;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,11 +20,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.User;
 import service.FileConverter;
 import service.ImageConverter;
@@ -34,8 +30,7 @@ import service.ImageConverter;
  *
  * @author Huy Võ
  */
-@MultipartConfig
-public class register extends HttpServlet {
+public class userProfile extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -54,10 +49,10 @@ public class register extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet register</title>");
+            out.println("<title>Servlet userProfile</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet register at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet userProfile at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -75,6 +70,22 @@ public class register extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+
+        // Giả sử user được lấy từ session (hoặc bạn có thể lấy từ cơ sở dữ liệu)
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            // Nếu user không tồn tại, chuyển hướng về trang đăng nhập
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        // Đặt đối tượng user vào request để sử dụng trong JSP
+        request.setAttribute("user", user);
+
+        // Chuyển tiếp đến userProfile.jsp
+        request.getRequestDispatcher("userProfile.jsp").forward(request, response);
     }
 
     /**
@@ -89,15 +100,13 @@ public class register extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String repassword = request.getParameter("repassword");
+        String username = request.getParameter("usernameHidden");
         String dobString = request.getParameter("dob");
         Date dob = null;
 
-        // Parse date
         if (dobString != null && !dobString.isEmpty()) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             try {
@@ -106,57 +115,47 @@ public class register extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        String email = request.getParameter("email");
-        String role = request.getParameter("role");
-
-        Path avatarPath = Paths.get(getServletContext().getRealPath("/img/bc439871417621836a0eeea768d60944.jpg"));
-        byte[] avatarBytes = Files.readAllBytes(avatarPath);
-        String avatar = ImageConverter.gI().encode(avatarBytes);
-
-        String cvBase64 = null;
-
-        if ("mentor".equals(request.getParameter("role"))) {
-            Part cvPart = request.getPart("cv");
-            if (cvPart != null && cvPart.getSize() > 0) {
-                FileConverter fileConverter = FileConverter.getInstance();
-                String cvPrefix = "cvFile";
-                File tempFile = File.createTempFile(cvPrefix, ".pdf");
-                cvPart.write(tempFile.getAbsolutePath());
-                cvBase64 = fileConverter.encode(tempFile);
-                tempFile.delete();
-            }
-        }
+        String newEmail = request.getParameter("email");
+        String oldEmail = request.getParameter("oldEmail");
+//        String cvBase64 = null;
+//
+//        if ("mentor".equals(request.getParameter("role"))) {
+//            Part cvPart = request.getPart("cv");
+//            if (cvPart != null && cvPart.getSize() > 0) {
+//                FileConverter fileConverter = FileConverter.getInstance();
+//                String cvPrefix = "cvFile";
+//                File tempFile = File.createTempFile(cvPrefix, ".pdf");
+//                cvPart.write(tempFile.getAbsolutePath());
+//                cvBase64 = fileConverter.encode(tempFile);
+//                tempFile.delete();
+//            }
+//        }
 
         UserDAO dao = new UserDAO();
         List<User> users = dao.getAll();
         String redString = "";
         String greenString = "";
-
-        if (!password.equals(repassword)) {
-            session.setAttribute("error", "*Passwords do not match");
-            response.sendRedirect("register.jsp");
-            return;
-        }
-
-        for (User u : users) {
-            if (username.equals(u.getUsername())) {
-                redString += "*Username has been used<br>";
+        if (!newEmail.equals(oldEmail)) {
+            for (User u : users) {
+                if (newEmail.equals(u.getMail())) {
+                    redString += "*Email has been used<br>";
+                }
             }
-            if (email.equals(u.getMail())) {
-                redString += "*Email has been used<br>";
-            }
+
         }
         if (!redString.isEmpty()) {
             session.setAttribute("error", redString);
         } else {
-            Date doc = new Date();
-            int roleId = role.equals("mentor") ? 2 : 3;
-            User user = new User(username, password, firstName, lastName, dob, email, doc, avatar, cvBase64, true, false, roleId);
-            dao.registerUser(user);
-            greenString = "Register Successfully!";
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setDob(dob);
+            user.setMail(newEmail);
+            user.setCvPath(newEmail);
+            dao.updateProfile(username, user);
+            greenString = "Update Successfully!";
             session.setAttribute("note", greenString);
         }
-        response.sendRedirect("register.jsp");
+        response.sendRedirect("userProfile.jsp");
     }
 
     /**
@@ -168,4 +167,5 @@ public class register extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

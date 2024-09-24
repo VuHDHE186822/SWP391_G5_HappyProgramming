@@ -277,7 +277,6 @@ public class UserDAO extends DBContext {
         return list;
     }
 
-//<<<<<<< HEAD
     public List<Course> getCourseByQuantityEnroll() {
         List<Course> list = new ArrayList<>();
         String sql = "SELECT c.courseId, c.courseName, \n"
@@ -302,17 +301,18 @@ public class UserDAO extends DBContext {
                 String name = rs.getString("courseName");
                 String des = rs.getString("courseDescription");
                 Date date = rs.getDate("createdAt");
-                int count  = rs.getInt("user_count");
+                int count = rs.getInt("user_count");
                 Course e = new Course(id, name, des, date);
                 list.add(e);
-                  }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
     }
-//=======
-    public void registerUser(User user) {
+
+
+public void registerUser(User user) {
         String sql = "INSERT INTO [User] (username, [password], firstName, lastName, dob, mail, createdDate, avatarPath, CVPath, activeStatus,isVerified, roleId) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -358,16 +358,39 @@ public class UserDAO extends DBContext {
                 String verificationCode = rs.getString("verification_code");
                 int roleId = rs.getInt("roleId");
                 u = new User(id, username, password, firstName, lastName, dob, mail, createdDate, avatarPath, cvPath, activeStatus, isVerified, verificationCode, roleId);
-//>>>>>>> 40c94f28736ae32f75d643b7591a89e796317341
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-//<<<<<<< HEAD
 
 
-//=======
         return u;
     }
-//>>>>>>> 40c94f28736ae32f75d643b7591a89e796317341
+    public void updateProfile(String username, User user) {
+        String sql = "UPDATE [User] SET firstName = ?, lastName = ?, dob = ?, mail = ?, CVPath = ? WHERE username = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getFirstName());
+            statement.setString(2, user.getLastName());
+            statement.setDate(3, new java.sql.Date(user.getDob().getTime()));
+            statement.setString(4, user.getMail());
+            statement.setString(5, user.getCvPath());
+            statement.setString(6, username);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateUserAvatarPath(String username, String avatarPath) {
+        String sql = "UPDATE [User] SET avatarPath = ? WHERE username = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, avatarPath);
+            statement.setString(2, username);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
