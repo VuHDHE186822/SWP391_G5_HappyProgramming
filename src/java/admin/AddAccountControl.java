@@ -1,81 +1,94 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package admin;
 
+import dal.UserDAO;
+import model.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/**
- *
- * @author Sapphire
- */
+@WebServlet(name = "AddAccountControl", urlPatterns = {"/addaccount"})
 public class AddAccountControl extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException, ParseException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet AddAccountControl</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AddAccountControl at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        request.setCharacterEncoding("UTF-8");
+  
+        
+        
+        
+        
+        // Retrieve form parameters from the request
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date dob = dateFormat.parse(request.getParameter("dob")); // Date of birth
+        Date createdDate = new Date(); // Current date as the account creation date
+
+        String email = request.getParameter("email");
+        String avatarPath = request.getParameter("avatarPath");
+        String cvPath = request.getParameter("cvPath");
+
+        boolean activeStatus = request.getParameter("activeStatus") != null; // Checkbox, true if checked
+        boolean isVerified = request.getParameter("isVerified") != null; // Checkbox, true if checked
+
+        String verificationCode = request.getParameter("verificationCode");
+
+        // Role ID: Based on the selected role from the dropdown (1 for Admin, 2 for Mentor, 3 for Mentee)
+        int roleId = Integer.parseInt(request.getParameter("roleId"));
+
+        String msg = "";
+        UserDAO dao = new UserDAO();
+
+        // Check if the username already exists
+        boolean check = dao.checkUserNameDuplicate(username);
+        if (check) {
+            msg = "Username already exists!";
+            request.setAttribute("error", msg);
+        } else {
+            // Insert new user into the database
+            dao.insertUser(username, password, firstName, lastName, dob, email, createdDate, avatarPath, cvPath, activeStatus, isVerified, verificationCode, roleId);
+            msg = "Username " + username + " added successfully!";
+            request.setAttribute("mess", msg);
         }
-    } 
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
-    } 
-
-    /** 
-     * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
+        // Forward the request to the account management page
+        request.getRequestDispatcher("managerAccount").forward(request, response);
     }
 
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (ParseException ex) {
+            Logger.getLogger(AddAccountControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (ParseException ex) {
+            Logger.getLogger(AddAccountControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Servlet for adding new accounts";
+    }
 }
