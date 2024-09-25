@@ -88,27 +88,9 @@
                 background-color: #f1f1f1;
             }
 
-            .wide-banner {
-                background-color: #212529;
-                color: white;
-                text-align: center;
-                padding: 20px;
-                margin: 20px 0;
-                height: 300px;
-                border-radius: 10px;
-            }
-
             h2 {
                 text-align: center;
                 margin: 20px 0;
-            }
-
-            .featured-products {
-                background-color: black;
-                color: white;
-                padding: 20px;
-                border: 2px solid gold;
-                border-radius: 10px;
             }
 
             .product-list {
@@ -127,79 +109,40 @@
                 color: black;
             }
 
-            .product-item2 {
-                background: white;
-                border: 2px solid gold;
-                border-radius: 10px;
-                padding: 15px;
-                text-align: center;
-                width: 200px;
-                color: black;
-            }
-
-            .product-item img {
-                max-width: 100%;
-                border-radius: 10px;
-            }
-
             .pagination {
-                text-align: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 margin: 20px 0;
             }
 
-            .page-link {
-                margin: 0 5px;
-                cursor: pointer;
-                color: #1da1f2;
-            }
-
-            .page-link.active {
-                font-weight: bold;
-            }
-            .nav-link {
-                color: white;
-                text-decoration: none;
-            }
-
-            .nav-link:hover {
-                text-decoration: underline;
-            }
-            .featured-product2 {
-                background-color: black;
-                color: white;
-                padding: 20px;
-            }
-
-            .product-list2 {
+            .pagination ul {
+                list-style: none;
                 display: flex;
-                overflow-x: auto;
-                padding: 10px 0;
-                gap: 20px;
-                scrollbar-width: thin;
+                padding: 0;
+                margin: 0;
             }
 
-            .product-item2 {
-                background: white;
-                border: 2px solid gold;
-                border-radius: 10px;
-                padding: 15px;
-                text-align: center;
-                color: black;
-                flex: 0 0 auto;
-                min-width: 250px;
+            .pagination li {
+                margin: 0 5px;
             }
 
-            .product-item2 img {
-                max-width: 100%;
-                border-radius: 10px;
-            }
-            .mentor-course {
+            .pagination a {
+                padding: 10px 15px;
+                background-color: #1da1f2;
+                color: white;
+                border-radius: 5px;
                 text-decoration: none;
-                color: #3498db;
+                transition: background-color 0.3s;
             }
 
-            .mentor-course:hover {
-                color: #2980b9;
+            .pagination a:hover {
+                background-color: #ff9900;
+            }
+
+            .pagination .active a {
+                background-color: #ff9900;
+                font-weight: bold;
             }
         </style>
     </head>
@@ -216,7 +159,7 @@
                 </form>
             </div>
             <div class="">
-                <a href="allCourse" class="nav-link">All</a> <!-- Thêm lớp nav-link -->
+                <a href="allCourse" class="nav-link">All</a>
             </div>
             <div class="dropdown">
                 Category ▼
@@ -238,17 +181,18 @@
 
         <section class="featured-product2">
             <h2>Top courses with the most participation</h2>
-            <div class="product-list2">
-                <!--<div class="product-item2">-->
+            <div class="product-list">
                 <c:forEach items="${listMostEnrollCourse}" var="cou">
                     <c:forEach items="${listCourse_Category}" var="cocat">
-                        <c:if test="${cocat.courseId == cou.courseId}"> <!-- Kiểm tra nếu courseId khớp -->
+                        <c:if test="${cocat.courseId == cou.courseId}">
                             <c:forEach items="${listCategory}" var="cat">
-                                <c:if test="${cat.categoryId == cocat.categoryId}"> <!-- Kiểm tra nếu categoryId khớp -->
-                                    <div class="product-item2">
-                                       <a href="viewcourse?courseId=${cou.courseId}" class="mentor-course"> <h3>${cou.courseName}</h3></a>
-                                        <h6>Category: ${cat.categoryName}</h6> <!-- Hiển thị tên danh mục -->
-                                        <h6 class="course-description">${cou.courseDescription}</h6>
+                                <c:if test="${cat.categoryId == cocat.categoryId}">
+                                    <div class="product-item">
+                                        <a href="viewcourse?courseId=${cou.courseId}" class="mentor-course">
+                                            <h3>${cou.courseName}</h3>
+                                        </a>
+                                        <h6>Category: ${cat.categoryName}</h6>
+                                        <p class="short-description">${cou.courseDescription}</p>
                                         <p>Created at: ${cou.createdAt}</p>
                                         <button>Enroll</button>
                                     </div>
@@ -257,83 +201,54 @@
                         </c:if>
                     </c:forEach>
                 </c:forEach>
+            </div>
+        </section>
 
-            </div
-        </div>
-    </section>
-
-
-    <section class="all-products">
-        <h2>Courses</h2>
-        <div class="product-list" id="product-list">
-            <c:forEach items="${listCourse}" var="cou">
-                <c:forEach items="${listCourse_Category}" var="cocat">
-                    <c:if test="${cocat.courseId == cou.courseId}"> <!-- Kiểm tra nếu courseId khớp -->
-                        <c:forEach items="${listCategory}" var="cat">
-                            <c:if test="${cat.categoryId == cocat.categoryId}"> <!-- Kiểm tra nếu categoryId khớp -->
-                                <div class="product-item">
-                                    <a href="viewcourse?courseId=${cou.courseId}" class="mentor-course"><h3>${cou.courseName}</h3></a>
-                                    <h6>Category: ${cat.categoryName}</h6> <!-- Hiển thị tên danh mục -->
-                                    <h6 class="course-description">${cou.courseDescription}</h6>
-                                    <h6>Created at: ${cou.createdAt}</h6>
-                                    <button>Enroll</button>
-                                </div>
-                            </c:if>
-                        </c:forEach>
-                    </c:if>
+        <section class="all-products">
+            <h2>Courses</h2>
+            <div class="product-list" id="product-list">
+                <c:forEach items="${listCourse}" var="cou">
+                    <c:forEach items="${listCourse_Category}" var="cocat">
+                        <c:if test="${cocat.courseId == cou.courseId}">
+                            <c:forEach items="${listCategory}" var="cat">
+                                <c:if test="${cat.categoryId == cocat.categoryId}">
+                                    <div class="product-item">
+                                        <a href="viewcourse?courseId=${cou.courseId}" class="mentor-course">
+                                            <h3>${cou.courseName}</h3>
+                                        </a>
+                                        <h6>Category: ${cat.categoryName}</h6>
+                                        <p class="short-description">${cou.courseDescription}</p>
+                                        <h6>Created at: ${cou.createdAt}</h6>
+                                        <button>Enroll</button>
+                                    </div>
+                                </c:if>
+                            </c:forEach>
+                        </c:if>
+                    </c:forEach>
                 </c:forEach>
-            </c:forEach>
-        </div>
+            </div>
 
-        <div class="pagination" id="pagination"></div>
-    </section>
+            <div class="pagination">
+                <ul>
+                    <c:forEach begin="1" end="${pageControl.totalPage}" var="pageNumber">
+                        <li class="${pageNumber == pageControl.page ? 'active' : ''}">
+                            <a href="${pageControl.urlPattern}page=${pageNumber}">${pageNumber}</a>
+                        </li>
+                    </c:forEach>
+                </ul>
+            </div>
+        </section>
 
-    <jsp:include page="footer.jsp"/>
+        <jsp:include page="footer.jsp"/>
 
-    <script>
-        const productsPerPage = 10;
-        const productItems = document.querySelectorAll('.product-item');
-        const totalPages = Math.ceil(productItems.length / productsPerPage);
-        const pagination = document.getElementById('pagination');
-
-        function showPage(page) {
-            const start = (page - 1) * productsPerPage;
-            const end = start + productsPerPage;
-
-            productItems.forEach((item, index) => {
-                item.style.display = (index >= start && index < end) ? 'block' : 'none';
-            });
-
-            // Update pagination links
-            const pageLinks = Array.from(pagination.children);
-            pageLinks.forEach(link => link.classList.remove('active'));
-            if (pagination.children[page - 1]) {
-                pagination.children[page - 1].classList.add('active');
-            }
-        }
-
-        function createPagination() {
-            for (let i = 1; i <= totalPages; i++) {
-                const link = document.createElement('span');
-                link.textContent = i;
-                link.className = 'page-link';
-                link.onclick = () => showPage(i);
-                pagination.appendChild(link);
-            }
-        }
-
-        function limitDescription() {
-            document.querySelectorAll('.course-description').forEach(function (description) {
-                const text = description.textContent;
-                if (text.length > 45) {
-                    description.textContent = text.slice(0, 45) + '...';
+        <script>
+            // Giới hạn mô tả xuống 45 ký tự
+            document.querySelectorAll('.short-description').forEach(function (desc) {
+                if (desc.innerText.length > 45) {
+                    desc.innerText = desc.innerText.substring(0, 45) + '...';
                 }
             });
-        }
+        </script>
 
-        createPagination();
-        limitDescription(); // Giới hạn mô tả
-        showPage(1); // Hiển thị trang đầu tiên khi tải trang
-    </script>
-</body>
+    </body>
 </html>

@@ -87,4 +87,11 @@ public class Course {
     public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
+
+    @Override
+    public String toString() {
+        return "Course{" + "courseId=" + courseId + ", courseName=" + courseName + ", courseDescription=" + courseDescription + ", createdAt=" + createdAt + '}';
+    }
+
+
 }

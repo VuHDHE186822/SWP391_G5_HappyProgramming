@@ -66,6 +66,7 @@ public class viewAllCourse extends HttpServlet {
         session.setAttribute("listMentor", listMentor);
         session.setAttribute("listCourse_Category", listCourse_Category);
         session.setAttribute("listCourse", listCourse);
+        session.setAttribute("pageControl", pageControl);
 
         request.getRequestDispatcher("listCourse.jsp").forward(request, response);
     }
@@ -117,15 +118,13 @@ public class viewAllCourse extends HttpServlet {
         switch (actionSearch) {
             case "searchByName":
                 String keyword = request.getParameter("keyword");
-//                totalRecord = productDAO.findTotalRecordByName(keyword);
                 totalRecord = courseDAO.findTotalRecordByName(keyword);
                 listCourse = courseDAO.findByName(keyword, page);
-//                pagecontrol.setUrlPattern(requestURL + "?search=searchByName&keyword=" + keyword + "&");
                 pagecontrol.setUrlPattern(requestURL + "?search=searchByName&keyword=" + keyword + "&");
                 break;
             case "category":
                 String categoryId = request.getParameter("categoryId");
-//                totalRecord = courseDAO.findTotalRecordByCategory(categoryId);
+                totalRecord = courseDAO.findTotalRecordByCategory(categoryId);
                 listCourse = courseDAO.findByCategory(categoryId);
                 pagecontrol.setUrlPattern(requestURL + "?search=category&categoryId=" + categoryId + "&");
                 break;
@@ -137,12 +136,14 @@ public class viewAllCourse extends HttpServlet {
                 break;
 
             default:
-                listCourse = courseDAO.getAllCourse();
+                totalRecord = courseDAO.findTotalRecordAllCourses();
+                listCourse = courseDAO.getAllCourse2(page);
                 pagecontrol.setUrlPattern(requestURL + "?");
+
         }
-        int totalPage = (totalRecord % 12) == 0
-                ? (totalRecord / 12)
-                : (totalRecord / 12) + 1;
+        int totalPage = (totalRecord % 5) == 0
+                ? (totalRecord / 5)
+                : (totalRecord / 5) + 1;
 
         pagecontrol.setPage(page);
         pagecontrol.setTotalPage(totalPage);
