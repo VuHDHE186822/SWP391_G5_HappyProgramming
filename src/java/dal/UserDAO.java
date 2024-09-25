@@ -50,6 +50,22 @@ public class UserDAO extends DBContext {
         return list;
     }
 
+    public int countUser(int roleId) {
+        int count = 0;
+        String sql = "SELECT COUNT(*) AS total FROM [User] where roleId = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, roleId);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt("total");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return count;
+    }
+
     public List<User> getAllUserByRoleId(int roleId) {
         List<User> list = new ArrayList<>();
         String sql = "SELECT * FROM [User] WHERE roleId = ?";

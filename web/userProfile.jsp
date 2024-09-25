@@ -22,7 +22,6 @@
         <title>User Profile</title>
         <style>
             body {
-                font-family: Arial, sans-serif;
                 background-color: #f5f5f5;
                 display: flex;
                 justify-content: center;
@@ -188,6 +187,7 @@
             }
         </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link href="CSS/bootstrap.min.css" rel="stylesheet">
     </head>
     <body>
         <jsp:include page="header.jsp" />
@@ -201,16 +201,7 @@
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String dobFormatted = user.getDob() != null ? sdf.format(user.getDob()) : "";
             String cvBase64 = user.getCvPath(); // Giả sử user.getCvPath() trả về chuỗi Base64
-FileConverter fileConverter = FileConverter.getInstance();
-File cvFile = fileConverter.decode(cvBase64, "CV.pdf");
 
-// Kiểm tra xem file có được tạo thành công không
-if (cvFile != null && cvFile.exists()) {
-    // File đã được tạo thành công, bạn có thể xử lý tiếp
-    System.out.println("File CV đã được tạo thành công: " + cvFile.getAbsolutePath());
-} else {
-    System.out.println("Có lỗi xảy ra trong quá trình tạo file CV.");
-}
         %>
         <script>
             let isEditing = false;

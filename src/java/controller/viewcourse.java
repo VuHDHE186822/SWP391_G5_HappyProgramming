@@ -64,58 +64,32 @@ public class viewcourse extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         HttpSession session = request.getSession();
         CourseDAO daoC = new CourseDAO();
         String courseId_str = request.getParameter("courseId");
         CategoryDAO daoCt = new CategoryDAO();
         CourseCategoryDAO daoCC = new CourseCategoryDAO();
-        List<Category> category = daoCt.getAll();
-        Course c = new Course();
         try {
             int courseId = Integer.parseInt(courseId_str);
-            int sameCate = daoCC.getCategoryIdByCourseId(courseId);
-            List<CourseCategory> courseCateHasSameCate = daoCC.getAllByCategoryId(sameCate);
-            List<Course> course = daoC.getAll();
-            for (Course co : course) {
-                if (co.getCourseId() == courseId) {
-                    c = co;
-                }
-            }
-            List<Course> sameCourse = new ArrayList<>();
-            for (CourseCategory cSame : courseCateHasSameCate) {
-                Course c1 = daoC.getCourseByCourseId(cSame.getCourseId());
-                sameCourse.add(c1);
-            }
+            session.setAttribute("currentCourseId", courseId);
 
-            Category cate = new Category();
-            for (Category ca : category) {
-                if (ca.getCategoryId() == sameCate) {
-                    cate = ca;
-                }
-            }
-            List<Course> allCoursesExceptSameCategory = new ArrayList<>();
+            int sameCategoryId = daoCC.getCategoryIdByCourseId(courseId);
+            Course c = daoC.getCourseByCourseId(courseId);
+            List<Course> sameCourse = daoC.getSameCourse(sameCategoryId, courseId);
+            Category cate = daoCt.getCategoryByCategoryId(sameCategoryId);
+            List<Course> otherCourse = daoC.getOtherCourseHasOtherCategory(sameCategoryId);
+            List<Category> category = daoCt.getAllExceptOne(sameCategoryId);
 
-            for (Course co : course) {
-                boolean isSameCategory = false;
-
-                for (Course sameCo : sameCourse) {
-                    if (co.getCourseId() == sameCo.getCourseId()) {
-                        isSameCategory = true;
-                        break;
-                    }
-                }
-
-                if (!isSameCategory) {
-                    allCoursesExceptSameCategory.add(co);
-                }
-            }
-
-            session.setAttribute("otherCourse", allCoursesExceptSameCategory);
+            session.setAttribute("category", category);
+            session.setAttribute("otherCourse", otherCourse);
             session.setAttribute("sameCourse", sameCourse);
-            session.setAttribute("category", cate);
+            session.setAttribute("categoryCourse", cate);
             session.setAttribute("courseDetail", c);
-            response.sendRedirect("viewcourse.jsp");
+
+            response.sendRedirect("viewcourse.jsp?courseId=" + courseId);
         } catch (Exception e) {
+            e.printStackTrace(); // In ra lỗi nếu có
         }
 
     }
