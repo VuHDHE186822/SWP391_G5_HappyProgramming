@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,31 +10,14 @@ public class Course {
     private String courseName;
     private String courseDescription;
     private Date createdAt;
-//    private int userCount;
 
     private List<Category> categories;  // A course can belong to multiple categories
 
     // Constructors
     public Course() {
+        categories = new ArrayList<>();
     }
-
-//    public int getUserCount() {
-//        return userCount;
-//    }
-//
-//    public void setUserCount(int userCount) {
-//        this.userCount = userCount;
-//    }
-
-//    public Course(int courseId, String courseName, String courseDescription, Date createdAt, int userCount) {
-//        this.courseId = courseId;
-//        this.courseName = courseName;
-//        this.courseDescription = courseDescription;
-//        this.createdAt = createdAt;
-//        this.userCount = userCount;
-//    }
     
-
     public Course(int courseId, String courseName, String courseDescription, Date createdAt) {
         this.courseId = courseId;
         this.courseName = courseName;
