@@ -68,6 +68,10 @@
         <servlet-name>UpdateUserInfoControl</servlet-name>
         <servlet-class>admin.UpdateUserInfoControl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>viewMyCourses</servlet-name>
+        <servlet-class>controller.viewMyCourses</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
@@ -135,5 +139,9 @@
     <servlet-mapping>
         <servlet-name>UpdateUserInfoControl</servlet-name>
         <url-pattern>/UpdateUserInfoControl</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>viewMyCourses</servlet-name>
+        <url-pattern>/viewMyCourses</url-pattern>
     </servlet-mapping>
 </web-app>
