@@ -112,88 +112,277 @@
                 <div class="container pt-4" style="max-width: 2400px">
                     <section class="mb-4">
                         <div class="card">
-                            <div class="row"></div>
-                            <div class="col-sm-4" style="text-align: center; margin-top: 20px; margin-bottom: 20px;padding-top: 20px">
-                                <h3 class="mb-0" id="">
-                                    <strong>Manage Account</strong>
-                                </h3>
+                            <div class="row" style="">
+                                <div class="col-sm-4" style="text-align: center; margin-top: 20px; margin-bottom: 20px;padding-top: 20px">
+                                    <h3 class="mb-0" id="">
+                                        <strong>Manage Account</strong>
+                                    </h3>
+                                </div>
+                                <div class="col-lg-2"></div>
+                                <div class="col-lg-6" style="text-align: center; margin-top: 20px; margin-bottom: 20px;padding-top: 20px"F>
+                                    <form action="<%= request.getContextPath() %>/ManagerAccount" method="post" style="display: flex; justify-content: center">
+                                    <input name="valueSearch" value="${requestScope.searchValue != null ? requestScope.searchValue : ""}" id="searchId" type="text" placeholder="Search user name" style="width: 60%; padding: 4px 10px; border-radius: 15px">
+                                    <button type="submit" style="border-radius: 50%; width: 40px; font-size: 18px; margin-left: 10px"><i class="fa fa-search"></i></button>
+                                </form>
                             </div>
-                            <div class="col-lg-2"></div>
-                            <div class="col-lg-6" style="text-align: center; margin-top: 20px; margin-bottom: 20px;padding-top: 20px">
-                                <form action="<%= request.getContextPath() %>/ManagerAccount" method="post" style="display: flex; justify-content: center">
-                                <input name="valueSearch" value="${requestScope.searchValue != null ? requestScope.searchValue : ""}" id="searchId" type="text" placeholder="Search user name" style="width: 60%; padding: 4px 10px; border-radius: 15px">
-                                <button type="submit" style="border-radius: 50%; width: 40px; font-size: 18px; margin-left: 10px"><i class="fa fa-search"></i></button>
-                            </form>
                         </div>
-                    </div>
-                    <c:if test="${error!=null }">
-                        <div style="margin-top: 20px" class="alert alert-danger" role="alert">
-                            ${error}
-                        </div>
-                    </c:if>
-                    <c:if test="${mess!=null }">
-                        <div style="margin-top: 20px" class="alert alert-success" role="alert">
-                            ${mess}
-                        </div>
-                    </c:if>
-                    <div class="card-body" style="padding: 0">
-                        <div class="table-responsive">
-                            <table class="table table-hover text-nowrap">
-                                <thead>
-                                    <tr>
-                                        <th class="text_page_head">Username</th>
-                                        <th class="text_page_head">First name</th>
-                                        <th class="text_page_head">Last name</th>
-                                        <th class="text_page_head">DOB</th>
-                                        <th class="text_page_head">Mail</th>
-                                        <th class="text_page_head">Created Date</th>
-                                        <th class="text_page_head">Avatar Path</th>
-                                        <th class="text_page_head">CV Path</th>
-                                        <th class="text_page_head">Active Status</th>
-                                        <th class="text_page_head">Is Verified</th>
-                                        <th class="text_page_head">Role ID</th>
-                                        <th>
-                                            <a style="margin-left: 5px" href="dashboard/addAccount.jsp" class="btn btn-success">
-                                                <i class="fa-solid fa-plus"></i>
-                                            </a>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach items="${requestScope.listUsers}" var="t">
+                        <c:if test="${error!=null }">
+                            <div style="margin-top: 20px" class="alert alert-danger" role="alert">
+                                ${error}
+                            </div>
+                        </c:if>
+                        <c:if test="${mess!=null }">
+                            <div style="margin-top: 20px" class="alert alert-success" role="alert">
+                                ${mess}
+                            </div>
+                        </c:if>
+                        <div class="card-body" style="padding: 0">
+                            <div class="table-responsive">
+                                <table class="table table-hover text-nowrap">
+                                    <thead>
                                         <tr>
-                                            <td class="text_page" style="font-weight: 500">${t.username}</td>
-                                            <td class="text_page" style="font-weight: 500">${t.firstName}</td>
-                                            <td class="text_page" style="font-weight: 500">${t.lastName}</td>
-                                            <td class="text_page" style="font-weight: 500">${t.dob}</td>
-                                            <td class="text_page" style="font-weight: 500">${t.mail}</td>
-                                            <td class="text_page" style="font-weight: 500">${t.createdDate}</td>
-                                            <td class="text_page" style="font-weight: 500">${t.avatarPath}</td>
-                                            <td class="text_page" style="font-weight: 500">${t.cvPath}</td>
-                                            <td class="text_page" style="font-weight: 500">${t.activeStatus}</td>
-                                            <td class="text_page" style="font-weight: 500">${t.isVerified}</td>
-                                            <td class="text_page" style="font-weight: 500">${t.roleId}</td>
-                                            <td>
-                                                <!-- Update Button -->
-                                                <a href="<%= request.getContextPath() %>/UpdateUserInfoControl?username=${t.username}&firstName=${t.firstName}&lastName=${t.lastName}&dob=${t.dob}&email=${t.mail}&avatarPath=${t.avatarPath}&cvPath=${t.cvPath}&activeStatus=${t.activeStatus}&isVerified=${t.isVerified}&roleId=${t.roleId}" class="btn btn-primary">
-                                                    <i class="fa-solid fa-edit"></i>
+                                            <th class="text_page_head">Username</th>
+                                            <th class="text_page_head">First name</th>
+                                            <th class="text_page_head">Last name</th>
+                                            <th class="text_page_head">DOB</th>
+                                            <th class="text_page_head">Mail</th>
+                                            <th class="text_page_head">Created Date</th>
+                                            <th class="text_page_head">Avatar Path</th>
+                                            <th class="text_page_head">CV Path</th>
+                                            <th class="text_page_head">Active Status</th>
+                                            <th class="text_page_head">Is Verified</th>
+                                            <th class="text_page_head">Role ID</th>
+                                            <th>
+                                                <a style="margin-left: 5px" href="#addEmployeeModal" class="btn btn-success" data-toggle="modal">
+                                                    <i class="fa-solid fa-plus"></i>
                                                 </a>
-
-                                                <!-- Delete Button -->
-                                                <a href="<%= request.getContextPath() %>/DeleteUserInfoControl?username=${t.username}" class="btn btn-danger">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </a>
-                                            </td>
+                                            </th>
                                         </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="${requestScope.listUsers}" var="t">
+                                            <tr>
+                                                <td class="text_page" style="font-weight: 500">${t.username}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.firstName}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.lastName}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.dob}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.mail}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.createdDate}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.avatarPath}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.cvPath}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.activeStatus}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.isVerified}</td>
+                                                <td class="text_page" style="font-weight: 500">${t.roleId}</td>
+                                                <td>
+                                                    <!-- Update Button -->
+                                                    <button type="button" class="btn btn-primary" 
+                                                            data-toggle="modal" 
+                                                            data-target="#updateUserModal" 
+                                                            onclick="populateUpdateModal('${t.username}', '${t.firstName}', '${t.lastName}', '${t.dob}', '${t.mail}', '${t.avatarPath}', '${t.cvPath}', ${t.activeStatus}, ${t.isVerified}, ${t.roleId})">
+                                                        <i class="fa-solid fa-edit"></i>
+                                                    </button>
+
+                                                    <!-- Delete Button -->
+                                                    <button type="button" class="btn btn-danger" 
+                                                            data-toggle="modal" 
+                                                            data-target="#deleteUserModal" 
+                                                            onclick="populateDeleteModal('${t.username}')">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </section>
                 <!--Section: Quan Ly tai Khoan-->
             </div>
         </main>
+
+        <!-- Update Modal HTML -->
+        <div id="updateUserModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="updateForm" action="<%= request.getContextPath() %>/UpdateUserInfoControl" method="post">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Update User Info</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Username (hidden) -->
+                            <input name="username" type="hidden" id="updateUsername">
+
+                            <!-- First Name -->
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input name="firstName" type="text" class="form-control" id="updateFirstName" required>
+                            </div>
+                            <!-- Last Name -->
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input name="lastName" type="text" class="form-control" id="updateLastName" required>
+                            </div>
+                            <!-- Date of Birth -->
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input name="dob" type="date" class="form-control" id="updateDob" required>
+                            </div>
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input name="email" type="email" class="form-control" id="updateEmail" required>
+                            </div>
+                            <!-- Avatar Path -->
+                            <div class="form-group">
+                                <label>Avatar Path</label>
+                                <input name="avatarPath" type="text" class="form-control" id="updateAvatarPath">
+                            </div>
+                            <!-- CV Path -->
+                            <div class="form-group">
+                                <label>CV Path</label>
+                                <input name="cvPath" type="text" class="form-control" id="updateCvPath">
+                            </div>
+                            <!-- Active Status -->
+                            <div class="form-group">
+                                <input name="activeStatus" type="checkbox" class="form-check-input" id="updateActiveStatus">
+                                <label class="form-check-label" for="updateActiveStatus">Active</label>
+                            </div>
+                            <!-- Verified Status -->
+                            <div class="form-group">
+                                <input name="isVerified" type="checkbox" class="form-check-input" id="updateIsVerified">
+                                <label class="form-check-label" for="updateIsVerified">Verified</label>
+                            </div>
+                            <!-- Role Selection (Dropdown) -->
+                            <div class="form-group">
+                                <label>Role</label>
+                                <select name="roleId" class="form-control" id="updateRoleId" required>
+                                    <option value="1">Admin</option>
+                                    <option value="2">Mentor</option>
+                                    <option value="3">Mentee</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-success" value="Update">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Edit Modal HTML -->
+        <div id="addEmployeeModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="form" action="<%= request.getContextPath() %>/AddAccountControl" method="post">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Account</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Username -->
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input name="username" type="text" class="form-control" required>
+                            </div>
+                            <!-- Password -->
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input name="password" type="password" class="form-control" required>
+                            </div>
+                            <!-- First Name -->
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input name="firstName" type="text" class="form-control" required>
+                            </div>
+                            <!-- Last Name -->
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input name="lastName" type="text" class="form-control" required>
+                            </div>
+                            <!-- Date of Birth -->
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input name="dob" type="date" class="form-control" required>
+                            </div>
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input name="email" type="email" class="form-control" required>
+                            </div>
+                            <!-- Avatar Path -->
+                            <div class="form-group">
+                                <label>Avatar Path</label>
+                                <input name="avatarPath" type="text" class="form-control">
+                            </div>
+                            <!-- CV Path -->
+                            <div class="form-group">
+                                <label>CV Path</label>
+                                <input name="cvPath" type="text" class="form-control">
+                            </div>
+                            <!-- Active Status -->
+                            <div class="form-group">
+                                <input name="activeStatus" type="checkbox" class="form-check-input" id="activeStatus">
+                                <label class="form-check-label" for="activeStatus">Active</label>
+                            </div>
+                            <!-- Verified Status -->
+                            <div class="form-group">
+                                <input name="isVerified" type="checkbox" class="form-check-input" id="isVerified">
+                                <label class="form-check-label" for="isVerified">Verified</label>
+                            </div>
+                            <!-- Verification Code -->
+                            <div class="form-group">
+                                <label>Verification Code</label>
+                                <input name="verificationCode" type="text" class="form-control">
+                            </div>
+                            <!-- Role Selection (Dropdown) -->
+                            <div class="form-group">
+                                <label>Role</label>
+                                <select name="roleId" class="form-control" required>
+                                    <option value="1">Admin</option>
+                                    <option value="2">Mentor</option>
+                                    <option value="3">Mentee</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-success" value="Add">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Modal HTML -->
+        <div id="deleteUserModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="deleteForm" action="<%= request.getContextPath() %>/DeleteUserInfoControl" method="post">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Deactivate User</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <input name="username" type="hidden" id="deleteUsername">
+                            <p>Are you sure you want to deactivate this user?</p>
+                            <p class="text-warning"><small>The user will be marked as inactive.</small></p>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-danger" value="Deactivate">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>   
@@ -212,5 +401,38 @@
         <script type="text/javascript" src="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/js/plugins/mdb-plugins-gathered.min.js"></script>
 
         <script src="js/calender.js"></script>
+        <script type="text/javascript">
+                                                                function populateUpdateModal(username, firstName, lastName, dob, email, avatarPath, cvPath, activeStatus, isVerified, roleId) {
+                                                                    document.getElementById('updateUsername').value = username;
+                                                                    document.getElementById('updateFirstName').value = firstName;
+                                                                    document.getElementById('updateLastName').value = lastName;
+                                                                    document.getElementById('updateDob').value = dob.split("T")[0]; // Format to YYYY-MM-DD
+                                                                    document.getElementById('updateEmail').value = email;
+                                                                    document.getElementById('updateAvatarPath').value = avatarPath;
+                                                                    document.getElementById('updateCvPath').value = cvPath;
+                                                                    document.getElementById('updateActiveStatus').checked = activeStatus;
+                                                                    document.getElementById('updateIsVerified').checked = isVerified;
+                                                                    document.getElementById('updateRoleId').value = roleId;
+                                                                }
+                                                                // Function to populate the update modal
+                                                                function populateUpdateModal(username, firstName, lastName, dob, mail, avatarPath, cvPath, activeStatus, isVerified, roleId) {
+                                                                    document.getElementById('updateUsername').value = username;
+                                                                    document.getElementById('updateFirstName').value = firstName;
+                                                                    document.getElementById('updateLastName').value = lastName;
+                                                                    document.getElementById('updateDob').value = dob;
+                                                                    document.getElementById('updateEmail').value = mail;
+                                                                    document.getElementById('updateAvatarPath').value = avatarPath;
+                                                                    document.getElementById('updateCvPath').value = cvPath;
+                                                                    document.getElementById('updateActiveStatus').checked = activeStatus;
+                                                                    document.getElementById('updateIsVerified').checked = isVerified;
+                                                                    document.getElementById('updateRoleId').value = roleId;
+                                                                }
+
+                                                                // Function to populate the delete modal
+                                                                function populateDeleteModal(username) {
+                                                                    document.getElementById('deleteUsername').value = username;
+                                                                }
+
+        </script>
     </body>
 </html>
