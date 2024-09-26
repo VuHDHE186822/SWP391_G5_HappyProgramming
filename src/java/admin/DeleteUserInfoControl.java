@@ -54,7 +54,12 @@ public class DeleteUserInfoControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+
+        String username = request.getParameter("username");
+        request.setAttribute("username", username);
+        request.getRequestDispatcher("dashboard/deleteAccount.jsp").forward(request, response);
     }
 
     @Override

@@ -175,12 +175,12 @@
                                             <td class="text_page" style="font-weight: 500">${t.roleId}</td>
                                             <td>
                                                 <!-- Update Button -->
-                                                <a href="dashboard/updateAccount.jsp?username=${t.username}&firstName=${t.firstName}&lastName=${t.lastName}&dob=${t.dob}&email=${t.mail}&avatarPath=${t.avatarPath}&cvPath=${t.cvPath}&activeStatus=${t.activeStatus}&isVerified=${t.isVerified}&roleId=${t.roleId}" class="btn btn-primary">
+                                                <a href="<%= request.getContextPath() %>/UpdateUserInfoControl?username=${t.username}&firstName=${t.firstName}&lastName=${t.lastName}&dob=${t.dob}&email=${t.mail}&avatarPath=${t.avatarPath}&cvPath=${t.cvPath}&activeStatus=${t.activeStatus}&isVerified=${t.isVerified}&roleId=${t.roleId}" class="btn btn-primary">
                                                     <i class="fa-solid fa-edit"></i>
                                                 </a>
 
                                                 <!-- Delete Button -->
-                                                <a href="dashboard/deleteAccount.jsp?username=${t.username}" class="btn btn-danger">
+                                                <a href="<%= request.getContextPath() %>/DeleteUserInfoControl?username=${t.username}" class="btn btn-danger">
                                                     <i class="fa-solid fa-trash"></i>
                                                 </a>
                                             </td>

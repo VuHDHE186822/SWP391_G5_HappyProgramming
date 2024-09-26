@@ -57,11 +57,37 @@ public class UpdateUserInfoControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+
+        String username = request.getParameter("username");
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String email = request.getParameter("email");
+        String avatarPath = request.getParameter("avatarPath");
+        String cvPath = request.getParameter("cvPath");
+        int roleId = Integer.parseInt(request.getParameter("roleId"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date dob = null;
         try {
-            processRequest(request, response);
+            dob = dateFormat.parse(request.getParameter("dob")); // Date of birth
         } catch (ParseException ex) {
             Logger.getLogger(UpdateUserInfoControl.class.getName()).log(Level.SEVERE, null, ex);
         }
+        boolean activeStatus = request.getParameter("activeStatus") != null; // Checkbox
+        boolean isVerified = request.getParameter("isVerified") != null; // Checkbox
+        request.setAttribute("username", username);
+        request.setAttribute("firstName", firstName);
+        request.setAttribute("lastName", lastName);
+        request.setAttribute("email", email);
+        request.setAttribute("avatarPath", avatarPath);
+        request.setAttribute("cvPath", cvPath);
+        request.setAttribute("dob", dob);
+        request.setAttribute("activeStatus", activeStatus);
+        request.setAttribute("isVerified", isVerified);
+        request.setAttribute("roleId", roleId);
+
+        request.getRequestDispatcher("dashboard/updateAccount.jsp").forward(request, response);
     }
 
     @Override
