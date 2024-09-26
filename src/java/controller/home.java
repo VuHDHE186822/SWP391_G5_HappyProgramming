@@ -98,7 +98,7 @@ public class home extends HttpServlet {
             User u = (User) session.getAttribute("user");
             if (u.getRoleId() == 1) {
                 session.setAttribute("user", u);
-                response.sendRedirect("manageraccount");
+                response.sendRedirect("ManagerAccount");
             } else if (u.getRoleId() == 2) {
                 session.setAttribute("user", u);
                 response.sendRedirect("homementor.jsp");

@@ -48,7 +48,7 @@ public class DeleteUserInfoControl extends HttpServlet {
 
         // Set message and forward to the account management page
         request.setAttribute("mess", msg);
-        request.getRequestDispatcher("managerAccount").forward(request, response);
+        request.getRequestDispatcher("ManagerAccount").forward(request, response);
     }
 
     @Override
