@@ -42,6 +42,21 @@ public class CourseDAO extends DBContext {
         return list;
     }
 
+    public int countCourse() {
+        int count = 0;
+        String sql = "SELECT COUNT(*) AS total FROM Course";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt("total");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return count;
+    }
+
     public List<Course> getAllCourse() {
         List<Course> list = new ArrayList<>();
         String sql = "SELECT * FROM [Course]";
@@ -53,6 +68,117 @@ public class CourseDAO extends DBContext {
                 String name = rs.getString("courseName");
                 String des = rs.getString("courseDescription");
                 String dat = rs.getString("createdAt");
+                Date date = rs.getDate("createdAt");
+                Course e = new Course(id, name, des, date);
+
+                list.add(e);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return list;
+    }
+
+    public List<Course> getAllCourseOrderByDESCMenteeNum() {
+        List<Course> list = new ArrayList<>();
+        String sql = "SELECT Course.courseId, Course.courseName, CAST(Course.courseDescription AS NVARCHAR(MAX)) AS courseDescription, Course.createdAt\n"
+                + "FROM Course \n"
+                + "JOIN Participate ON Course.courseId = Participate.courseId\n"
+                + "JOIN [User] ON [User].username = Participate.username\n"
+                + "WHERE [User].roleId = 3\n"
+                + "GROUP BY Course.courseId, Course.courseName, CAST(Course.courseDescription AS NVARCHAR(MAX)), Course.createdAt\n"
+                + "ORDER BY COUNT(Course.courseId) DESC;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("courseId");
+                String name = rs.getString("courseName");
+                String des = rs.getString("courseDescription");
+                Date date = rs.getDate("createdAt");
+                Course e = new Course(id, name, des, date);
+
+                list.add(e);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return list;
+    }
+
+    public List<Course> getSameCourse(int categoryId, int courseId) {
+        List<Course> list = new ArrayList<>();
+        String sql = "SELECT Course.courseId, Course.courseName, Course.courseDescription, Course.createdAt\n"
+                + "FROM Course \n"
+                + "JOIN Course_Category ON Course.courseId = Course_Category.courseId\n"
+                + "JOIN Category ON Category.categoryId = Course_Category.categoryId\n"
+                + "WHERE Category.categoryId = ?\n"
+                + "AND Course.courseId != ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, categoryId);
+            st.setInt(2, courseId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("courseId");
+                String name = rs.getString("courseName");
+                String des = rs.getString("courseDescription");
+                Date date = rs.getDate("createdAt");
+                Course e = new Course(id, name, des, date);
+
+                list.add(e);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return list;
+    }
+
+    public List<Course> getEachCategoryLessThan2Courses() {
+        List<Course> list = new ArrayList<>();
+        String sql = "WITH RankedCourses AS (\n"
+                + "    SELECT Course.*, \n"
+                + "           ROW_NUMBER() OVER (PARTITION BY Category.categoryId ORDER BY Course.courseId) AS rn\n"
+                + "    FROM Course \n"
+                + "    JOIN Course_Category ON Course.courseId = Course_Category.courseId\n"
+                + "    JOIN Category ON Category.categoryId = Course_Category.categoryId\n"
+                + ")\n"
+                + "SELECT courseId, courseName, courseDescription, createdAt\n"
+                + "FROM RankedCourses\n"
+                + "WHERE rn <= 2;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("courseId");
+                String name = rs.getString("courseName");
+                String des = rs.getString("courseDescription");
+                Date date = rs.getDate("createdAt");
+                Course e = new Course(id, name, des, date);
+
+                list.add(e);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return list;
+    }
+
+    public List<Course> getOtherCourseHasOtherCategory(int categoryId) {
+        List<Course> list = new ArrayList<>();
+        String sql = "SELECT Course.courseId, Course.courseName, Course.courseDescription, Course.createdAt\n"
+                + "FROM Course \n"
+                + "JOIN Course_Category ON Course.courseId = Course_Category.courseId\n"
+                + "JOIN Category ON Category.categoryId = Course_Category.categoryId\n"
+                + "WHERE Category.categoryId != ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, categoryId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("courseId");
+                String name = rs.getString("courseName");
+                String des = rs.getString("courseDescription");
                 Date date = rs.getDate("createdAt");
                 Course e = new Course(id, name, des, date);
 
@@ -573,5 +699,280 @@ public class CourseDAO extends DBContext {
         }
 
         return courses;
+    }
+    public List<Course> searchMentoringCoursesByName(String userName, String keyword, int page) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT * FROM Course c "
+                + "INNER JOIN Participate p ON c.courseId = p.courseId "
+                + "WHERE p.userName = ? AND p.participateRole = 2 AND c.courseName LIKE ? "
+                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            ps.setString(2, "%" + keyword + "%");
+            ps.setInt(3, (page - 1) * 5);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                courses.add(mapCourse(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return courses;
+    }
+
+    public int countMentoringCoursesByName(String userName, String keyword) {
+        String sql = "SELECT COUNT(*) FROM Course c "
+                + "INNER JOIN Participate p ON c.courseId = p.courseId "
+                + "WHERE p.userName = ? AND p.participateRole = 2 AND c.courseName LIKE ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            ps.setString(2, "%" + keyword + "%");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int totalCourses = rs.getInt(1);
+                return calculateTotalPages(totalCourses);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 1;
+    }
+
+    public List<Course> getMentoringCoursesByUser(String userName, int page) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT * FROM Course c "
+                + "INNER JOIN Participate p ON c.courseId = p.courseId "
+                + "WHERE p.userName = ? AND p.participateRole = 2 "
+                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            ps.setInt(2, (page - 1) * 5);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                courses.add(mapCourse(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return courses;
+    }
+
+    public int countMentoringCoursesByUser(String userName) {
+        String sql = "SELECT COUNT(*) FROM Course c "
+                + "INNER JOIN Participate p ON c.courseId = p.courseId "
+                + "WHERE p.userName = ? AND p.participateRole = 2";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int totalCourses = rs.getInt(1);
+                return calculateTotalPages(totalCourses);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 1;
+    }
+
+    public List<Course> searchStudyingCoursesByName(String userName, String keyword, int page) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT * FROM Course c "
+                + "INNER JOIN Participate p ON c.courseId = p.courseId "
+                + "WHERE p.userName = ? AND p.participateRole = 3 AND c.courseName LIKE ? "
+                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            ps.setString(2, "%" + keyword + "%");
+            ps.setInt(3, (page - 1) * 5);  // Pagination logic
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                courses.add(mapCourse(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return courses;
+    }
+
+    public int countStudyingCoursesByName(String userName, String keyword) {
+        String sql = "SELECT COUNT(*) FROM Course c "
+                + "INNER JOIN Participate p ON c.courseId = p.courseId "
+                + "WHERE p.userName = ? AND p.participateRole = 3 AND c.courseName LIKE ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            ps.setString(2, "%" + keyword + "%");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int totalCourses = rs.getInt(1);
+                return calculateTotalPages(totalCourses);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 1;
+    }
+
+    public List<Course> getStudyingCoursesByUser(String userName, int page) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT * FROM Course c "
+                + "INNER JOIN Participate p ON c.courseId = p.courseId "
+                + "WHERE p.userName = ? AND p.participateRole = 3 "
+                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            ps.setInt(2, (page - 1) * 5);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                courses.add(mapCourse(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return courses;
+    }
+
+    public int countStudyingCoursesByUser(String userName) {
+        String sql = "SELECT COUNT(*) FROM Course c "
+                + "INNER JOIN Participate p ON c.courseId = p.courseId "
+                + "WHERE p.userName = ? AND p.participateRole = 3";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int totalCourses = rs.getInt(1);
+                return calculateTotalPages(totalCourses);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 1;
+    }
+
+    private int calculateTotalPages(int totalCourses) {
+        int itemsPerPage = 5;
+        return (int) Math.ceil((double) totalCourses / itemsPerPage);
+    }
+
+    private Course mapCourse(ResultSet rs) throws SQLException {
+        Course course = new Course();
+        course.setCourseId(rs.getInt("courseId"));
+        course.setCourseName(rs.getString("courseName"));
+        course.setCourseDescription(rs.getString("courseDescription"));
+        course.setCreatedAt(rs.getDate("createdAt"));
+        List<Category> categories = getCategoriesByCourseId(rs.getInt("courseId"));
+        course.setCategories(categories);
+        return course;
+    }
+
+    public List<Category> getCategoriesByCourseId(int courseId) {
+        List<Category> categories = new ArrayList<>();
+        String sql = "SELECT c.categoryId, c.categoryName FROM Category c "
+                + "JOIN Course_Category cc ON c.categoryId = cc.categoryId "
+                + "WHERE cc.courseId = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, courseId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Category category = new Category();
+                category.setCategoryId(rs.getInt("categoryId"));
+                category.setCategoryName(rs.getString("categoryName"));
+                categories.add(category);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categories;
+    }
+
+    public List<Course> getMentoringCoursesByCategory(String userName, String categoryId, int page) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT * FROM Course c "
+                + "INNER JOIN Participate p ON c.courseId = p.courseId "
+                + "INNER JOIN Course_Category cc ON c.courseId = cc.courseId "
+                + "WHERE p.userName = ? AND p.participateRole = 2 AND cc.categoryId = ? "
+                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            ps.setString(2, categoryId);
+            ps.setInt(3, (page - 1) * 5);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                courses.add(mapCourse(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return courses;
+    }
+
+    public int countMentoringCoursesByCategory(String userName, String categoryId) {
+        String sql = "SELECT COUNT(*) FROM Course c "
+                + "INNER JOIN Participate p ON c.courseId = p.courseId "
+                + "INNER JOIN Course_Category cc ON c.courseId = cc.courseId "
+                + "WHERE p.userName = ? AND p.participateRole = 2 AND cc.categoryId = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            ps.setString(2, categoryId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int totalCourses = rs.getInt(1);
+                return calculateTotalPages(totalCourses);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 1;
+    }
+
+    public List<Course> getStudyingCoursesByCategory(String userName, String categoryId, int page) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT * FROM Course c "
+                + "INNER JOIN Participate p ON c.courseId = p.courseId "
+                + "INNER JOIN Course_Category cc ON c.courseId = cc.courseId "
+                + "WHERE p.userName = ? AND p.participateRole = 3 AND cc.categoryId = ? "
+                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            ps.setString(2, categoryId);
+            ps.setInt(3, (page - 1) * 5);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                courses.add(mapCourse(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return courses;
+    }
+
+    public int countStudyingCoursesByCategory(String userName, String categoryId) {
+        String sql = "SELECT COUNT(*) FROM Course c "
+                + "INNER JOIN Participate p ON c.courseId = p.courseId "
+                + "INNER JOIN Course_Category cc ON c.courseId = cc.courseId "
+                + "WHERE p.userName = ? AND p.participateRole = 3 AND cc.categoryId = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            ps.setString(2, categoryId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int totalCourses = rs.getInt(1);
+                return calculateTotalPages(totalCourses);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 1;
     }
 }

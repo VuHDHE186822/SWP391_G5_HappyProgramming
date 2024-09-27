@@ -36,18 +36,6 @@
             <div class="text-link-list">
                 <div class="title1">
                     <div class="text-strong">
-                        <div class="text-strong1">Course Category</div>
-                    </div>
-                </div>
-                <c:forEach items="${listCategory}" var ="cate">
-                    <div class="text-link-list-item">
-                        <a href="allCourse?search=category&categoryId=${cate.categoryId}"><div class="list-item">${cate.categoryName}</div></a>
-                    </div>
-                </c:forEach>
-            </div>
-            <div class="text-link-list">
-                <div class="title1">
-                    <div class="text-strong">
                         <div class="text-strong1">Resources</div>
                     </div>
                 </div>

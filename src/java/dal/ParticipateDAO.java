@@ -60,7 +60,7 @@ public class ParticipateDAO extends DBContext {
         }
         return list;
     }
-
+    
     public static void main(String[] args) {
         ParticipateDAO dao = new ParticipateDAO();
         List<Participate> list = dao.getAll();

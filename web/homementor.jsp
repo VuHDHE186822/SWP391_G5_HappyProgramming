@@ -39,50 +39,51 @@
                 <img src="img/banner.jpg" alt="alt"/>
             </div>
 
+            <!-- CATEGORY -->
+            <div style="background-color: #edf2fa">
+                <div class="category-list row">
+                    <c:forEach items="${sessionScope.category}" var="cate" begin="0" end="5">
+                        <a href="allCourse?search=category&categoryId=${cate.categoryId}" class="col-md-5 category-card">
+                            ${cate.categoryName}
+                        </a>
+                    </c:forEach>
+                </div>
+            </div>
+
             <!-- COURSES SLIDE -->
             <div class="course-content">
                 <div class="course-content-heading">
-                    <div class="course-heading">COURSES</div>
+                    <div class="course-heading">SOME COURSES YOU SHOULD TAKE</div>
                 </div>
-                <c:if test="${not empty sessionScope.course}">
+                <c:if test="${not empty sessionScope.listCourse}">
                     <div class="row course-cards" id="course-container">
-                        <c:forEach items="${sessionScope.course}" var="c" varStatus="status">
+                        <c:forEach items="${sessionScope.listCourse}" var="c" varStatus="status">
                             <a href="viewcourse?courseId=${c.courseId}" class="col-md-5 course-card"
                                style="display: ${status.index < 4 ? 'block' : 'none'};">
                                 <div class="course-body">
                                     <div class="course-text">
                                         <div class="course-name">${c.courseName}</div>
                                         <div class="course-body-text">${fn:substring(c.courseDescription, 0, 140)}
-                                            <c:if test="${fn:length(c.courseDescription) > 140}">...</c:if>
-                                            </div>
+                                            <c:if test="${fn:length(c.courseDescription) > 140}">...
+                                            </c:if>
                                         </div>
                                     </div>
-                                </a>
+                                </div>
+                            </a>
                         </c:forEach>
                     </div>
                 </c:if>
-                <a href="#" class="more-course-button" id="more-courses-button" onclick="showMoreCourses(event)">More Courses</a>
+                <div class="pagination" id="course-section">
+                    <ul>
+                        <c:forEach begin="1" end="${pageControl.totalPage - 2}" var="pageNumber">
+                            <li class="${pageNumber == pageControl.page ? 'active' : ''}">
+                                <a href="${pageControl.urlPattern}page=${pageNumber}#course-section">${pageNumber}</a>
+                            </li>
+                        </c:forEach>
+                    </ul>
+                </div>
+                <a href="allCourse" class="more-course-button">View All Courses</a>
             </div>
-
-            <script>
-                let coursesShown = 4;
-
-                function showMoreCourses(event) {
-                    event.preventDefault();
-                    const allCourses = document.querySelectorAll('.course-card');
-                    const totalCourses = allCourses.length;
-                    const moreCoursesButton = document.getElementById('more-courses-button');
-                    if (coursesShown < 8) {
-                        for (let i = coursesShown; i < coursesShown + 4 && i < totalCourses; i++) {
-                            allCourses[i].style.display = 'block';
-                        }
-                        coursesShown += 4;
-                        moreCoursesButton.textContent = 'View All Courses';
-                    } else {
-                        window.location.href = 'allcourse';
-                    }
-                }
-            </script>
 
             <!-- SPLIT -->
             <div style="height: 100px; background-color: #edf2fa"></div>

@@ -133,6 +133,13 @@
                 color: black;
             }
 
+            .avatar-image-mini {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid #ccc;
+            }
 
             .dropdown-content {
                 display: none;
@@ -187,7 +194,7 @@
             <ul class="menu">
                 <li><a href="allCourse">Courses</a></li>
                     <c:if test="${sessionScope.user != null}">
-                    <li><a href="#">My Courses</a></li>
+                    <li><a href="viewMyCourses">My Courses</a></li>
                     <li><a href="#">Chat</a></li>
                     </c:if>
             </ul>
@@ -200,20 +207,16 @@
                     <div class="user-dropdown">
                         <c:if test="${u.avatarPath != null}">
                             <a href="javascript:void(0);" class="user-logo" onclick="toggleDropdown()">
-                                <img src="data:image/jpeg;base64, ${u.avatarPath}" alt="Avatar" class="avatar-image">
+                                <img src="data:image/jpeg;base64, ${u.avatarPath}" alt="Avatar" class="avatar-image-mini">
                             </a>
                         </c:if>
                         <div id="userDropdown" class="dropdown-content">
                             <h3>${u.lastName} ${u.firstName}</h3>
-                            <a href="userProfile.jsp"><i class="fas fa-user"></i> User Profile</a>
+                            <a href="userProfile"><i class="fas fa-user"></i> User Profile</a>
                             <a href="changePass.jsp"><i class="fas fa-lock"></i> Change Password</a>
                             <a href="logout.jsp"><i class="fas fa-sign-out-alt"></i> Log Out</a>
                         </div>
                     </div>
-
-                    <a href="userProfile.jsp" class="user">${u.lastName} ${u.firstName}</a>
-                    |
-                    <a href="logout.jsp" class="button-logout">Log Out</a>
                 </c:if>
 
                 <script>

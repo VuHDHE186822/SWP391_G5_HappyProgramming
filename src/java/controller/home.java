@@ -21,6 +21,7 @@ import model.Category;
 import model.Course;
 import model.Participate;
 import model.User;
+import util.PageControl;
 
 /**
  *
@@ -72,35 +73,27 @@ public class home extends HttpServlet {
         ParticipateDAO daoP = new ParticipateDAO();
         CategoryDAO daoCt = new CategoryDAO();
         List<User> mentor = daoU.getAllUserByRoleId(2);
-        List<Course> course = daoC.getAll();
+        List<Course> course = daoC.getEachCategoryLessThan2Courses();
         List<Category> category = daoCt.getAll();
         List<User> mentee = daoU.getAllUserByRoleId(3);
+        List<Course> sortedCourse = daoC.getAllCourseOrderByDESCMenteeNum();
         List<Participate> participate = daoP.getAll();
-        session.setAttribute("categoryFooter", category);
+        int countCourse = daoC.countCourse();
+        int countMentor = daoU.countUser(2);
+        int countMentee = daoU.countUser(3);
+        session.setAttribute("countCourse", countCourse);
+        session.setAttribute("countMentor", countMentor);
+        session.setAttribute("countMentee", countMentee);
+        session.setAttribute("category", category);
         session.setAttribute("mentor", mentor);
         session.setAttribute("course", course);
         session.setAttribute("mentee", mentee);
         session.setAttribute("participate", participate);
-        List<int[]> courseMenteeCount = new ArrayList<>();
-
-        for (Course c : course) {
-            int menteeCount = 0;
-            for (Participate p : participate) {
-                if (p.getCourseId() == c.getCourseId()) {
-                    for (User m : mentee) {
-                        if (p.getUsername().equals(m.getUsername())) {
-                            menteeCount++;
-                            break;
-                        }
-                    }
-                }
-            }
-            courseMenteeCount.add(new int[]{c.getCourseId(), menteeCount});
-        }
-
-        courseMenteeCount.sort((a, b) -> Integer.compare(b[1], a[1]));
-        session.setAttribute("sortedCourses", courseMenteeCount);
-
+        session.setAttribute("sortedCourses", sortedCourse);
+        PageControl pageControl = new PageControl();
+        List<Course> listCourse = findCourseDoGet(request, pageControl);
+        session.setAttribute("listCourse", listCourse);
+        session.setAttribute("pageControl", pageControl);
         if (session.getAttribute("user") != null) {
             User u = (User) session.getAttribute("user");
             if (u.getRoleId() == 1) {
@@ -118,6 +111,36 @@ public class home extends HttpServlet {
         }
     }
 
+    private List<Course> findCourseDoGet(HttpServletRequest request, PageControl pagecontrol) {
+        CourseDAO dao = new CourseDAO();
+        String pageRaw = request.getParameter("page");
+        //valid
+        int page;
+        try {
+            page = Integer.parseInt(pageRaw);
+            if (page <= 0) {
+                page = 1;
+            }
+        } catch (NumberFormatException e) {
+            page = 1;
+        }
+        List<Course> listCourse;
+        String requestURL = request.getRequestURL().toString();
+        int totalRecord = 0;
+        totalRecord = dao.findTotalRecordAllCourses();
+        listCourse = dao.getAllCourse2(page);
+        pagecontrol.setUrlPattern(requestURL + "?");
+        int totalPage = (totalRecord % 5) == 0
+                ? (totalRecord / 5)
+                : (totalRecord / 5) + 1;
+
+        pagecontrol.setPage(page);
+        pagecontrol.setTotalPage(totalPage);
+        pagecontrol.setTotalRecord(totalRecord);
+
+        return listCourse;
+    }
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -129,7 +152,7 @@ public class home extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.sendRedirect("home");
     }
 
     /**
