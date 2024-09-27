@@ -416,7 +416,7 @@ public class UserDAO extends DBContext {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                 int id = rs.getInt("courseId");
+                int id = rs.getInt("courseId");
                 String name = rs.getString("courseName");
                 String des = rs.getString("courseDescription");
                 Date date = rs.getDate("createdAt");
@@ -427,5 +427,17 @@ public class UserDAO extends DBContext {
             System.out.println(ex);
         }
         return list;
+    }
+
+    public void verifyEmail(String username, User user) {
+        String sql = "UPDATE [User] SET isVerified = ? WHERE username = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setBoolean(1, user.isIsVerified());
+            statement.setString(2, username);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
