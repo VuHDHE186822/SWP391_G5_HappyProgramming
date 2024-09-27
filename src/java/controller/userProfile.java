@@ -9,6 +9,7 @@ import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,6 +31,7 @@ import service.ImageConverter;
  *
  * @author Huy Võ
  */
+@MultipartConfig
 public class userProfile extends HttpServlet {
 
     /**
@@ -106,7 +108,7 @@ public class userProfile extends HttpServlet {
         String username = request.getParameter("usernameHidden");
         String dobString = request.getParameter("dob");
         Date dob = null;
-
+        int role = Integer.parseInt(request.getParameter("role"));
         if (dobString != null && !dobString.isEmpty()) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             try {
@@ -117,19 +119,20 @@ public class userProfile extends HttpServlet {
         }
         String newEmail = request.getParameter("email");
         String oldEmail = request.getParameter("oldEmail");
-//        String cvBase64 = null;
-//
-//        if ("mentor".equals(request.getParameter("role"))) {
-//            Part cvPart = request.getPart("cv");
-//            if (cvPart != null && cvPart.getSize() > 0) {
-//                FileConverter fileConverter = FileConverter.getInstance();
-//                String cvPrefix = "cvFile";
-//                File tempFile = File.createTempFile(cvPrefix, ".pdf");
-//                cvPart.write(tempFile.getAbsolutePath());
-//                cvBase64 = fileConverter.encode(tempFile);
-//                tempFile.delete();
-//            }
-//        }
+
+        String cvBase64 = null;
+
+        if (role == 2) {
+            Part cvPart = request.getPart("cvFileInput");
+            if (cvPart != null && cvPart.getSize() > 0) {
+                FileConverter fileConverter = FileConverter.getInstance();
+                String cvPrefix = "cvFile";
+                File tempFile = File.createTempFile(cvPrefix, ".pdf");
+                cvPart.write(tempFile.getAbsolutePath());
+                cvBase64 = fileConverter.encode(tempFile);
+                tempFile.delete();
+            }
+        }
 
         UserDAO dao = new UserDAO();
         List<User> users = dao.getAll();
@@ -150,7 +153,7 @@ public class userProfile extends HttpServlet {
             user.setLastName(lastName);
             user.setDob(dob);
             user.setMail(newEmail);
-            user.setCvPath(newEmail);
+            user.setCvPath(cvBase64);
             dao.updateProfile(username, user);
             greenString = "Update Successfully!";
             session.setAttribute("note", greenString);

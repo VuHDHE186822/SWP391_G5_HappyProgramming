@@ -22,7 +22,6 @@
         <title>User Profile</title>
         <style>
             body {
-                background-color: #f5f5f5;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -36,7 +35,7 @@
                 width: 60%;
                 box-shadow: 0 0 10px #888;
                 flex-direction: column;
-                padding: 20px;
+                padding: 20px 0 10px 30px;
             }
 
             .profile-form h2 {
@@ -63,6 +62,7 @@
             .right-part {
                 flex: 0 0 67%;
                 margin-right: 3%;
+                margin-top: 2%;
             }
 
             .avatar-image {
@@ -106,7 +106,7 @@
             }
 
             .input-container input {
-                width: calc(100% - 30% - 10px);
+                width: calc(100% - 30% + 10px);
                 padding: 10px;
                 font-size: 0.9rem;
                 border: none;
@@ -200,44 +200,32 @@
             }
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String dobFormatted = user.getDob() != null ? sdf.format(user.getDob()) : "";
-            String cvBase64 = user.getCvPath(); // Giả sử user.getCvPath() trả về chuỗi Base64
-
+            String base64Cv = user.getCvPath();
         %>
         <script>
-            let isEditing = false;
             let originalValues = {};
+            let mimeType, fileName;
 
             function toggleEdit() {
                 const inputs = document.querySelectorAll('.input-container input');
                 const editButton = document.getElementById('editButton');
                 const saveButton = document.getElementById('saveButton');
                 const cancelButton = document.getElementById('cancelButton');
-                const uploadCvButton = document.getElementById('uploadCvButton');
-                if (!isEditing) {
-                    inputs.forEach(input => {
-                        if (input.name !== 'username') {
-                            if (!originalValues[input.name]) {
-                                originalValues[input.name] = input.value;
-                            }
-                            input.disabled = false;
+                const cvFileInput = document.getElementById('cvFileInput');
+                const linkCv = document.getElementById('linkCv');
+                inputs.forEach(input => {
+                    if (input.name !== 'username') {
+                        if (!originalValues[input.name]) {
+                            originalValues[input.name] = input.value;
                         }
-                    });
-                    editButton.style.display = 'none';
-                    saveButton.style.display = 'inline-block';
-                    cancelButton.style.display = 'inline-block';
-                    uploadCvButton.style.display = 'inline-block';
-                } else {
-                    inputs.forEach(input => {
-                        if (input.name !== 'username') {
-                            input.disabled = true;
-                        }
-                    });
-                    editButton.style.display = 'inline-block';
-                    saveButton.style.display = 'none';
-                    cancelButton.style.display = 'none';
-                    uploadCvButton.style.display = 'none';
-                }
-                isEditing = !isEditing;
+                        input.disabled = false;
+                    }
+                });
+                editButton.style.display = 'none';
+                saveButton.style.display = 'inline-block';
+                cancelButton.style.display = 'inline-block';
+                linkCv.style.display = 'none';
+                cvFileInput.style.display = 'inline';
             }
 
             function saveChanges() {
@@ -245,25 +233,107 @@
                 toggleEdit();
             }
 
-            function cancelEdit() {
-                const inputs = document.querySelectorAll('.input-container input');
-                inputs.forEach(input => {
-                    if (input.name !== 'username') {
-                        input.value = originalValues[input.name];
-                        input.disabled = true;
-                    }
-                });
-                document.getElementById('saveButton').style.display = 'none';
-                document.getElementById('editButton').style.display = 'inline-block';
-                document.getElementById('uploadCvButton').style.display = 'none'; // Ẩn nút tải lên CV
-            }
             function changeImage() {
                 let input = document.getElementById("fileinput");
                 input.click();
             }
+
+            function cancelEdit() {
+                const cvFileInput = document.getElementById('cvFileInput');
+                const linkCv = document.getElementById('linkCv');
+                const inputs = document.querySelectorAll('.input-container input');
+                inputs.forEach(input => {
+                    if (input.name !== 'username' && input.name !== 'cvFile') {
+                        input.value = originalValues[input.name] || '';
+                        input.disabled = true;
+                        if (input.type === 'file') {
+                            input.value = ''; // Reset giá trị của input file về rỗng
+                        }
+                    }
+                });
+                document.getElementById('saveButton').style.display = 'none';
+                document.getElementById('cancelButton').style.display = 'none';
+                document.getElementById('editButton').style.display = 'inline-block';
+                linkCv.style.display = 'inline';
+                cvFileInput.style.display = 'none';
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                function base64ToFile(base64String, fileName) {
+                    let mimeType;
+                    if (base64String.startsWith('JVBERi0') || base64String.startsWith('0M8R4KGx')) {
+                        mimeType = 'application/pdf';
+                        fileName += '.pdf';
+                    } else if (base64String.startsWith('/9j/') || base64String.startsWith('iVBORw0KGgo') || base64String.startsWith('R0lGODdh') || base64String.startsWith('Qk') || base64String.startsWith('II') || base64String.startsWith('MM') || base64String.startsWith('UklGR')) {
+                        mimeType = 'image/jpeg';
+                        fileName += '.jpg';
+                    } else {
+                        alert('Invalid file type. Only PDF and image files are allowed.');
+                        return;
+                    }
+
+                    // Remove data URL scheme if present
+                    const base64Data = base64String.replace(/^data:.+;base64,/, '');
+                    const byteCharacters = atob(base64Data); // Decode Base64 string
+                    const byteNumbers = new Array(byteCharacters.length);
+
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], {type: mimeType});
+                    const url = URL.createObjectURL(blob);
+
+                    // Create a link element to download the file
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = fileName;
+                    link.click();
+
+                    // Cleanup
+                    URL.revokeObjectURL(url);
+                }
+
+                document.getElementById('download').addEventListener('click', () => {
+                    let base64String = document.getElementById('cvFile').value;
+                    console.log(base64String);
+                    const fileName = "CV"; // Default file name without extension
+
+                    base64ToFile(base64String, fileName); // Use .pdf or .jpg based on the mime type
+                });
+            });
+            document.addEventListener('DOMContentLoaded', function () {
+                function selectRole() {
+                    const role = document.getElementById('role').value;
+                    const userProfile = document.getElementById('userProfileForm');
+                    if (role === "2") { // Chú ý so sánh giá trị dưới dạng chuỗi
+                        userProfile.enctype = 'multipart/form-data';
+                    } else {
+                        userProfile.enctype = '';
+                    }
+                }
+
+                const roleInput = document.getElementById('role');
+                roleInput.addEventListener('change', selectRole);
+                selectRole();
+            });
+
+            function validateFileSize() {
+                const fileInput = document.getElementById("cvContainer");
+                const file = fileInput.files[0];
+                const maxSize = 5 * 1024 * 1024;
+
+                if (file) {
+                    if (file.size > maxSize) {
+                        alert("CV must be less than 5MB!");
+                        fileInput.value = "";
+                        return false;
+                    }
+                }
+                return true;
+            }
         </script>
-
-
         <div class="profile-form">
             <div class="profile-container">
                 <div class="avatar-container">
@@ -271,14 +341,18 @@
                         <a onclick="changeImage()">
                             <img src="data:image/jpeg;base64,<%= user.getAvatarPath() %>" alt="Avatar" class="avatar-image">
                         </a>
-                        <button type="button" class="button-upload" onclick="changeImage()">Change Image</button>
+                        <button type="button" class="button-upload" onclick="changeImage()">Change</button>
                         <input style="display: none;" name="avatarFile" type="file" id="fileinput" accept="image/*" onchange="document.getElementById('avatarForm').submit();"/>
 
                     </form>
                 </div>
                 <div class="right-part">
-                    <form action="userProfile" method="post">
+                    <form action="userProfile" method="post" id="userProfileForm">
+                        <input type="number" id="role" name="role" style="display: none;" value="<%= user.getRoleId() %>">
                         <h2>User Profile</h2>
+                        <p style="text-align: center; margin-bottom: 20px; font-weight: 600; color: red;">
+                            Your account is not verified! Please <a href="verifyEmail.jsp?code=${user.verificationCode}">click here</a> to verify!
+                        </p>
                         <div class="input-container">
                             <label>First Name:</label>
                             <div class="name-input">
@@ -301,11 +375,14 @@
                             <input type="email" name="email" value="<%= user.getMail() %>" disabled>
                             <input type="hidden" name="oldEmail" value="<%= user.getMail() %>">
                         </div>
-                        <c:if test="${user.getRoleId() == 2}">
+                        <c:if test="${user.getRoleId() == 2}">                          
                             <div class="input-container">
                                 <label>CV:</label>
-                                <a id="cvLink" href="data:application/pdf;base64,${user.getCvPath()}" target="_blank" class="cv-link" style="display: block;">View CV</a>
-                                <input type="file" name="cvFile" id="cvFile" style="display: none;" accept="*">
+                                <div style="margin-bottom: 8px;" id="linkCv">
+                                    <a href="javascript:void(0);" id="download" style="text-decoration: none; color: #5d3fd3; font-weight: bold; padding-botton: 5px;" >Download CV</a>
+                                </div>
+                                <input type="file" name="cvFileInput" id="cvFileInput" style="display: none;" accept="pdf, image/*" onchange="validateFileSize()">
+                                <input type="hidden" name="cvFile" id="cvFile" style="display: none;" accept="*" value="<%= user.getCvPath() %>">
                             </div>
                         </c:if>
                         <c:if test="${not empty sessionScope.error}">
