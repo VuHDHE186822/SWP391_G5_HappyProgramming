@@ -1,9 +1,3 @@
-<%-- 
-    Document   : refine
-    Created on : Dec 20, 2023, 7:55:37 PM
-    Author     : Admin
---%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.text.DecimalFormat" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
