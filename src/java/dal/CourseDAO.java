@@ -16,8 +16,8 @@ public class CourseDAO extends DBContext {
 
     public static void main(String[] args) {
         CourseDAO dao = new CourseDAO();
-        int count = dao.findTotalRecordAllCourses();
-        List<Course> list = dao.getAllCourse2(1);
+       int count = dao.findTotalRecordOrderByNumberOfMentee();
+        List<Course> list = dao.findCourseOrderByNumberOfMentee(2)     ;
         for (Course course : list) {
             System.out.println(course);
         }
@@ -162,7 +162,7 @@ public class CourseDAO extends DBContext {
             System.out.println(ex);
         }
         return list;
-    }
+    }       
 
     public List<Course> getOtherCourseHasOtherCategory(int categoryId) {
         List<Course> list = new ArrayList<>();
@@ -370,24 +370,22 @@ public class CourseDAO extends DBContext {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, "%" + keyword + "%");
-            // Tính toán offset và số lượng bản ghi trên một trang (giả sử mỗi trang có 10 khóa học)
-            int recordsPerPage = 12;
+            int recordsPerPage = 5;
             int offset = (page - 1) * recordsPerPage;
             preparedStatement.setInt(2, offset);
             preparedStatement.setInt(3, recordsPerPage);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                // Giả sử bạn có một lớp Course với các trường phù hợp
+                
                 Course course = new Course();
                 course.setCourseId(resultSet.getInt("CourseId"));
                 course.setCourseName(resultSet.getString("CourseName"));
                 course.setCourseDescription(resultSet.getString("courseDescription"));
-                // Thêm các trường khác nếu có
                 courses.add(course);
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Xử lý ngoại lệ
+            e.printStackTrace(); 
         }
 
         return courses;
@@ -495,7 +493,23 @@ public class CourseDAO extends DBContext {
     }
 
     public int findTotalRecordByCategory(String categoryId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "SELECT COUNT(*) AS total_records\n"
+                + "FROM Course c\n"
+                + "JOIN Course_Category cc ON c.courseId = cc.courseId\n"
+                + "WHERE cc.categoryId = ?";
+        int totalRecord = 0;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, categoryId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                totalRecord = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exceptions appropriately
+        }
+
+        return totalRecord;
     }
 
     public int findTotalRecordAllCourses() {
@@ -540,8 +554,147 @@ public class CourseDAO extends DBContext {
         return list;
     }
 
+    public List<Course> findByCategory2(String categoryId, int page) {
+
+        List<Course> list = new ArrayList<>();
+        String sql = "SELECT c.*\n"
+                + "FROM Course c\n"
+                + "JOIN Course_Category cc ON c.courseId = cc.courseId\n"
+                + "WHERE cc.categoryId = ? ORDER BY courseId OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+         try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            int recordsPerPage = 5;
+            int offset = (page - 1) * recordsPerPage;
+            st.setString(1, categoryId); 
+            st.setInt(2, offset); 
+            st.setInt(3, recordsPerPage);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("courseId");
+                String name = rs.getString("courseName");
+                String des = rs.getString("courseDescription");
+                Date date = rs.getDate("createdAt");
+                Course e = new Course(id, name, des, date);
+                list.add(e);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return list;
+
+    }
+
+    public int findTotalRecordOrderByNumberOfMentee() {
+        String sql = "SELECT COUNT(*) AS total_records\n"
+                + "FROM (\n"
+                + "    SELECT c.courseId, c.courseName, \n"
+                + "           CAST(c.courseDescription AS NVARCHAR(MAX)) AS courseDescription, \n"
+                + "           c.createdAt, \n"
+                + "           COUNT(p.username) AS user_count\n"
+                + "    FROM Course c\n"
+                + "    JOIN Participate p ON c.courseId = p.courseId\n"
+                + "    JOIN [User] u ON p.username = u.username\n"
+                + "    JOIN Status s ON p.statusId = s.statusId\n"
+                + "    WHERE p.participateRole = 3 AND p.statusId = 1\n"
+                + "    GROUP BY c.courseId, c.courseName, \n"
+                + "             CAST(c.courseDescription AS NVARCHAR(MAX)), \n"
+                + "             c.createdAt\n"
+                + ") AS subquery";
+        int totalRecord = 5;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                totalRecord = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exceptions appropriately
+        }
+
+        return totalRecord;
+
+    }
+
+    public List<Course> findCourseOrderByNumberOfMentee(int page) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT c.courseId, c.courseName, \n"
+                + "       CAST(c.courseDescription AS NVARCHAR(MAX)) AS courseDescription, \n"
+                + "       c.createdAt, \n"
+                + "       COUNT(p.username) AS user_count\n"
+                + "FROM Course c\n"
+                + "JOIN Participate p ON c.courseId = p.courseId\n"
+                + "JOIN [User] u ON p.username = u.username\n"
+                + "JOIN Status s ON p.statusId = s.statusId\n"
+                + "WHERE p.participateRole = 3 AND p.statusId = 1\n"
+                + "GROUP BY c.courseId, c.courseName, \n"
+                + "         CAST(c.courseDescription AS NVARCHAR(MAX)), \n"
+                + "         c.createdAt\n"
+                + "ORDER BY user_count DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY ;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            // Tính toán offset và số lượng bản ghi trên một trang (giả sử mỗi trang có 10 khóa học)
+            int recordsPerPage = 5;
+            int offset = (page - 1) * recordsPerPage;
+            preparedStatement.setInt(1, offset);
+            preparedStatement.setInt(2, recordsPerPage);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                // Giả sử bạn có một lớp Course với các trường phù hợp
+                Course course = new Course();
+                course.setCourseId(resultSet.getInt("CourseId"));
+                course.setCourseName(resultSet.getString("CourseName"));
+                course.setCourseDescription(resultSet.getString("courseDescription"));
+                // Thêm các trường khác nếu có
+                courses.add(course);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Xử lý ngoại lệ
+        }
+
+        return courses;
+    }
     
-    //My Courses
+    
+
+    public List<Course> findCourseOrderByNumberOfMentee3(int page) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "SELECT c.courseId, c.courseName, \n"
+                + "       CAST(c.courseDescription AS NVARCHAR(MAX)) AS courseDescription, \n"
+                + "       c.createdAt, \n"
+                + "       COUNT(p.username) AS user_count\n"
+                + "FROM Course c\n"
+                + "JOIN Participate p ON c.courseId = p.courseId\n"
+                + "JOIN [User] u ON p.username = u.username\n"
+                + "JOIN Status s ON p.statusId = s.statusId\n"
+                + "WHERE p.participateRole = 3 AND p.statusId = 1\n"
+                + "GROUP BY c.courseId, c.courseName, \n"
+                + "         CAST(c.courseDescription AS NVARCHAR(MAX)), \n"
+                + "         c.createdAt\n"
+                + "ORDER BY user_count ASC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY ;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            // Tính toán offset và số lượng bản ghi trên một trang (giả sử mỗi trang có 10 khóa học)
+            int recordsPerPage = 5;
+            int offset = (page - 1) * recordsPerPage;
+            preparedStatement.setInt(1, offset);
+            preparedStatement.setInt(2, recordsPerPage);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                // Giả sử bạn có một lớp Course với các trường phù hợp
+                Course course = new Course();
+                course.setCourseId(resultSet.getInt("CourseId"));
+                course.setCourseName(resultSet.getString("CourseName"));
+                course.setCourseDescription(resultSet.getString("courseDescription"));
+                // Thêm các trường khác nếu có
+                courses.add(course);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Xử lý ngoại lệ
+        }
+
+        return courses;
+    }
     public List<Course> searchMentoringCoursesByName(String userName, String keyword, int page) {
         List<Course> courses = new ArrayList<>();
         String sql = "SELECT * FROM Course c "
@@ -557,7 +710,7 @@ public class CourseDAO extends DBContext {
             while (rs.next()) {
                 courses.add(mapCourse(rs));
             }
-        } catch (SQLException e) {
+        }catch (SQLException e) {
             e.printStackTrace();
         }
         return courses;
