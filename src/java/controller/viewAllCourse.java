@@ -56,6 +56,7 @@ public class viewAllCourse extends HttpServlet {
         List<User> listMentor = courseDAO.getAllMentor();
         List<User> listUser = userDAO.getAll();
         List<Course> listMostEnrollCourse = userDAO.getCourseByQuantityEnroll();
+        List<Course> listByDate = userDAO.getCourseByDate();
         PageControl pageControl = new PageControl();
         List<Course> listCourse = findCourseDoGet(request, pageControl);
         HttpSession session = request.getSession();
@@ -64,6 +65,7 @@ public class viewAllCourse extends HttpServlet {
         session.setAttribute("listUser", listUser);
         session.setAttribute("listCategory", listCategory);
         session.setAttribute("listMentor", listMentor);
+        session.setAttribute("listByDate", listByDate);
         session.setAttribute("listCourse_Category", listCourse_Category);
         session.setAttribute("listCourse", listCourse);
         session.setAttribute("pageControl", pageControl);
@@ -125,8 +127,18 @@ public class viewAllCourse extends HttpServlet {
             case "category":
                 String categoryId = request.getParameter("categoryId");
                 totalRecord = courseDAO.findTotalRecordByCategory(categoryId);
-                listCourse = courseDAO.findByCategory(categoryId);
+                listCourse = courseDAO.findByCategory2(categoryId, page);
                 pagecontrol.setUrlPattern(requestURL + "?search=category&categoryId=" + categoryId + "&");
+                break;
+            case "price-dces":
+                totalRecord = courseDAO.findTotalRecordOrderByNumberOfMentee();
+                listCourse = courseDAO.findCourseOrderByNumberOfMentee(page);
+                pagecontrol.setUrlPattern(requestURL + "?search=price-dces");
+                break;
+            case "price-asc":
+                totalRecord = courseDAO.findTotalRecordOrderByNumberOfMentee();
+                listCourse = courseDAO.findCourseOrderByNumberOfMentee3(page);
+                pagecontrol.setUrlPattern(requestURL + "?search=price-dces");
                 break;
             case "username":
                 String username = request.getParameter("username");
