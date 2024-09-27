@@ -695,6 +695,8 @@ public class CourseDAO extends DBContext {
 
         return courses;
     }
+    
+    //My Courses
     public List<Course> searchMentoringCoursesByName(String userName, String keyword, int page) {
         List<Course> courses = new ArrayList<>();
         String sql = "SELECT * FROM Course c "
@@ -970,4 +972,5 @@ public class CourseDAO extends DBContext {
         }
         return 1;
     }
+    //End My Courses
 }

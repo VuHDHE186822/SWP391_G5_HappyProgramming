@@ -1,6 +1,6 @@
 <%-- 
-    Document   : userProfile
-    Created on : Sep 21, 2024, 11:38:41 PM
+    Document   : editUser
+    Created on : Sep 27, 2024, 1:31:24 PM
     Author     : Huy Võ
 --%>
 
@@ -206,28 +206,6 @@
             let originalValues = {};
             let mimeType, fileName;
 
-            function toggleEdit() {
-                const inputs = document.querySelectorAll('.input-container input');
-                const editButton = document.getElementById('editButton');
-                const saveButton = document.getElementById('saveButton');
-                const cancelButton = document.getElementById('cancelButton');
-                const cvFileInput = document.getElementById('cvFileInput');
-                const linkCv = document.getElementById('linkCv');
-                inputs.forEach(input => {
-                    if (input.name !== 'username') {
-                        if (!originalValues[input.name]) {
-                            originalValues[input.name] = input.value;
-                        }
-                        input.disabled = false;
-                    }
-                });
-                editButton.style.display = 'none';
-                saveButton.style.display = 'inline-block';
-                cancelButton.style.display = 'inline-block';
-                linkCv.style.display = 'none';
-                cvFileInput.style.display = 'inline';
-            }
-
             function saveChanges() {
                 alert("Do you want to save changes?");
                 toggleEdit();
@@ -365,32 +343,29 @@
                         <div class="input-container">
                             <label>First Name:</label>
                             <div class="name-input">
-                                <input type="text" name="firstName" value="<%= user.getFirstName() %>" disabled>
+                                <input type="text" name="firstName" value="<%= user.getFirstName() %>">
                                 <label>Last Name:</label>
-                                <input type="text" name="lastName" value="<%= user.getLastName() %>" disabled>
+                                <input type="text" name="lastName" value="<%= user.getLastName() %>">
                             </div>
                         </div>
                         <div class="input-container">
                             <label>Username:</label>
-                            <input type="text" name="username" value="<%= user.getUsername() %>" disabled>
+                            <input type="text" name="username" value="<%= user.getUsername()  %>"disabled>
                             <input type="hidden" name="usernameHidden" value="<%= user.getUsername() %>">
                         </div>
                         <div class="input-container">
                             <label>Date of Birth:</label>
-                            <input type="date" name="dob" value="<%= dobFormatted %>" disabled max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
+                            <input type="date" name="dob" value="<%= dobFormatted %>" max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
                         </div>
                         <div class="input-container">
                             <label>Email:</label>
-                            <input type="email" name="email" value="<%= user.getMail() %>" disabled>
+                            <input type="email" name="email" value="<%= user.getMail() %>">
                             <input type="hidden" name="oldEmail" value="<%= user.getMail() %>">
                         </div>
                         <c:if test="${user.getRoleId() == 2}">                          
                             <div class="input-container">
                                 <label>CV:</label>
-                                <div style="margin-bottom: 8px;" id="linkCv">
-                                    <a href="javascript:void(0);" id="download" style="text-decoration: none; color: #5d3fd3; font-weight: bold; padding-botton: 5px;" >Download CV</a>
-                                </div>
-                                <input type="file" name="cvFileInput" id="cvFileInput" style="display: none;" accept=".pdf, image/*" onchange="validateFileSize()">
+                                <input type="file" name="cvFileInput" id="cvFileInput" accept=".pdf, image/*" onchange="validateFileSize()">
                                 <input type="hidden" name="cvFile" id="cvFile" style="display: none;" accept="*" value="<%= user.getCvPath() %>">
                             </div>
                         </c:if>
@@ -408,10 +383,8 @@
                         </c:if>
                         <% session.removeAttribute("note"); %>
                         <div class="button-container">
-                            <button type="button" class="button-save" id="editButton" onclick="window.location.href='editUser.jsp'">Edit Profile</button>
-
-                            <button type="submit" class="button-save" id="saveButton" style="display: none;" onclick="saveChanges()">Save Changes</button>
-                            <button type="button" class="button-save" id="cancelButton" style="display: none; background-color: red;" onclick="cancelEdit()">Cancel</button>
+                            <button type="submit" class="button-save" id="saveButton"  onclick="saveChanges()">Save Changes</button>
+                            <button type="button" class="button-save" id="cancelButton"  background-color: red;" onclick="window.location.href='userProfile.jsp'">Cancel</button>
                         </div>
                     </form>
                 </div>

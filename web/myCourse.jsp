@@ -39,7 +39,7 @@
             input[type="text"] {
                 padding: 5px;
                 width: 500px;
-                height: 31px;
+                height: 32.5px;
                 border: none;
                 border-radius: 5px;
             }
@@ -162,6 +162,9 @@
                     <input type="text" placeholder="Search course" name="keyword" id="search-input" required/>
                     <button type="submit" title="Search"><i class="fa fa-search"></i> Search</button>
                 </form>
+            </div>
+            <div>
+                <a href="viewMyCourses" class="dropdown">All</a>
             </div>
             <div class="dropdown">
                 Category ▼
