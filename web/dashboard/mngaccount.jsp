@@ -50,6 +50,13 @@
                 border-radius: 10px;
                 outline: none;
             }
+            .modal-dialog {
+                max-width: 1400px;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
         </style>
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"><link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap"><link rel="stylesheet" type="text/css" href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/mdb5/3.8.1/compiled.min.css"><link rel="stylesheet" type="text/css" href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/mdb-plugins-gathered.min.css"><style>body {
                 background-color: #fbfbfb;
@@ -100,9 +107,7 @@
         </style>
     </head>
     <body>
-        <jsp:include page="addAccount.jsp" />
-        <jsp:include page="updateAccount.jsp" />
-        <jsp:include page="deactivateAccount.jsp" />
+
         <!--Main Navigation-->
         <header>
             <jsp:include page="leftadmin.jsp"></jsp:include>
@@ -154,7 +159,11 @@
                                             <th class="text_page_head">Active Status</th>
                                             <th class="text_page_head">Is Verified</th>
                                             <th class="text_page_head">Role ID</th>
-                                            <th class="text_page_head">Action</th>
+                                            <th>
+                                                <a style="margin-left: 5px" href="#addEmployeeModal" class="btn btn-success" data-toggle="modal">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                </a>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -172,10 +181,6 @@
                                                 <td class="text_page" style="font-weight: 500">${t.isVerified}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.roleId}</td>
                                                 <td>
-
-                                                    <a style="margin-left: 5px" href="#addEmployeeModal" class="btn btn-success" data-toggle="modal">
-                                                        <i class="fa-solid fa-plus"></i>
-                                                    </a>
                                                     <!-- Update Button -->
                                                     <button type="button" class="btn btn-primary" 
                                                             data-toggle="modal" 
@@ -203,6 +208,188 @@
                 <!--Section: Quan Ly tai Khoan-->
             </div>
         </main>
+
+        <!-- Update Modal HTML -->
+        <div id="updateUserModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="updateForm" action="<%= request.getContextPath() %>/UpdateUserInfoControl" method="post">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Update User Info</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Username (hidden) -->
+                            <input name="username" type="hidden" id="updateUsername">
+
+                            <!-- First Name -->
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input name="firstName" type="text" class="form-control" id="updateFirstName" required>
+                            </div>
+                            <!-- Last Name -->
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input name="lastName" type="text" class="form-control" id="updateLastName" required>
+                            </div>
+                            <!-- Date of Birth -->
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input name="dob" type="date" class="form-control" id="updateDob" required>
+                            </div>
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input name="email" type="email" class="form-control" id="updateEmail" required>
+                            </div>
+                            <!-- Avatar Path -->
+                            <div class="form-group">
+                                <label>Avatar Path</label>
+                                <input name="avatarPath" type="text" class="form-control" id="updateAvatarPath">
+                            </div>
+                            <!-- CV Path -->
+                            <div class="form-group">
+                                <label>CV Path</label>
+                                <input name="cvPath" type="text" class="form-control" id="updateCvPath">
+                            </div>
+                            <!-- Active Status -->
+                            <div class="form-group">
+                                <input name="activeStatus" type="checkbox" class="form-check-input" id="updateActiveStatus">
+                                <label class="form-check-label" for="updateActiveStatus">Active</label>
+                            </div>
+                            <!-- Verified Status -->
+                            <div class="form-group">
+                                <input name="isVerified" type="checkbox" class="form-check-input" id="updateIsVerified">
+                                <label class="form-check-label" for="updateIsVerified">Verified</label>
+                            </div>
+                            <!-- Role Selection (Dropdown) -->
+                            <div class="form-group">
+                                <label>Role</label>
+                                <select name="roleId" class="form-control" id="updateRoleId" required>
+                                    <option value="1">Admin</option>
+                                    <option value="2">Mentor</option>
+                                    <option value="3">Mentee</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-success" value="Update">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Edit Modal HTML -->
+        <div id="addEmployeeModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="form" action="<%= request.getContextPath() %>/AddAccountControl" method="post">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Account</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Username -->
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input name="username" type="text" class="form-control" required>
+                            </div>
+                            <!-- Password -->
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input name="password" type="password" class="form-control" required>
+                            </div>
+                            <!-- First Name -->
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input name="firstName" type="text" class="form-control" required>
+                            </div>
+                            <!-- Last Name -->
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input name="lastName" type="text" class="form-control" required>
+                            </div>
+                            <!-- Date of Birth -->
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input name="dob" type="date" class="form-control" required>
+                            </div>
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input name="email" type="email" class="form-control" required>
+                            </div>
+                            <!-- Avatar Path -->
+                            <div class="form-group">
+                                <label>Avatar Path</label>
+                                <input name="avatarPath" type="text" class="form-control">
+                            </div>
+                            <!-- CV Path -->
+                            <div class="form-group">
+                                <label>CV Path</label>
+                                <input name="cvPath" type="text" class="form-control">
+                            </div>
+                            <!-- Active Status -->
+                            <div class="form-group">
+                                <input name="activeStatus" type="checkbox" class="form-check-input" id="activeStatus">
+                                <label class="form-check-label" for="activeStatus">Active</label>
+                            </div>
+                            <!-- Verified Status -->
+                            <div class="form-group">
+                                <input name="isVerified" type="checkbox" class="form-check-input" id="isVerified">
+                                <label class="form-check-label" for="isVerified">Verified</label>
+                            </div>
+                            <!-- Verification Code -->
+                            <div class="form-group">
+                                <label>Verification Code</label>
+                                <input name="verificationCode" type="text" class="form-control">
+                            </div>
+                            <!-- Role Selection (Dropdown) -->
+                            <div class="form-group">
+                                <label>Role</label>
+                                <select name="roleId" class="form-control" required>
+                                    <option value="1">Admin</option>
+                                    <option value="2">Mentor</option>
+                                    <option value="3">Mentee</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-success" value="Add">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Modal HTML -->
+        <div id="deleteUserModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="deleteForm" action="<%= request.getContextPath() %>/DeleteUserInfoControl" method="post">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Deactivate User</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <input name="username" type="hidden" id="deleteUsername">
+                            <p>Are you sure you want to deactivate this user?</p>
+                            <p class="text-warning"><small>The user will be marked as inactive.</small></p>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-danger" value="Deactivate">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>   
