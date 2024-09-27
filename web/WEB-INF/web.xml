@@ -72,6 +72,10 @@
         <servlet-name>viewMyCourses</servlet-name>
         <servlet-class>controller.viewMyCourses</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>verifyEmail</servlet-name>
+        <servlet-class>controller.verifyEmail</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
@@ -143,5 +147,9 @@
     <servlet-mapping>
         <servlet-name>viewMyCourses</servlet-name>
         <url-pattern>/viewMyCourses</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>verifyEmail</servlet-name>
+        <url-pattern>/verifyEmail</url-pattern>
     </servlet-mapping>
 </web-app>

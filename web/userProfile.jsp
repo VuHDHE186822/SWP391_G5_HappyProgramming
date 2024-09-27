@@ -350,9 +350,18 @@
                     <form action="userProfile" method="post" id="userProfileForm">
                         <input type="number" id="role" name="role" style="display: none;" value="<%= user.getRoleId() %>">
                         <h2>User Profile</h2>
-                        <p style="text-align: center; margin-bottom: 20px; font-weight: 600; color: red;">
-                            Your account is not verified! Please <a href="verifyEmail.jsp?code=${user.verificationCode}">click here</a> to verify!
-                        </p>
+
+                        <c:if test="${!user.isIsVerified()}">
+                            <p style="text-align: center; margin-bottom: 20px; font-weight: 600; color: red;">
+                                Your account is not verified! Please <a href="verifyEmail?send=true">click here</a> to verify!
+                            </p>
+                        </c:if>
+                        <c:if test="${not empty sessionScope.verify}">
+                            <p style="text-align: center; margin-bottom: 20px; font-weight: 600; color: green;">
+                                ${sessionScope.verify}
+                            </p>
+                        </c:if>
+                        <% session.removeAttribute("verify"); %>
                         <div class="input-container">
                             <label>First Name:</label>
                             <div class="name-input">
@@ -368,7 +377,7 @@
                         </div>
                         <div class="input-container">
                             <label>Date of Birth:</label>
-                            <input type="date" name="dob" value="<%= dobFormatted %>" disabled>
+                            <input type="date" name="dob" value="<%= dobFormatted %>" disabled max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
                         </div>
                         <div class="input-container">
                             <label>Email:</label>
