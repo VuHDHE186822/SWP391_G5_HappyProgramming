@@ -381,7 +381,7 @@
                                 <div style="margin-bottom: 8px;" id="linkCv">
                                     <a href="javascript:void(0);" id="download" style="text-decoration: none; color: #5d3fd3; font-weight: bold; padding-botton: 5px;" >Download CV</a>
                                 </div>
-                                <input type="file" name="cvFileInput" id="cvFileInput" style="display: none;" accept="pdf, image/*" onchange="validateFileSize()">
+                                <input type="file" name="cvFileInput" id="cvFileInput" style="display: none;" accept=".pdf, image/*" onchange="validateFileSize()">
                                 <input type="hidden" name="cvFile" id="cvFile" style="display: none;" accept="*" value="<%= user.getCvPath() %>">
                             </div>
                         </c:if>
