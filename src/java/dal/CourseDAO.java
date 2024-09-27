@@ -17,7 +17,7 @@ public class CourseDAO extends DBContext {
     public static void main(String[] args) {
         CourseDAO dao = new CourseDAO();
        int count = dao.findTotalRecordOrderByNumberOfMentee();
-        List<Course> list = dao.findCourseOrderByNumberOfMentee(2)     ;
+        List<Course> list = dao.findCourseOrderByNumberOfMentee(1)     ;
         for (Course course : list) {
             System.out.println(course);
         }
