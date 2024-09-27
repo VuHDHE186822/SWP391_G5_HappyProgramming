@@ -172,7 +172,7 @@
                                                 <td class="text_page" style="font-weight: 500">${t.isVerified}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.roleId}</td>
                                                 <td>
-                                                    
+
                                                     <a style="margin-left: 5px" href="#addEmployeeModal" class="btn btn-success" data-toggle="modal">
                                                         <i class="fa-solid fa-plus"></i>
                                                     </a>
