@@ -296,7 +296,7 @@
                             <input type="text" name="dob" placeholder="Date Of Birth" required onfocus="(this.type = 'date')" max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
                         <input type="hidden" name="email" value="${sessionScope.email}" required>
                         <input type="hidden" name="role" id="selectedRole" value="" required>
-                        <input type="text" id="cvContainer" class="hidden" name="cv" accept="*" onfocus="(this.type = 'file')" placeholder="Your CV (<5MB)" onchange="validateFileSize()">
+                        <input type="text" id="cvContainer" class="hidden" name="cv" accept=".pdf, image/*" onfocus="(this.type = 'file')" placeholder="Your CV (<5MB)" onchange="validateFileSize()">
 
                         <c:if test="${not empty sessionScope.error}">
                             <div class="error-message">
