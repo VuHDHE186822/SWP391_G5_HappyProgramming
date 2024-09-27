@@ -409,6 +409,37 @@ public class UserDAO extends DBContext {
         return list;
     }
 
+    public List<User> getUsersByUsername(String txt) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM [dbo].[User] WHERE [username] = ? ";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, txt);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                Date dob = rs.getDate("dob");
+                String mail = rs.getString("mail");
+                Date createdDate = rs.getDate("createdDate");
+                String avatarPath = rs.getString("avatarPath");
+                String cvPath = rs.getString("cvPath");
+                boolean activeStatus = rs.getBoolean("activeStatus");
+                boolean isVerified = rs.getBoolean("isVerified");
+                String verificationCode = rs.getString("verification_code");
+                int roleId = rs.getInt("roleId");
+                User u = new User(id, username, password, firstName, lastName, dob, mail, createdDate, avatarPath, cvPath, activeStatus, isVerified, verificationCode, roleId);
+                list.add(u);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public List<Course> getCourseByDate() {
         List<Course> list = new ArrayList<>();
         String sql = "SELECT * FROM Course ORDER BY createdAt DESC;";
@@ -416,7 +447,7 @@ public class UserDAO extends DBContext {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                 int id = rs.getInt("courseId");
+                int id = rs.getInt("courseId");
                 String name = rs.getString("courseName");
                 String des = rs.getString("courseDescription");
                 Date date = rs.getDate("createdAt");

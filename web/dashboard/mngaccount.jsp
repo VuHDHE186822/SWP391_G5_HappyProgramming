@@ -154,11 +154,7 @@
                                             <th class="text_page_head">Active Status</th>
                                             <th class="text_page_head">Is Verified</th>
                                             <th class="text_page_head">Role ID</th>
-                                            <th>
-                                                <a style="margin-left: 5px" href="#addEmployeeModal" class="btn btn-success" data-toggle="modal">
-                                                    <i class="fa-solid fa-plus"></i>
-                                                </a>
-                                            </th>
+                                            <th class="text_page_head">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -176,6 +172,10 @@
                                                 <td class="text_page" style="font-weight: 500">${t.isVerified}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.roleId}</td>
                                                 <td>
+                                                    
+                                                    <a style="margin-left: 5px" href="#addEmployeeModal" class="btn btn-success" data-toggle="modal">
+                                                        <i class="fa-solid fa-plus"></i>
+                                                    </a>
                                                     <!-- Update Button -->
                                                     <button type="button" class="btn btn-primary" 
                                                             data-toggle="modal" 
