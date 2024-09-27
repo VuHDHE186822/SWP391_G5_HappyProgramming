@@ -16,8 +16,8 @@ public class CourseDAO extends DBContext {
 
     public static void main(String[] args) {
         CourseDAO dao = new CourseDAO();
-       int count = dao.findTotalRecordOrderByNumberOfMentee();
-        List<Course> list = dao.findCourseOrderByNumberOfMentee(1)     ;
+       int count = dao.findTotalRecordByCategory("1");
+        List<Course> list = dao.getAllCourse2(1)     ;
         for (Course course : list) {
             System.out.println(course);
         }
@@ -532,13 +532,11 @@ public class CourseDAO extends DBContext {
         List<Course> list = new ArrayList<>();
         String sql = "SELECT * FROM [Course] "
                 + "ORDER BY courseId "
-                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+                + "OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
-            int recordsPerPage = 5;
-            int offset = (page - 1) * recordsPerPage;
+            int offset = (page - 1) * 5;
             st.setInt(1, offset); // Corrected: set offset first
-            st.setInt(2, recordsPerPage);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("courseId");
@@ -973,4 +971,6 @@ public class CourseDAO extends DBContext {
         return 1;
     }
     //End My Courses
+
+
 }

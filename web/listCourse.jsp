@@ -110,23 +110,8 @@
 
             .product-list {
                 display: flex;
-                overflow-x: auto; /* Enable horizontal scrolling */
+                flex-wrap: wrap; /* Cho phép nhiều hàng */
                 max-width: 100%; /* Full width for responsive design */
-                scroll-behavior: smooth; /* Smooth scrolling */
-            }
-
-            /* Thay đổi màu thanh cuộn */
-            .product-list::-webkit-scrollbar {
-                height: 8px; /* Độ cao của thanh cuộn */
-            }
-
-            .product-list::-webkit-scrollbar-thumb {
-                background: #5e3fd3; /* Màu của thanh cuộn */
-                border-radius: 10px; /* Bo tròn thanh cuộn */
-            }
-
-            .product-list::-webkit-scrollbar-track {
-                background: rgba(0, 0, 0, 0.1); /* Màu nền cho track của thanh cuộn */
             }
 
             .product-item {
@@ -260,7 +245,6 @@
                 background-color: #ff9900;
             }
 
-            /* Additional styles for latest courses section */
             .course-navigation {
                 display: flex;
                 align-items: center;
@@ -315,10 +299,10 @@
 
         <section class="featured-product2">
             <h2 class = "alo" >LASTEST COURSE</h2>
-            <div class="course-navigation">
-                <button class="nav-button" onclick="move(-1)">&#10094;</button>
+            <div class="
+                 course-navigation">
                 <div class="product-list">
-                    <c:forEach items="${listByDate}" var="cou" end = "2">
+                    <c:forEach items="${listByDate}" var="cou" end="2">
                         <c:forEach items="${listCourse_Category}" var="cocat">
                             <c:if test="${cocat.courseId == cou.courseId}">
                                 <c:forEach items="${listCategory}" var="cat">
@@ -341,12 +325,11 @@
                         </c:forEach>
                     </c:forEach>
                 </div>
-                <button class="nav-button" onclick="move(1)">&#10095;</button>
             </div>
         </section>
 
         <section class="all-products">
-            <h2 class = "alo">COURSES</h2>
+            <h2 class="alo">COURSES</h2>
             <div class="product-list" id="product-list">
                 <c:forEach items="${listCourse}" var="cou">
                     <c:forEach items="${listCourse_Category}" var="cocat">
@@ -386,22 +369,11 @@
         <jsp:include page="footer.jsp"/>
 
         <script>
-            // Giới hạn mô tả xuống 45 ký tự
             document.querySelectorAll('.short-description').forEach(function (desc) {
                 if (desc.innerText.length > 45) {
                     desc.innerText = desc.innerText.substring(0, 45) + '...';
                 }
             });
-
-            // JavaScript for horizontal scrolling
-            let scrollAmount = 0;
-
-            function move(direction) {
-                const productList = document.querySelector('.product-list');
-                const itemWidth = document.querySelector('.product-item').offsetWidth + 20; // width + margin
-                scrollAmount += direction * itemWidth; // Update scroll amount
-                productList.scrollTo({left: scrollAmount, behavior: 'smooth'}); // Smooth scroll to the new position
-            }
         </script>
 
     </body>

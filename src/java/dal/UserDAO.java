@@ -471,4 +471,11 @@ public class UserDAO extends DBContext {
             e.printStackTrace();
         }
     }
+
+    public List<Course> getCourseByCategory() {
+
+        
+
+
+    }
 }

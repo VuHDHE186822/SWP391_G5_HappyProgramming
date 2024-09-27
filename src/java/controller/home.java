@@ -1,4 +1,4 @@
-/*
+                    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
@@ -130,9 +130,9 @@ public class home extends HttpServlet {
         totalRecord = dao.findTotalRecordAllCourses();
         listCourse = dao.getAllCourse2(page);
         pagecontrol.setUrlPattern(requestURL + "?");
-        int totalPage = (totalRecord % 5) == 0
-                ? (totalRecord / 5)
-                : (totalRecord / 5) + 1;
+        int totalPage = (totalRecord % 6) == 0
+                ? (totalRecord / 6)
+                : (totalRecord / 6) + 1;
 
         pagecontrol.setPage(page);
         pagecontrol.setTotalPage(totalPage);
