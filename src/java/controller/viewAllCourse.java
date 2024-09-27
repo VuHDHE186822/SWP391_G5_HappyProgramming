@@ -133,12 +133,12 @@ public class viewAllCourse extends HttpServlet {
             case "price-dces":
                 totalRecord = courseDAO.findTotalRecordOrderByNumberOfMentee();
                 listCourse = courseDAO.findCourseOrderByNumberOfMentee(page);
-                pagecontrol.setUrlPattern(requestURL + "?search=price-dces");
+                pagecontrol.setUrlPattern(requestURL + "?search=price-dces?");
                 break;
             case "price-asc":
                 totalRecord = courseDAO.findTotalRecordOrderByNumberOfMentee();
                 listCourse = courseDAO.findCourseOrderByNumberOfMentee3(page);
-                pagecontrol.setUrlPattern(requestURL + "?search=price-dces");
+                pagecontrol.setUrlPattern(requestURL + "?search=price-dces?");
                 break;
             case "username":
                 String username = request.getParameter("username");
