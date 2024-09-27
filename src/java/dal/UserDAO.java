@@ -459,4 +459,16 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
+
+    public void verifyEmail(String username, User user) {
+        String sql = "UPDATE [User] SET isVerified = ? WHERE username = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setBoolean(1, user.isIsVerified());
+            statement.setString(2, username);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
