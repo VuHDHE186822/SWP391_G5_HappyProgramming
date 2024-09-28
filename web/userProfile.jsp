@@ -233,31 +233,6 @@
                 toggleEdit();
             }
 
-            function changeImage() {
-                let input = document.getElementById("fileinput");
-                input.click();
-            }
-
-            function cancelEdit() {
-                const cvFileInput = document.getElementById('cvFileInput');
-                const linkCv = document.getElementById('linkCv');
-                const inputs = document.querySelectorAll('.input-container input');
-                inputs.forEach(input => {
-                    if (input.name !== 'username' && input.name !== 'cvFile') {
-                        input.value = originalValues[input.name] || '';
-                        input.disabled = true;
-                        if (input.type === 'file') {
-                            input.value = ''; // Reset giá trị của input file về rỗng
-                        }
-                    }
-                });
-                document.getElementById('saveButton').style.display = 'none';
-                document.getElementById('cancelButton').style.display = 'none';
-                document.getElementById('editButton').style.display = 'inline-block';
-                linkCv.style.display = 'inline';
-                cvFileInput.style.display = 'none';
-            }
-
             document.addEventListener('DOMContentLoaded', function () {
                 function base64ToFile(base64String, fileName) {
                     let mimeType;
@@ -341,8 +316,6 @@
                         <a onclick="changeImage()">
                             <img src="data:image/jpeg;base64,<%= user.getAvatarPath() %>" alt="Avatar" class="avatar-image">
                         </a>
-                        <button type="button" class="button-upload" onclick="changeImage()">Change</button>
-                        <input style="display: none;" name="avatarFile" type="file" id="fileinput" accept="image/*" onchange="document.getElementById('avatarForm').submit();"/>
 
                     </form>
                 </div>
@@ -409,9 +382,6 @@
                         <% session.removeAttribute("note"); %>
                         <div class="button-container">
                             <button type="button" class="button-save" id="editButton" onclick="window.location.href='editUser.jsp'">Edit Profile</button>
-
-                            <button type="submit" class="button-save" id="saveButton" style="display: none;" onclick="saveChanges()">Save Changes</button>
-                            <button type="button" class="button-save" id="cancelButton" style="display: none; background-color: red;" onclick="cancelEdit()">Cancel</button>
                         </div>
                     </form>
                 </div>

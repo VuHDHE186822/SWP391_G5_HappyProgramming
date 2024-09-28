@@ -365,10 +365,7 @@
                         <c:if test="${user.getRoleId() == 2}">                          
                             <div class="input-container">
                                 <label>CV:</label>
-                                <div style="margin-bottom: 8px;" id="linkCv">
-                                    <a href="javascript:void(0);" id="download" style="text-decoration: none; color: #5d3fd3; font-weight: bold; padding-botton: 5px;" >Download CV</a>
-                                </div>
-                                <input type="file" name="cvFileInput" id="cvFileInput" style="display: none;" accept=".pdf, image/*" onchange="validateFileSize()">
+                                <input type="file" name="cvFileInput" id="cvFileInput" accept=".pdf, image/*" onchange="validateFileSize()">
                                 <input type="hidden" name="cvFile" id="cvFile" style="display: none;" accept="*" value="<%= user.getCvPath() %>">
                             </div>
                         </c:if>
@@ -387,7 +384,7 @@
                         <% session.removeAttribute("note"); %>
                         <div class="button-container">
                             <button type="submit" class="button-save" id="saveButton"  onclick="saveChanges()">Save Changes</button>
-                            <button type="button" class="button-save" id="cancelButton"  background-color: red;" onclick="window.location.href='userProfile.jsp'">Cancel</button>
+                            <button type="button" class="button-save" id="cancelButton"  style="background-color: red;" onclick="window.location.href='userProfile.jsp'">Cancel</button>
                         </div>
                     </form>
                 </div>

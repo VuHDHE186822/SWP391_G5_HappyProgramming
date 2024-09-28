@@ -95,7 +95,7 @@ public class changeAvatar extends HttpServlet {
             dao.updateUserAvatarPath(user.getUsername(), user.getAvatarPath());
         }
 
-        response.sendRedirect("userProfile.jsp");
+        response.sendRedirect("editUser.jsp");
     }
 
     /**
