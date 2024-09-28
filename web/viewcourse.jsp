@@ -42,14 +42,30 @@
                 </c:forEach>
                 <h3>Number of Mentor</h3>
                 <h4 class="stat-number">${count}</h4>
-                <a href="#" class="button-enroll">Enroll</a>
+                <form action="#">
+                    <button class="button-enroll">Enroll</button>
+                </form>
             </c:if>
         </div>
 
         <!-- SAME COURSE -->
         <c:if test="${not empty sessionScope.sameCourse}">
-            <c:set var="c" value="${sessionScope.categoryCourse}"/>
-            <h2 class="list-mentor">Same ${c.categoryName} Courses</h2>
+            <h2 class="list-mentor">
+                <c:set var="hasPrinted" value="false" />
+                Same
+                <c:forEach items="${sessionScope.category}" var="ca">
+                    <c:forEach items="${sessionScope.sameCateId}" var="cId">
+                        <c:if test="${cId == ca.categoryId}">
+                            <c:if test="${hasPrinted}">
+                                , 
+                            </c:if>
+                            ${ca.categoryName}
+                            <c:set var="hasPrinted" value="true" />
+                        </c:if>
+                    </c:forEach>
+                </c:forEach>
+                Course
+            </h2>
             <div class="same-course-cards-wrapper">
                 <div class="same-course-cards">
                     <c:forEach items="${sessionScope.sameCourse}" var="sC">
@@ -80,7 +96,7 @@
             <h2 class="list-category">Other Category You Can Discover</h2>
             <div class="category-cards-wrapper">
                 <div class="category-cards">
-                    <c:forEach items="${sessionScope.category}" var="c" varStatus="status">
+                    <c:forEach items="${sessionScope.othercategory}" var="c" varStatus="status">
                         <a href="allCourse?search=category&categoryId=${c.categoryId}" class="category-card" style="display: ${status.index < 4 ? 'block' : 'none'};">
                             <h3>${c.categoryName}</h3>
                         </a>
@@ -114,24 +130,21 @@
         <!-- MENTOR LIST -->
         <h2 class="list-mentor">Mentor Of This Course</h2>
         <div class="mentor-cards">
-            <c:if test="${not empty sessionScope.courseDetail}">
-                <c:set var="cD" value="${sessionScope.courseDetail}"/>
-                <c:forEach items="${sessionScope.participate}" var="p">
-                    <c:if test="${cD.courseId == p.courseId}">
-                        <c:forEach items="${sessionScope.mentor}" var="m">
-                            <c:if test="${p.username == m.username}">
-                                <div class="mentor-card">
-                                    <img class="mentor-image-icon" alt="" src="https://zpsocial2-f4-org.zadn.vn/9790ea297aa49bfac2b5.jpg">
-                                    <div class="mentor-body">
-                                        <div class="mentor-text">
-                                            <div style="color: black">${m.lastName} ${m.firstName}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:if>
-                        </c:forEach>
-                    </c:if>
+            <c:if test="${not empty sessionScope.mentorThisCourse}">
+                <c:forEach items="${sessionScope.mentorThisCourse}" var="m">
+                    <div class="mentor-card">
+                        <img class="mentor-image-icon" alt="" src="data:image/jpeg;base64, ${m.avatarPath}">
+                        <div class="mentor-body">
+                            <div class="mentor-text">
+                                <div style="color: black">${m.lastName} ${m.firstName}</div>
+                            </div>
+                        </div>
+                    </div>
                 </c:forEach>
+            </c:if>
+
+            <c:if test="${empty sessionScope.mentorThisCourse}">
+                <h4>This Course Does Not Have Mentor Yet!</h4>
             </c:if>
         </div>
 

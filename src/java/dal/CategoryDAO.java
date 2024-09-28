@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import model.Category;
 import model.CourseCategory;
 
@@ -35,13 +36,18 @@ public class CategoryDAO extends DBContext {
         }
         return list;
     }
-    
-    public List<Category> getAllExceptOne(int categoryId) {
+
+    public List<Category> getAllExceptOne(List<Integer> categoryIds) {
         List<Category> list = new ArrayList<>();
-        String sql = "SELECT * FROM [Category] where categoryId != ?";
+        String sql = "SELECT * FROM [Category] WHERE categoryId NOT IN ("
+                + categoryIds.stream().map(id -> "?").collect(Collectors.joining(",")) + ")";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
-            st.setInt(1, categoryId);
+
+            for (int i = 0; i < categoryIds.size(); i++) {
+                st.setInt(i + 1, categoryIds.get(i));
+            }
+
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("categoryId");
@@ -54,7 +60,7 @@ public class CategoryDAO extends DBContext {
         }
         return list;
     }
-    
+
     public Category getCategoryByCategoryId(int categoryId) {
         Category c = new Category();
         String sql = "SELECT * FROM [Category] where categoryId = ?";
@@ -71,11 +77,12 @@ public class CategoryDAO extends DBContext {
         }
         return c;
     }
-    
+
     public static void main(String[] args) {
         CategoryDAO dao = new CategoryDAO();
-        List<Category> category = dao.getAllExceptOne(1);
-        for(Category c : category) {
+        List<Integer> list = new ArrayList<>();
+        List<Category> category = dao.getAllExceptOne(list);
+        for (Category c : category) {
             System.out.println(c);
         }
     }

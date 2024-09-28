@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 import model.Course;
 import model.Category;
 import model.Course_Category;
@@ -16,12 +17,18 @@ public class CourseDAO extends DBContext {
 
     public static void main(String[] args) {
         CourseDAO dao = new CourseDAO();
-       int count = dao.findTotalRecordOrderByNumberOfMentee();
-        List<Course> list = dao.findCourseOrderByNumberOfMentee(2)     ;
+        CourseCategoryDAO daoCC = new CourseCategoryDAO();
+        int count = dao.findTotalRecordOrderByNumberOfMentee();
+//        List<Integer> in = new ArrayList<>();
+//        in.add(1);
+//        in.add(3);
+//        List<Integer> sameCategoryId = daoCC.getCategoryIdByCourseId(5);
+        List<Course> list = dao.getAllCourse3(1);
         for (Course course : list) {
             System.out.println(course);
         }
-        System.out.println(count);
+//        int totalRecord = dao.findTotalRecordEachCategoryLessThan2Courses();
+//        System.out.println(totalRecord);
     }
 
     public List<Category> getAllCategories() {
@@ -106,18 +113,53 @@ public class CourseDAO extends DBContext {
         return list;
     }
 
-    public List<Course> getSameCourse(int categoryId, int courseId) {
+    public List<Course> getSameCourse(int courseId) {
         List<Course> list = new ArrayList<>();
-        String sql = "SELECT Course.courseId, Course.courseName, Course.courseDescription, Course.createdAt\n"
-                + "FROM Course \n"
-                + "JOIN Course_Category ON Course.courseId = Course_Category.courseId\n"
-                + "JOIN Category ON Category.categoryId = Course_Category.categoryId\n"
-                + "WHERE Category.categoryId = ?\n"
-                + "AND Course.courseId != ?";
+        String sql = "SELECT Course.courseId, Course.courseName, Course.courseDescription, Course.createdAt "
+                + "FROM Course "
+                + "JOIN Course_Category ON Course.courseId = Course_Category.courseId "
+                + "JOIN Category ON Category.categoryId = Course_Category.categoryId "
+                + "WHERE Course.courseId != ? "
+                + "AND Category.categoryId IN (SELECT categoryId FROM Course_Category WHERE courseId = ?)";
+
         try {
             PreparedStatement st = connection.prepareStatement(sql);
-            st.setInt(1, categoryId);
+            st.setInt(1, courseId);
             st.setInt(2, courseId);
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("courseId");
+                String name = rs.getString("courseName");
+                String des = rs.getString("courseDescription");
+                Date date = rs.getDate("createdAt");
+                Course e = new Course(id, name, des, date);
+                list.add(e);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return list;
+    }
+
+    public List<Course> getEachCategoryLessThan2Courses() {
+        List<Course> list = new ArrayList<>();
+        String sql = "WITH RankedCourses AS (\n"
+                + "    SELECT Course.courseId, Course.courseName, \n"
+                + "           CAST(Course.courseDescription AS VARCHAR(255)) AS courseDescription, \n"
+                + "           Course.createdAt, \n"
+                + "           ROW_NUMBER() OVER (PARTITION BY Category.categoryId ORDER BY Course.courseId) AS rn\n"
+                + "    FROM Course \n"
+                + "    JOIN Course_Category ON Course.courseId = Course_Category.courseId\n"
+                + "    JOIN Category ON Category.categoryId = Course_Category.categoryId\n"
+                + "), DistinctCourses AS (\n"
+                + "    SELECT DISTINCT courseId, courseName, courseDescription, createdAt\n"
+                + "    FROM RankedCourses\n"
+                + "    WHERE rn <= 2\n"
+                + ")\n"
+                + "SELECT * FROM DistinctCourses;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("courseId");
@@ -134,47 +176,29 @@ public class CourseDAO extends DBContext {
         return list;
     }
 
-    public List<Course> getEachCategoryLessThan2Courses() {
+    public List<Course> getOtherCourseHasOtherCategory(List<Integer> categoryIds) {
         List<Course> list = new ArrayList<>();
-        String sql = "WITH RankedCourses AS (\n"
-                + "    SELECT Course.*, \n"
-                + "           ROW_NUMBER() OVER (PARTITION BY Category.categoryId ORDER BY Course.courseId) AS rn\n"
-                + "    FROM Course \n"
-                + "    JOIN Course_Category ON Course.courseId = Course_Category.courseId\n"
-                + "    JOIN Category ON Category.categoryId = Course_Category.categoryId\n"
-                + ")\n"
-                + "SELECT courseId, courseName, courseDescription, createdAt\n"
-                + "FROM RankedCourses\n"
-                + "WHERE rn <= 2;";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("courseId");
-                String name = rs.getString("courseName");
-                String des = rs.getString("courseDescription");
-                Date date = rs.getDate("createdAt");
-                Course e = new Course(id, name, des, date);
+        // Dynamically generate placeholders for the categoryIds
+        String placeholders = categoryIds.stream().map(id -> "?").collect(Collectors.joining(","));
 
-                list.add(e);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }
-        return list;
-    }       
-
-    public List<Course> getOtherCourseHasOtherCategory(int categoryId) {
-        List<Course> list = new ArrayList<>();
-        String sql = "SELECT Course.courseId, Course.courseName, Course.courseDescription, Course.createdAt\n"
+        String sql = "SELECT Course.courseId, Course.courseName, CAST(Course.courseDescription AS CHAR) AS courseDescription, Course.createdAt\n"
                 + "FROM Course \n"
                 + "JOIN Course_Category ON Course.courseId = Course_Category.courseId\n"
                 + "JOIN Category ON Category.categoryId = Course_Category.categoryId\n"
-                + "WHERE Category.categoryId != ?";
+                + "GROUP BY Course.courseId, Course.courseName, CAST(Course.courseDescription AS CHAR), Course.createdAt\n"
+                + "HAVING SUM(CASE WHEN Category.categoryId IN (" + placeholders + ") THEN 1 ELSE 0 END) = 0";
+
         try {
             PreparedStatement st = connection.prepareStatement(sql);
-            st.setInt(1, categoryId);
+
+            // Set the category IDs in the prepared statement
+            for (int i = 0; i < categoryIds.size(); i++) {
+                st.setInt(i + 1, categoryIds.get(i));
+            }
+
             ResultSet rs = st.executeQuery();
+
+            // Process the result set
             while (rs.next()) {
                 int id = rs.getInt("courseId");
                 String name = rs.getString("courseName");
@@ -185,8 +209,9 @@ public class CourseDAO extends DBContext {
                 list.add(e);
             }
         } catch (SQLException ex) {
-            System.out.println(ex);
+            ex.printStackTrace();  // Log the exception to make debugging easier
         }
+
         return list;
     }
 
@@ -377,7 +402,7 @@ public class CourseDAO extends DBContext {
 
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                
+
                 Course course = new Course();
                 course.setCourseId(resultSet.getInt("CourseId"));
                 course.setCourseName(resultSet.getString("CourseName"));
@@ -385,7 +410,7 @@ public class CourseDAO extends DBContext {
                 courses.add(course);
             }
         } catch (SQLException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
 
         return courses;
@@ -554,6 +579,75 @@ public class CourseDAO extends DBContext {
         return list;
     }
 
+    public int findTotalRecordEachCategoryLessThan2Courses() {
+        String sql = "WITH RankedCourses AS (\n"
+                + "    SELECT Course.courseId, Course.courseName, \n"
+                + "           CAST(Course.courseDescription AS VARCHAR(255)) AS courseDescription, \n"
+                + "           Course.createdAt, \n"
+                + "           ROW_NUMBER() OVER (PARTITION BY Category.categoryId ORDER BY Course.courseId) AS rn\n"
+                + "    FROM Course \n"
+                + "    JOIN Course_Category ON Course.courseId = Course_Category.courseId\n"
+                + "    JOIN Category ON Category.categoryId = Course_Category.categoryId\n"
+                + "), DistinctCourses AS (\n"
+                + "    SELECT DISTINCT courseId, courseName, courseDescription, createdAt\n"
+                + "    FROM RankedCourses\n"
+                + "    WHERE rn <= 2\n"
+                + ")\n"
+                + "SELECT count(*) FROM [DistinctCourses]";
+        int totalRecord = 0;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                totalRecord = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exceptions appropriately
+        }
+
+        return totalRecord;
+    }
+
+    public List<Course> getAllCourse3(int page) {
+        List<Course> list = new ArrayList<>();
+        String sql = "WITH RankedCourses AS (\n"
+                + "    SELECT Course.courseId, Course.courseName, \n"
+                + "           CAST(Course.courseDescription AS VARCHAR(255)) AS courseDescription, \n"
+                + "           Course.createdAt, \n"
+                + "           ROW_NUMBER() OVER (PARTITION BY Category.categoryId ORDER BY Course.courseId) AS rn\n"
+                + "    FROM Course \n"
+                + "    JOIN Course_Category ON Course.courseId = Course_Category.courseId\n"
+                + "    JOIN Category ON Category.categoryId = Course_Category.categoryId\n"
+                + "), DistinctCourses AS (\n"
+                + "    SELECT DISTINCT courseId, courseName, courseDescription, createdAt\n"
+                + "    FROM RankedCourses\n"
+                + "    WHERE rn <= 2\n"
+                + ")\n"
+                + "SELECT * FROM DistinctCourses\n" // Removed the semicolon here
+                + "ORDER BY courseId "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"; // This is part of the main query
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            int recordsPerPage = 4;
+            int offset = (page - 1) * recordsPerPage;
+            st.setInt(1, offset); // Corrected: set offset first
+            st.setInt(2, recordsPerPage);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("courseId");
+                String name = rs.getString("courseName");
+                String des = rs.getString("courseDescription");
+                Date date = rs.getDate("createdAt");
+                Course e = new Course(id, name, des, date);
+                list.add(e);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return list;
+    }
+
     public List<Course> findByCategory2(String categoryId, int page) {
 
         List<Course> list = new ArrayList<>();
@@ -562,12 +656,12 @@ public class CourseDAO extends DBContext {
                 + "JOIN Course_Category cc ON c.courseId = cc.courseId\n"
                 + "WHERE cc.categoryId = ? ORDER BY courseId OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
-         try {
+        try {
             PreparedStatement st = connection.prepareStatement(sql);
             int recordsPerPage = 5;
             int offset = (page - 1) * recordsPerPage;
-            st.setString(1, categoryId); 
-            st.setInt(2, offset); 
+            st.setString(1, categoryId);
+            st.setInt(2, offset);
             st.setInt(3, recordsPerPage);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
@@ -654,8 +748,6 @@ public class CourseDAO extends DBContext {
 
         return courses;
     }
-    
-    
 
     public List<Course> findCourseOrderByNumberOfMentee3(int page) {
         List<Course> courses = new ArrayList<>();
@@ -695,6 +787,7 @@ public class CourseDAO extends DBContext {
 
         return courses;
     }
+
     public List<Course> searchMentoringCoursesByName(String userName, String keyword, int page) {
         List<Course> courses = new ArrayList<>();
         String sql = "SELECT * FROM Course c "
@@ -710,7 +803,7 @@ public class CourseDAO extends DBContext {
             while (rs.next()) {
                 courses.add(mapCourse(rs));
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return courses;
