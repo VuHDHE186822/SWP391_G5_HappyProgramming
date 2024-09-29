@@ -10,12 +10,40 @@ public class Course {
     private String courseName;
     private String courseDescription;
     private Date createdAt;
+    private int countMentee;
+
+    public Course(int courseId, String courseName, String courseDescription, Date createdAt, int countMentee, List<Category> categories) {
+        this.courseId = courseId;
+        this.courseName = courseName;
+        this.courseDescription = courseDescription;
+        this.createdAt = createdAt;
+        this.countMentee = countMentee;
+        this.categories = categories;
+    }
+
+    public int getCountMentee() {
+        return countMentee;
+    }
+
+    public void setCountMentee(int countMentee) {
+        this.countMentee = countMentee;
+    }
+    
+    
 
     private List<Category> categories;  // A course can belong to multiple categories
 
     // Constructors
     public Course() {
         categories = new ArrayList<>();
+    }
+
+    public Course(int courseId, String courseName, String courseDescription, Date createdAt, List<Category> categories) {
+        this.courseId = courseId;
+        this.courseName = courseName;
+        this.courseDescription = courseDescription;
+        this.createdAt = createdAt;
+        this.categories = categories;
     }
     
     public Course(int courseId, String courseName, String courseDescription, Date createdAt) {

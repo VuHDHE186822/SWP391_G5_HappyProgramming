@@ -64,7 +64,7 @@ public class verifyServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            String verificationCode = request.getParameter("verificationCode");
+            String passWord = request.getParameter("passWord");
             String newPass = request.getParameter("newPass");
             String confirmPass = request.getParameter("confirmPass");
 
@@ -73,26 +73,24 @@ public class verifyServlet extends HttpServlet {
             boolean userFound = false;
             User foundUser = null;
             for (User u : users) {
-                if (verificationCode.equals(u.getVerificationCode())) {
+                if (passWord.equals(u.getPassword())) {
                     userFound = true; // Đánh dấu rằng người dùng đã tìm thấy
                     foundUser = u;
                     break; // Ngừng lặp sau khi tìm thấy người dùng
                 }
             }
             if (!userFound) {
-                request.setAttribute("error", "Verification code is invalid.");
+                request.setAttribute("error", "Password is invalid.");
                 request.getRequestDispatcher("verify.jsp").forward(request, response);
                 return;
             }
 
-            // Kiểm tra xem mật khẩu mới và mật khẩu xác nhận có khớp không
             if (!newPass.equals(confirmPass)) {
                 request.setAttribute("error", "Passwords do not match.");
                 request.getRequestDispatcher("verify.jsp").forward(request, response);
                 return;
             }
 
-            // Gọi hàm changePassword để cập nhật mật khẩu
             boolean passwordChanged = dao.resetPassWord(foundUser.getVerificationCode(), newPass);
             if (passwordChanged) {
                 request.setAttribute("success", "Password has been changed successfully.");
@@ -101,7 +99,6 @@ public class verifyServlet extends HttpServlet {
                 request.setAttribute("error", "Failed to change password. Please try again.");
                 request.getRequestDispatcher("verify.jsp").forward(request, response);
             }
-            // Nếu không tìm thấy người dùng tương ứng
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "An error occurred. Please try again.");

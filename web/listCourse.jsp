@@ -255,6 +255,9 @@
                 border-radius: 5px;
                 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             }
+            .lv3Text {
+                color:grey;
+            }
         </style>
     </head>
     <body>
@@ -303,55 +306,54 @@
                  course-navigation">
                 <div class="product-list">
                     <c:forEach items="${listByDate}" var="cou" end="2">
-                        <c:forEach items="${listCourse_Category}" var="cocat">
-                            <c:if test="${cocat.courseId == cou.courseId}">
-                                <c:forEach items="${listCategory}" var="cat">
-                                    <c:if test="${cat.categoryId == cocat.categoryId}">
-                                        <div class="product-item">
-                                            <div class="background" style="background-image: url('img/course_${cou.courseId}.jpg');"></div>
-                                            <div class="content">
-                                                <a href="viewcourse?courseId=${cou.courseId}" class="mentor-course">
-                                                    <h3>${cou.courseName}</h3>
-                                                </a>
-                                                <h6>Category: ${cat.categoryName}</h6>
-                                                <p class="short-description">${cou.courseDescription}</p>
-                                                <p>Created at: ${cou.createdAt}</p>
-                                                <button>Enroll</button>
-                                            </div>
-                                        </div>
-                                    </c:if>
-                                </c:forEach>
-                            </c:if>
-                        </c:forEach>
+                        <div class="product-item">
+                            <div class="background" style="background-image: url('img/course_${cou.courseId}.jpg');"></div>
+                            <div class="content">
+                                <a href="viewcourse?courseId=${cou.courseId}" class="mentor-course">
+                                    <h3>${cou.courseName}</h3>
+                                </a>
+                                <c:if test="${not empty cou.categories}">
+                                    <h6>Category: 
+                                        <c:forEach items="${cou.categories}" var="cat" varStatus="status">
+                                            ${cat.categoryName}<c:if test="${not status.last}">, </c:if>
+                                        </c:forEach>
+                                    </h6>
+                                </c:if>  
+                                <p class="short-description">${cou.courseDescription}</p>
+                                <p>Created at: ${cou.createdAt}</p>
+                                <h6 class = "lv3Text">Mentee in this coursr:${cou.countMentee} </h6>
+
+                                <button>Enroll</button>
+                            </div>
+                        </div>
                     </c:forEach>
                 </div>
             </div>
-        </section>
+        </section>      
 
         <section class="all-products">
             <h2 class="alo">COURSES</h2>
             <div class="product-list" id="product-list">
                 <c:forEach items="${listCourse}" var="cou">
-                    <c:forEach items="${listCourse_Category}" var="cocat">
-                        <c:if test="${cocat.courseId == cou.courseId}">
-                            <c:forEach items="${listCategory}" var="cat">
-                                <c:if test="${cat.categoryId == cocat.categoryId}">
-                                    <div class="product-item">
-                                        <div class="background" style="background-image: url('img/course_${cou.courseId}.jpg');"></div>
-                                        <div class="content">
-                                            <a href="viewcourse?courseId=${cou.courseId}" class="mentor-course">
-                                                <h3>${cou.courseName}</h3>
-                                            </a>
-                                            <h6>Category: ${cat.categoryName}</h6>
-                                            <p class="short-description">${cou.courseDescription}</p>
-                                            <h6>Created at: ${cou.createdAt}</h6>
-                                            <button>Enroll</button>
-                                        </div>
-                                    </div>
-                                </c:if>
-                            </c:forEach>
-                        </c:if>
-                    </c:forEach>
+                    <div class="product-item">
+                        <div class="background" style="background-image: url('img/course_${cou.courseId}.jpg');"></div>
+                        <div class="content">
+                            <a href="viewcourse?courseId=${cou.courseId}" class="mentor-course">
+                                <h3>${cou.courseName}</h3>
+                            </a>
+                            <c:if test="${not empty cou.categories}">
+                                <h6>Category: 
+                                    <c:forEach items="${cou.categories}" var="cat" varStatus="status">
+                                        ${cat.categoryName}<c:if test="${not status.last}">, </c:if>
+                                    </c:forEach>
+                                </h6>
+                            </c:if>
+                            <p class="short-description">${cou.courseDescription}</p>
+                            <h6>Created at: ${cou.createdAt}</h6>
+                            <h6 class = "lv3Text">Mentee in this coursr:${cou.countMentee} </h6>
+                            <button>Enroll</button>
+                        </div>
+                    </div>
                 </c:forEach>
             </div>
 

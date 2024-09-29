@@ -1,6 +1,6 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+                 * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+                 * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dal;
 
@@ -440,26 +440,6 @@ public class UserDAO extends DBContext {
         return list;
     }
 
-    public List<Course> getCourseByDate() {
-        List<Course> list = new ArrayList<>();
-        String sql = "SELECT * FROM Course ORDER BY createdAt DESC;";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("courseId");
-                String name = rs.getString("courseName");
-                String des = rs.getString("courseDescription");
-                Date date = rs.getDate("createdAt");
-                Course e = new Course(id, name, des, date);
-                list.add(e);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }
-        return list;
-    }
-
     public void verifyEmail(String username, User user) {
         String sql = "UPDATE [User] SET isVerified = ? WHERE username = ?";
 
@@ -472,10 +452,70 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public List<Course> getCourseByCategory() {
+    public void newPassWord(String username) {
 
-        
-
-
+        String sql = "DECLARE @NewCode VARCHAR(6);\n"
+                + "DECLARE @Username NVARCHAR(50) = 'your_username'; \n"
+                + "SET @NewCode = RIGHT(CONVERT(VARCHAR(10), CAST(NEWID() AS BINARY(4)) % 1000000), 6);\n"
+                + "WHILE EXISTS (SELECT 1 FROM [User] WHERE password = @NewCode)\n"
+                + "BEGIN\n"
+                + "    SET @NewCode = RIGHT(CONVERT(VARCHAR(10), CAST(NEWID() AS BINARY(4)) % 1000000), 6);\n"
+                + "END\n"
+                + "UPDATE [User]\n"
+                + "SET password = @NewCode\n"
+                + "WHERE username = ?;  ";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, username);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
+    public String newPassWord2(String username) {
+        String newCode = null;
+
+        // Generate new password in a separate query
+        String generatePasswordSql = 
+            "DECLARE @NewCode VARCHAR(6); " +
+            "SET @NewCode = RIGHT(CONVERT(VARCHAR(10), CAST(NEWID() AS BINARY(4)) % 1000000), 6); " +
+            "WHILE EXISTS (SELECT 1 FROM [User] WHERE password = @NewCode) " +
+            "BEGIN " +
+            "    SET @NewCode = RIGHT(CONVERT(VARCHAR(10), CAST(NEWID() AS BINARY(4)) % 1000000), 6); " +
+            "END; " +
+            "SELECT @NewCode AS NewPassword;";
+
+        // Update password
+        String updatePasswordSql = "UPDATE [User] SET password = ? WHERE username = ?;";
+
+        try {
+            // Step 1: Generate new password
+            try (PreparedStatement generateStmt = connection.prepareStatement(generatePasswordSql);
+                 ResultSet resultSet = generateStmt.executeQuery()) {
+                if (resultSet.next()) {
+                    newCode = resultSet.getString("NewPassword");
+                }
+            }
+
+            // Step 2: Update password in the database
+            if (newCode != null) {
+                try (PreparedStatement updateStmt = connection.prepareStatement(updatePasswordSql)) {
+                    updateStmt.setString(1, newCode);
+                    updateStmt.setString(2, username);
+                    updateStmt.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return newCode;
+    }
+
+    public static void main(String[] args) {
+        UserDAO dao = new UserDAO();
+        String s = dao.newPassWord2("admin");
+        System.out.println(s);
+    }
+
 }

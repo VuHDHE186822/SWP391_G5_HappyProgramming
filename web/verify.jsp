@@ -138,7 +138,7 @@
             <div class="changepass-form-left">
                 <h2>Change Password</h2>
                 <form action="verify" method="post">
-                    <input type="password" placeholder="Enter verification code" id="verificationCode" name="verificationCode" required>
+                    <input type="password" placeholder="Enter password you got from email" id="verificationCode" name="passWord" required>
                     <input type="password" placeholder="New password" id="newPass" name="newPass" required>
                     <input type="password" placeholder="Confirm new password" id="confirmPass" name="confirmPass" required>
                     <button type="submit" class="button-changepass">CHANGE PASSWORD</button>

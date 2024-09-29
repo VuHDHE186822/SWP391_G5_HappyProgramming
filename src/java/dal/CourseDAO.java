@@ -14,16 +14,6 @@ import model.User;
 
 public class CourseDAO extends DBContext {
 
-    public static void main(String[] args) {
-        CourseDAO dao = new CourseDAO();
-       int count = dao.findTotalRecordByCategory("1");
-        List<Course> list = dao.getAllCourse2(1)     ;
-        for (Course course : list) {
-            System.out.println(course);
-        }
-        System.out.println(count);
-    }
-
     public List<Category> getAllCategories() {
         List<Category> list = new ArrayList<>();
         String sql = "SELECT * FROM Category";
@@ -162,7 +152,7 @@ public class CourseDAO extends DBContext {
             System.out.println(ex);
         }
         return list;
-    }       
+    }
 
     public List<Course> getOtherCourseHasOtherCategory(int categoryId) {
         List<Course> list = new ArrayList<>();
@@ -363,32 +353,33 @@ public class CourseDAO extends DBContext {
 
     public List<Course> findByName(String keyword, int page) {
 
-        List<Course> courses = new ArrayList<>();
+        List<Course> list = new ArrayList<>();
         String sql = "SELECT * FROM [Course] WHERE courseName LIKE ? \n"
                 + "                 ORDER BY CourseId \n"
                 + "                 OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, "%" + keyword + "%");
-            int recordsPerPage = 5;
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, "%" + keyword + "%");
+            int recordsPerPage = 6;
             int offset = (page - 1) * recordsPerPage;
-            preparedStatement.setInt(2, offset);
-            preparedStatement.setInt(3, recordsPerPage);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                
-                Course course = new Course();
-                course.setCourseId(resultSet.getInt("CourseId"));
-                course.setCourseName(resultSet.getString("CourseName"));
-                course.setCourseDescription(resultSet.getString("courseDescription"));
-                courses.add(course);
+            st.setInt(2, offset);
+            st.setInt(3, recordsPerPage);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("courseId");
+                String name = rs.getString("courseName");
+                String des = rs.getString("courseDescription");
+                Date date = rs.getDate("createdAt");
+                List<Category> listC = getCategoriesForCourse(id);
+                Course e = new Course(id, name, des, date, listC);
+                list.add(e);
             }
-        } catch (SQLException e) {
-            e.printStackTrace(); 
+        } catch (SQLException ex) {
+            System.out.println(ex);
         }
 
-        return courses;
+        return list;
 
     }
 
@@ -528,14 +519,92 @@ public class CourseDAO extends DBContext {
         return totalRecord;
     }
 
+    public List<Category> getCategoriesForCourse(int id) {
+        List<Category> categories = new ArrayList<>();
+        String sql = "SELECT *\n"
+                + "FROM Category cat\n"
+                + "INNER JOIN Course_Category cc ON cat.categoryId = cc.categoryId\n"
+                + "WHERE cc.courseId = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                int iD = rs.getInt("categoryId");
+                String name = rs.getString("categoryName");
+                categories.add(new Category(iD, name));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return categories;
+
+    }
+
+    public List<Course> getCourseByDate() {
+        List<Course> list = new ArrayList<>();
+        String sql = "SELECT * FROM Course ORDER BY createdAt DESC;";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("courseId");
+                String name = rs.getString("courseName");
+                String des = rs.getString("courseDescription");
+                Date date = rs.getDate("createdAt");
+                List<Category> listC = getCategoriesForCourse(id);
+                Course e = new Course(id, name, des, date, listC);
+                list.add(e);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return list;
+    }
+
+    private int getNumOfMentee(int id) {
+
+        String sql = "SELECT COUNT(*)\n"
+                + "			FROM Course c\n"
+                + "			JOIN Participate p ON c.courseId = p.courseId\n"
+                + "			JOIN [User] u ON p.username = u.username\n"
+                + "			JOIN Status s ON p.statusId = s.statusId\n"
+                + "			WHERE p.participateRole = 3 AND p.statusId = 1 AND c.courseId = ?\n"
+                + "			GROUP BY c.courseId, c.courseName, \n"
+                + "			CAST(c.courseDescription AS NVARCHAR(MAX)), c.createdAt";
+        int totalMentee = 0;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                totalMentee = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exceptions appropriately
+        }
+
+        return totalMentee;
+
+    }
+
+    public static void main(String[] args) {
+        CourseDAO dao = new CourseDAO();
+
+        int numberOfMenteeInCourse1 = dao.getNumOfMentee(1);
+        System.out.println(numberOfMenteeInCourse1);
+    }
+     
+
     public List<Course> getAllCourse2(int page) {
         List<Course> list = new ArrayList<>();
         String sql = "SELECT * FROM [Course] "
                 + "ORDER BY courseId "
-                + "OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+                + "OFFSET ? ROWS FETCH NEXT 6 ROWS ONLY";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
-            int offset = (page - 1) * 5;
+            int offset = (page - 1) * 6;
             st.setInt(1, offset); // Corrected: set offset first
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
@@ -543,7 +612,9 @@ public class CourseDAO extends DBContext {
                 String name = rs.getString("courseName");
                 String des = rs.getString("courseDescription");
                 Date date = rs.getDate("createdAt");
-                Course e = new Course(id, name, des, date);
+                List<Category> listC = getCategoriesForCourse(id);
+                int countMentee = getNumOfMentee(id);
+                Course e = new Course(id, name, des, date,countMentee, listC);
                 list.add(e);
             }
         } catch (SQLException ex) {
@@ -560,12 +631,12 @@ public class CourseDAO extends DBContext {
                 + "JOIN Course_Category cc ON c.courseId = cc.courseId\n"
                 + "WHERE cc.categoryId = ? ORDER BY courseId OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
-         try {
+        try {
             PreparedStatement st = connection.prepareStatement(sql);
-            int recordsPerPage = 5;
+            int recordsPerPage = 6;
             int offset = (page - 1) * recordsPerPage;
-            st.setString(1, categoryId); 
-            st.setInt(2, offset); 
+            st.setString(1, categoryId);
+            st.setInt(2, offset);
             st.setInt(3, recordsPerPage);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
@@ -573,7 +644,8 @@ public class CourseDAO extends DBContext {
                 String name = rs.getString("courseName");
                 String des = rs.getString("courseDescription");
                 Date date = rs.getDate("createdAt");
-                Course e = new Course(id, name, des, date);
+                List<Category> listC = getCategoriesForCourse(id);
+                Course e = new Course(id, name, des, date, listC);
                 list.add(e);
             }
         } catch (SQLException ex) {
@@ -599,7 +671,7 @@ public class CourseDAO extends DBContext {
                 + "             CAST(c.courseDescription AS NVARCHAR(MAX)), \n"
                 + "             c.createdAt\n"
                 + ") AS subquery";
-        int totalRecord = 5;
+        int totalRecord = 0;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -631,7 +703,7 @@ public class CourseDAO extends DBContext {
                 + "ORDER BY user_count DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY ;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             // Tính toán offset và số lượng bản ghi trên một trang (giả sử mỗi trang có 10 khóa học)
-            int recordsPerPage = 5;
+            int recordsPerPage = 6;
             int offset = (page - 1) * recordsPerPage;
             preparedStatement.setInt(1, offset);
             preparedStatement.setInt(2, recordsPerPage);
@@ -652,8 +724,6 @@ public class CourseDAO extends DBContext {
 
         return courses;
     }
-    
-    
 
     public List<Course> findCourseOrderByNumberOfMentee3(int page) {
         List<Course> courses = new ArrayList<>();
@@ -672,7 +742,7 @@ public class CourseDAO extends DBContext {
                 + "ORDER BY user_count ASC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY ;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             // Tính toán offset và số lượng bản ghi trên một trang (giả sử mỗi trang có 10 khóa học)
-            int recordsPerPage = 5;
+            int recordsPerPage = 6;
             int offset = (page - 1) * recordsPerPage;
             preparedStatement.setInt(1, offset);
             preparedStatement.setInt(2, recordsPerPage);
@@ -693,24 +763,24 @@ public class CourseDAO extends DBContext {
 
         return courses;
     }
-    
+
     //My Courses
     public List<Course> searchMentoringCoursesByName(String userName, String keyword, int page) {
         List<Course> courses = new ArrayList<>();
         String sql = "SELECT * FROM Course c "
                 + "INNER JOIN Participate p ON c.courseId = p.courseId "
                 + "WHERE p.userName = ? AND p.participateRole = 2 AND c.courseName LIKE ? "
-                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 6 ROWS ONLY";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, userName);
             ps.setString(2, "%" + keyword + "%");
-            ps.setInt(3, (page - 1) * 5);
+            ps.setInt(3, (page - 1) * 6);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 courses.add(mapCourse(rs));
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return courses;
@@ -740,11 +810,11 @@ public class CourseDAO extends DBContext {
         String sql = "SELECT * FROM Course c "
                 + "INNER JOIN Participate p ON c.courseId = p.courseId "
                 + "WHERE p.userName = ? AND p.participateRole = 2 "
-                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 6 ROWS ONLY";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, userName);
-            ps.setInt(2, (page - 1) * 5);
+            ps.setInt(2, (page - 1) * 6);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 courses.add(mapCourse(rs));
@@ -778,12 +848,12 @@ public class CourseDAO extends DBContext {
         String sql = "SELECT * FROM Course c "
                 + "INNER JOIN Participate p ON c.courseId = p.courseId "
                 + "WHERE p.userName = ? AND p.participateRole = 3 AND c.courseName LIKE ? "
-                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 6 ROWS ONLY";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, userName);
             ps.setString(2, "%" + keyword + "%");
-            ps.setInt(3, (page - 1) * 5);  // Pagination logic
+            ps.setInt(3, (page - 1) * 6);  // Pagination logic
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 courses.add(mapCourse(rs));
@@ -818,11 +888,11 @@ public class CourseDAO extends DBContext {
         String sql = "SELECT * FROM Course c "
                 + "INNER JOIN Participate p ON c.courseId = p.courseId "
                 + "WHERE p.userName = ? AND p.participateRole = 3 "
-                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 6 ROWS ONLY";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, userName);
-            ps.setInt(2, (page - 1) * 5);
+            ps.setInt(2, (page - 1) * 6);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 courses.add(mapCourse(rs));
@@ -893,12 +963,12 @@ public class CourseDAO extends DBContext {
                 + "INNER JOIN Participate p ON c.courseId = p.courseId "
                 + "INNER JOIN Course_Category cc ON c.courseId = cc.courseId "
                 + "WHERE p.userName = ? AND p.participateRole = 2 AND cc.categoryId = ? "
-                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 6 ROWS ONLY";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, userName);
             ps.setString(2, categoryId);
-            ps.setInt(3, (page - 1) * 5);
+            ps.setInt(3, (page - 1) * 6);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 courses.add(mapCourse(rs));
@@ -935,12 +1005,12 @@ public class CourseDAO extends DBContext {
                 + "INNER JOIN Participate p ON c.courseId = p.courseId "
                 + "INNER JOIN Course_Category cc ON c.courseId = cc.courseId "
                 + "WHERE p.userName = ? AND p.participateRole = 3 AND cc.categoryId = ? "
-                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+                + "ORDER BY c.courseName OFFSET ? ROWS FETCH NEXT 6 ROWS ONLY";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, userName);
             ps.setString(2, categoryId);
-            ps.setInt(3, (page - 1) * 5);
+            ps.setInt(3, (page - 1) * 6);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 courses.add(mapCourse(rs));
@@ -971,6 +1041,5 @@ public class CourseDAO extends DBContext {
         return 1;
     }
     //End My Courses
-
 
 }

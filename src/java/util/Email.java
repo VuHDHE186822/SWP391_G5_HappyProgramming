@@ -1,5 +1,6 @@
 package util;
 
+import constant.Iconstant;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -15,8 +16,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import model.User;
-//import javax.activation.DataHandler;
-//import javax.activation.DataSource;
 
 /**
  *
@@ -24,7 +23,7 @@ import model.User;
  */
 public class Email {
 
-    public boolean sendMail(User user) {
+    public boolean sendNewPassToMail(User user, String newPass) {
         boolean test = false;
 
         String sendFrom = "yeudangyeunuoc2424@gmail.com";
@@ -48,35 +47,20 @@ public class Email {
         MimeMessage msg = new MimeMessage(session);
 
         try {
-
-//            message.setFrom(new InternetAddress(from));
-//            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-//            message.setSubject("Test Email");
-//            message.setText("Hello, this is a test email!");
-//content type
             msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
-            // who send
             msg.setFrom(new InternetAddress(sendFrom));
-            //recip
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sendTo, false));
-            //subtitle
-            msg.setSubject("Happy Programing: Your confirm code!!!" + System.currentTimeMillis());
-            //set send day
+            msg.setSubject("HAPPY PROGRAMING WARNING: AUTHENTIC EMAIL, DO NOT SHARE!" );
             msg.setSentDate(new Date());
-            //quy ddinhj emal nhan phan hoi(email khacs)
-            //--  msg.setReplyTo(InternetAddress.parse(from,false));
-//<<<<<<< HEAD
-//            String resetLink = "http://localhost:8080/HappyProgramming/verify.jsp"; // Thay đổi đường dẫn cho phù hợp
-//=======
-            String resetLink = "http://localhost:8080/HappyProgramming/verify.jsp"; // Thay đổi đường dẫn cho phù hợp
-//>>>>>>> 40c94f28736ae32f75d643b7591a89e796317341
-            msg.setContent("Verification code: " + user.getVerificationCode() + ". Reset your password <a href=\"" + resetLink + "\">HERE</a>", "text/html");
+            String resetLink = Iconstant.GOOGLE_REDIRECT_RESET;
+            msg.setContent("Your new password is: " + newPass + ". You can change your password <a href=\"" + resetLink + "\">HERE</a>", "text/html");
             Transport.send(msg);
             test = true;
         } catch (MessagingException e) {
             e.printStackTrace();
         }
         return test;
+
     }
 
     public String generateVerificationCode() {

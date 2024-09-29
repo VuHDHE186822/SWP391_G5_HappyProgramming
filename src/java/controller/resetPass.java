@@ -64,46 +64,53 @@ public class resetPass extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        @Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-        try {
-            String username = request.getParameter("username");
-            String email = request.getParameter("email");
+    try {
+        String username = request.getParameter("username");
+        String email = request.getParameter("email");
 
-            UserDAO dao = new UserDAO();
-            List<User> users = dao.getAll();
-            boolean userFound = false;
+        UserDAO dao = new UserDAO();
+        List<User> users = dao.getAll();
+        boolean userFound = false;
 
-            for (User u : users) {
-                if (username.equals(u.getUsername()) && email.equals(u.getMail())) {
-                    userFound = true; // Đánh dấu rằng người dùng đã tìm thấy
+        for (User u : users) {
+            if (username.equals(u.getUsername()) && email.equals(u.getMail())) {
+                userFound = true;
+
+                // Update the password in the database
+                String newPass = dao.newPassWord2(u.getUsername()); // Assuming this method returns the new password
+                if (newPass != null) { // Check if the password was updated successfully
                     Email em = new Email();
-                    boolean test = em.sendMail(u);
-                    if (test) {
+                    boolean emailSent = em.sendNewPassToMail(u, newPass); // Pass the new password to the email method
+                    if (emailSent) {
                         request.setAttribute("message", "The authentication code has been sent to your email!");
                     } else {
-                        request.setAttribute("error", "Error, try again");
+                        request.setAttribute("error", "Error sending email, please try again.");
                     }
-                    break; // Ngừng lặp sau khi tìm thấy người dùng
+                } else {
+                    request.setAttribute("error", "Error updating password, please try again.");
                 }
+                break; // Exit loop after finding the user
             }
-
-            // Nếu không tìm thấy người dùng tương ứng
-            if (!userFound) {
-                request.setAttribute("error", "Username or email is incorrect.");
-            }
-
-            // Chuyển tiếp đến trang JSP để hiển thị thông báo
-            request.getRequestDispatcher("forgetPass.jsp").forward(request, response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", "An error occurred. Please try again.");
-            request.getRequestDispatcher("forgetPass.jsp").forward(request, response);
         }
+
+        // If no matching user is found
+        if (!userFound) {
+            request.setAttribute("error", "Username or email is incorrect.");
+        }
+
+        // Forward to the JSP page to display messages
+        request.getRequestDispatcher("forgetPass.jsp").forward(request, response);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        request.setAttribute("error", "An error occurred. Please try again.");
+        request.getRequestDispatcher("forgetPass.jsp").forward(request, response);
     }
+}
 
     /**
      * Returns a short description of the servlet.

@@ -54,7 +54,6 @@
                                         
                                         
                                         
-                                        List<Course> listCourseByCategory = userDAO.getCourseByCategory();
                                         
                                         
                                         List<Category> listCategory = courseDAO.getAllCategories();
@@ -62,11 +61,10 @@
                                         List<User> listMentor = courseDAO.getAllMentor();
                                         List<User> listUser = userDAO.getAll();
                                         List<Course> listMostEnrollCourse = userDAO.getCourseByQuantityEnroll();
-                                        List<Course> listByDate = userDAO.getCourseByDate();
+                                        List<Course> listByDate = courseDAO.getCourseByDate();
                                         PageControl pageControl = new PageControl();
                                         List<Course> listCourse = findCourseDoGet(request, pageControl);
                                         HttpSession session = request.getSession();
-
                                         session.setAttribute("listMostEnrollCourse", listMostEnrollCourse);
                                         session.setAttribute("listUser", listUser);
                                         session.setAttribute("listCategory", listCategory);
@@ -151,7 +149,7 @@
                                 //                totalRecord = courseDAO.findTotalRecordByCategory(categoryId);
                                                 listCourse = courseDAO.findByUsername2(username);
                                                 pagecontrol.setUrlPattern(requestURL + "?search=username&username=" + username + "&");
-                                                break;
+                                                        break;
 
                                             default:
                                                 totalRecord = courseDAO.findTotalRecordAllCourses();
