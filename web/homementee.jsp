@@ -110,7 +110,7 @@
                     <div class="mentor-cards">
                         <c:forEach items="${sessionScope.mentor}" var="m" begin="0" end="3">
                             <div class="mentor-card">
-                                <img class="mentor-image-icon" alt="" src="https://zpsocial2-f4-org.zadn.vn/9790ea297aa49bfac2b5.jpg">
+                                <img class="mentor-image-icon" alt="" src="data:image/jpeg;base64, ${m.avatarPath}">
                                 <div class="mentor-body">
                                     <div class="mentor-text">
                                         <div style="color: black">${m.lastName} ${m.firstName}</div>
@@ -143,8 +143,7 @@
                 <c:if test="${not empty sessionScope.listCourse}">
                     <div class="row course-cards" id="course-container">
                         <c:forEach items="${sessionScope.listCourse}" var="c" varStatus="status">
-                            <a href="viewcourse?courseId=${c.courseId}" class="col-md-5 course-card"
-                               style="display: ${status.index < 4 ? 'block' : 'none'};">
+                            <a href="viewcourse?courseId=${c.courseId}" class="col-md-5 course-card">
                                 <div class="course-body">
                                     <div class="course-text">
                                         <div class="course-name">${c.courseName}</div>
@@ -160,7 +159,7 @@
                 </c:if>
                 <div class="pagination" id="course-section">
                     <ul>
-                        <c:forEach begin="1" end="${pageControl.totalPage - 2}" var="pageNumber">
+                        <c:forEach begin="1" end="${pageControl.totalPage}" var="pageNumber">
                             <li class="${pageNumber == pageControl.page ? 'active' : ''}">
                                 <a href="${pageControl.urlPattern}page=${pageNumber}#course-section">${pageNumber}</a>
                             </li>

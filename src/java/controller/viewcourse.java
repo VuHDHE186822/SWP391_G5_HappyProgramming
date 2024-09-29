@@ -7,6 +7,7 @@ package controller;
 import dal.CategoryDAO;
 import dal.CourseCategoryDAO;
 import dal.CourseDAO;
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,6 +20,7 @@ import java.util.List;
 import model.Category;
 import model.Course;
 import model.CourseCategory;
+import model.User;
 
 /**
  *
@@ -70,23 +72,27 @@ public class viewcourse extends HttpServlet {
         String courseId_str = request.getParameter("courseId");
         CategoryDAO daoCt = new CategoryDAO();
         CourseCategoryDAO daoCC = new CourseCategoryDAO();
+        UserDAO daoU = new UserDAO();
         try {
             int courseId = Integer.parseInt(courseId_str);
-            session.setAttribute("currentCourseId", courseId);
-
-            int sameCategoryId = daoCC.getCategoryIdByCourseId(courseId);
+            session.setAttribute("currentCourseId", courseId);     
             Course c = daoC.getCourseByCourseId(courseId);
-            List<Course> sameCourse = daoC.getSameCourse(sameCategoryId, courseId);
-            Category cate = daoCt.getCategoryByCategoryId(sameCategoryId);
+            List<Integer> sameCategoryId = daoCC.getCategoryIdByCourseId(courseId);
+            List<Course> sameCourse = daoC.getSameCourse(courseId);
+            Category cate = daoCt.getCategoryByCategoryId(courseId);
             List<Course> otherCourse = daoC.getOtherCourseHasOtherCategory(sameCategoryId);
+            List<User> mentor = daoU.getAllMentorByCourseId(courseId);
+            List<Category> allCategory = daoCt.getAll();
             List<Category> category = daoCt.getAllExceptOne(sameCategoryId);
-
-            session.setAttribute("category", category);
+            
+            session.setAttribute("category", allCategory);
+            session.setAttribute("sameCateId", sameCategoryId);
+            session.setAttribute("othercategory", category);
             session.setAttribute("otherCourse", otherCourse);
             session.setAttribute("sameCourse", sameCourse);
             session.setAttribute("categoryCourse", cate);
             session.setAttribute("courseDetail", c);
-
+            session.setAttribute("mentorThisCourse", mentor);
             response.sendRedirect("viewcourse.jsp?courseId=" + courseId);
         } catch (Exception e) {
             e.printStackTrace(); // In ra lỗi nếu có

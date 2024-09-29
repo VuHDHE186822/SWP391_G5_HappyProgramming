@@ -127,12 +127,18 @@ public class home extends HttpServlet {
         List<Course> listCourse;
         String requestURL = request.getRequestURL().toString();
         int totalRecord = 0;
-        totalRecord = dao.findTotalRecordAllCourses();
-        listCourse = dao.getAllCourse2(page);
+        totalRecord = dao.findTotalRecordEachCategoryLessThan2Courses();
+        listCourse = dao.getAllCourse3(page);
         pagecontrol.setUrlPattern(requestURL + "?");
+<<<<<<< HEAD
         int totalPage = (totalRecord % 6) == 0
                 ? (totalRecord / 6)
                 : (totalRecord / 6) + 1;
+=======
+        int totalPage = (totalRecord % 4) == 0
+                ? (totalRecord / 4)
+                : (totalRecord / 4) + 1;
+>>>>>>> 623080b1ff51eb984a650c78f86759cd4d2b1c4f
 
         pagecontrol.setPage(page);
         pagecontrol.setTotalPage(totalPage);

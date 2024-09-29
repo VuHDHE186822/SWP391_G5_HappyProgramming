@@ -58,8 +58,7 @@
                 <c:if test="${not empty sessionScope.listCourse}">
                     <div class="row course-cards" id="course-container">
                         <c:forEach items="${sessionScope.listCourse}" var="c" varStatus="status">
-                            <a href="viewcourse?courseId=${c.courseId}" class="col-md-5 course-card"
-                               style="display: ${status.index < 4 ? 'block' : 'none'};">
+                            <a href="viewcourse?courseId=${c.courseId}" class="col-md-5 course-card">
                                 <div class="course-body">
                                     <div class="course-text">
                                         <div class="course-name">${c.courseName}</div>
@@ -75,7 +74,7 @@
                 </c:if>
                 <div class="pagination" id="course-section">
                     <ul>
-                        <c:forEach begin="1" end="${pageControl.totalPage - 2}" var="pageNumber">
+                        <c:forEach begin="1" end="${pageControl.totalPage}" var="pageNumber">
                             <li class="${pageNumber == pageControl.page ? 'active' : ''}">
                                 <a href="${pageControl.urlPattern}page=${pageNumber}#course-section">${pageNumber}</a>
                             </li>
@@ -112,48 +111,7 @@
                         </c:if>
                     </c:forEach>
                 </div>
-
-                <div class="col-md-12">
-                    <ul class="listPage"></ul>
-                </div>
             </div>
-            <script>
-                let thisPage = 1;
-                let limit = 4;
-                let list = document.querySelectorAll('.mycourse-card');
-
-                function loadItem() {
-                    let beginGet = limit * (thisPage - 1);
-                    let endGet = limit * thisPage - 1;
-                    list.forEach((item, key) => {
-                        item.style.display = (key >= beginGet && key <= endGet) ? 'block' : 'none';
-                    });
-                    listPage();
-                }
-
-                function listPage() {
-                    let count = Math.ceil(list.length / limit);
-                    document.querySelector('.listPage').innerHTML = '';
-                    for (let i = 1; i <= count; i++) {
-                        let newPage = document.createElement('li');
-                        newPage.innerText = i;
-                        if (i === thisPage) {
-                            newPage.classList.add('active');
-                        }
-                        newPage.setAttribute('onclick', "changePage(" + i + ")");
-                        document.querySelector('.listPage').appendChild(newPage);
-                    }
-                }
-
-                function changePage(i) {
-                    thisPage = i;
-                    loadItem();
-                }
-
-                document.addEventListener('DOMContentLoaded', function () {
-                    loadItem();
-                });
-            </script>
 
             <!-- FOOTER -->
             <jsp:include page="footer.jsp"/>

@@ -384,7 +384,7 @@
                         <% session.removeAttribute("note"); %>
                         <div class="button-container">
                             <button type="submit" class="button-save" id="saveButton"  onclick="saveChanges()">Save Changes</button>
-                            <button type="button" class="button-save" id="cancelButton"  background-color: red;" onclick="window.location.href='userProfile.jsp'">Cancel</button>
+                            <button type="button" class="button-save" id="cancelButton"  style="background-color: red;" onclick="window.location.href='userProfile.jsp'">Cancel</button>
                         </div>
                     </form>
                 </div>

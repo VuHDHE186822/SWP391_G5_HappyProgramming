@@ -68,12 +68,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 /* CATEGORY */
 .category-list {
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
     padding: 30px;
     background-color: #f7f7f7;
+    margin: 0;
 }
 
 .category-card {
@@ -279,7 +281,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 .mentor-image-icon {
     width: 100%;
-    height: auto;
+    height: 300px;
     object-fit: cover;
     margin-bottom: 15px;
 }

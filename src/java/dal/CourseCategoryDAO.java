@@ -36,20 +36,21 @@ public class CourseCategoryDAO extends DBContext {
         return list;
     }
 
-    public int getCategoryIdByCourseId(int courseId) {
-        String sql = "SELECT categoryId FROM [Course_Category] where courseId = ?";
-        int categoryId = 0;
+    public List<Integer> getCategoryIdByCourseId(int courseId) {
+        List<Integer> list = new ArrayList<>();
+        String sql = "SELECT * FROM [Course_Category] where courseId = ?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, courseId);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                categoryId = rs.getInt("categoryId");
+                int categoryId = rs.getInt("categoryId");
+                list.add(categoryId);
             }
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-        return categoryId;
+        return list;
     }
 
     public List<CourseCategory> getAllByCategoryId(int categoryId) {
@@ -69,11 +70,11 @@ public class CourseCategoryDAO extends DBContext {
         }
         return list;
     }
-    
+
     public static void main(String[] args) {
         CourseCategoryDAO dao = new CourseCategoryDAO();
         List<CourseCategory> list = dao.getAllByCategoryId(1);
-        for(CourseCategory l : list) {
+        for (CourseCategory l : list) {
             System.out.println(l);
         }
     }
