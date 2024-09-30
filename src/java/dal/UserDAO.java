@@ -408,6 +408,22 @@ public class UserDAO extends DBContext {
         }
     }
 
+    public boolean checkUserDeactivated(String username) {
+        String sql = "SELECT * FROM [dbo].[User] WHERE username = ? and activeStatus = 0";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, username); // Set the username parameter
+            ResultSet rs = st.executeQuery();
+        //co ket qua thi return true (da deactivate)
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public List<User> getUsersBySearchName(String txt) {
         List<User> list = new ArrayList<>();
         String sql = "SELECT * FROM [dbo].[User] WHERE [firstName] LIKE ? or [lastName] LIKE ? ";
@@ -507,22 +523,21 @@ public class UserDAO extends DBContext {
         String newCode = null;
 
         // Generate new password in a separate query
-        String generatePasswordSql = 
-            "DECLARE @NewCode VARCHAR(6); " +
-            "SET @NewCode = RIGHT(CONVERT(VARCHAR(10), CAST(NEWID() AS BINARY(4)) % 1000000), 6); " +
-            "WHILE EXISTS (SELECT 1 FROM [User] WHERE password = @NewCode) " +
-            "BEGIN " +
-            "    SET @NewCode = RIGHT(CONVERT(VARCHAR(10), CAST(NEWID() AS BINARY(4)) % 1000000), 6); " +
-            "END; " +
-            "SELECT @NewCode AS NewPassword;";
+        String generatePasswordSql
+                = "DECLARE @NewCode VARCHAR(6); "
+                + "SET @NewCode = RIGHT(CONVERT(VARCHAR(10), CAST(NEWID() AS BINARY(4)) % 1000000), 6); "
+                + "WHILE EXISTS (SELECT 1 FROM [User] WHERE password = @NewCode) "
+                + "BEGIN "
+                + "    SET @NewCode = RIGHT(CONVERT(VARCHAR(10), CAST(NEWID() AS BINARY(4)) % 1000000), 6); "
+                + "END; "
+                + "SELECT @NewCode AS NewPassword;";
 
         // Update password
         String updatePasswordSql = "UPDATE [User] SET password = ? WHERE username = ?;";
 
         try {
             // Step 1: Generate new password
-            try (PreparedStatement generateStmt = connection.prepareStatement(generatePasswordSql);
-                 ResultSet resultSet = generateStmt.executeQuery()) {
+            try (PreparedStatement generateStmt = connection.prepareStatement(generatePasswordSql); ResultSet resultSet = generateStmt.executeQuery()) {
                 if (resultSet.next()) {
                     newCode = resultSet.getString("NewPassword");
                 }
@@ -549,7 +564,6 @@ public class UserDAO extends DBContext {
         System.out.println(s);
     }
 
-    
 //    public static void main(String[] args) {
 //        UserDAO dao = new UserDAO();
 //        List<User> list = dao.getAllMentorByCourseId(1);
