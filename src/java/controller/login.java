@@ -28,6 +28,10 @@ public class login extends HttpServlet {
         HttpSession session = request.getSession();
         response.setContentType("text/html;charset=UTF-8");
         String code = request.getParameter("code");
+        String error = request.getParameter("error");
+        if (error != null) {
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
         googlelogin gg = new googlelogin();
         String accessToken = gg.getToken(code);
         GoogleAccount acc = gg.getUserInfo(accessToken);
