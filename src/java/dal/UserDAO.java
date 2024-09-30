@@ -483,7 +483,6 @@ public class UserDAO extends DBContext {
             e.printStackTrace();
         }
     }
-<<<<<<< HEAD
 
     public void newPassWord(String username) {
 
@@ -551,14 +550,12 @@ public class UserDAO extends DBContext {
         System.out.println(s);
     }
 
-=======
     
-    public static void main(String[] args) {
-        UserDAO dao = new UserDAO();
-        List<User> list = dao.getAllMentorByCourseId(1);
-        for(User l : list) {
-            System.out.println(l);
-        }
-    }
->>>>>>> 623080b1ff51eb984a650c78f86759cd4d2b1c4f
+//    public static void main(String[] args) {
+//        UserDAO dao = new UserDAO();
+//        List<User> list = dao.getAllMentorByCourseId(1);
+//        for(User l : list) {
+//            System.out.println(l);
+//        }
+//    }
 }

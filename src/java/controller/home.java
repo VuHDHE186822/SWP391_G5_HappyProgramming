@@ -42,7 +42,6 @@ public class home extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -127,18 +126,12 @@ public class home extends HttpServlet {
         List<Course> listCourse;
         String requestURL = request.getRequestURL().toString();
         int totalRecord = 0;
-        totalRecord = dao.findTotalRecordEachCategoryLessThan2Courses();
-        listCourse = dao.getAllCourse3(page);
+        totalRecord = dao.findTotalRecordAllCourses();
+        listCourse = dao.getAllCourse2(page);
         pagecontrol.setUrlPattern(requestURL + "?");
-<<<<<<< HEAD
         int totalPage = (totalRecord % 6) == 0
                 ? (totalRecord / 6)
                 : (totalRecord / 6) + 1;
-=======
-        int totalPage = (totalRecord % 4) == 0
-                ? (totalRecord / 4)
-                : (totalRecord / 4) + 1;
->>>>>>> 623080b1ff51eb984a650c78f86759cd4d2b1c4f
 
         pagecontrol.setPage(page);
         pagecontrol.setTotalPage(totalPage);

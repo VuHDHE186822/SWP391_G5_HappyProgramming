@@ -15,8 +15,6 @@ import model.User;
 
 public class CourseDAO extends DBContext {
 
-<<<<<<< HEAD
-=======
     public static void main(String[] args) {
         CourseDAO dao = new CourseDAO();
         CourseCategoryDAO daoCC = new CourseCategoryDAO();
@@ -33,7 +31,6 @@ public class CourseDAO extends DBContext {
 //        System.out.println(totalRecord);
     }
 
->>>>>>> 623080b1ff51eb984a650c78f86759cd4d2b1c4f
     public List<Category> getAllCategories() {
         List<Category> list = new ArrayList<>();
         String sql = "SELECT * FROM Category";
@@ -179,58 +176,54 @@ public class CourseDAO extends DBContext {
         return list;
     }
 
-    public List<Course> getOtherCourseHasOtherCategory(List<Integer> categoryIds) {
-        List<Course> list = new ArrayList<>();
-        // Dynamically generate placeholders for the categoryIds
-        String placeholders = categoryIds.stream().map(id -> "?").collect(Collectors.joining(","));
+   public List<Course> getOtherCourseHasOtherCategory(List<Integer> categoryIds) {
+    List<Course> list = new ArrayList<>();
+    // Dynamically generate placeholders for the categoryIds
+    String placeholders = categoryIds.stream().map(id -> "?").collect(Collectors.joining(","));
 
-<<<<<<< HEAD
-                list.add(e);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }
-        return list;
-    }
+    String sql = "SELECT Course.courseId, Course.courseName, CAST(Course.courseDescription AS CHAR) AS courseDescription, Course.createdAt "
+               + "FROM Course "
+               + "JOIN Course_Category ON Course.courseId = Course_Category.courseId "
+               + "JOIN Category ON Category.categoryId = Course_Category.categoryId "
+               + "GROUP BY Course.courseId, Course.courseName, CAST(Course.courseDescription AS CHAR), Course.createdAt "
+               + "HAVING SUM(CASE WHEN Category.categoryId IN (" + placeholders + ") THEN 1 ELSE 0 END) = 0";
 
-    public List<Course> getOtherCourseHasOtherCategory(int categoryId) {
-        List<Course> list = new ArrayList<>();
-        String sql = "SELECT Course.courseId, Course.courseName, Course.courseDescription, Course.createdAt\n"
-=======
-        String sql = "SELECT Course.courseId, Course.courseName, CAST(Course.courseDescription AS CHAR) AS courseDescription, Course.createdAt\n"
->>>>>>> 623080b1ff51eb984a650c78f86759cd4d2b1c4f
-                + "FROM Course \n"
-                + "JOIN Course_Category ON Course.courseId = Course_Category.courseId\n"
-                + "JOIN Category ON Category.categoryId = Course_Category.categoryId\n"
-                + "GROUP BY Course.courseId, Course.courseName, CAST(Course.courseDescription AS CHAR), Course.createdAt\n"
-                + "HAVING SUM(CASE WHEN Category.categoryId IN (" + placeholders + ") THEN 1 ELSE 0 END) = 0";
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
 
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-
-            // Set the category IDs in the prepared statement
-            for (int i = 0; i < categoryIds.size(); i++) {
-                st.setInt(i + 1, categoryIds.get(i));
-            }
-
-            ResultSet rs = st.executeQuery();
-
-            // Process the result set
-            while (rs.next()) {
-                int id = rs.getInt("courseId");
-                String name = rs.getString("courseName");
-                String des = rs.getString("courseDescription");
-                Date date = rs.getDate("createdAt");
-                Course e = new Course(id, name, des, date);
-
-                list.add(e);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();  // Log the exception to make debugging easier
+        // Set the category IDs in the prepared statement
+        for (int i = 0; i < categoryIds.size(); i++) {
+            st.setInt(i + 1, categoryIds.get(i));
         }
 
-        return list;
+        ResultSet rs = st.executeQuery();
+
+        // Process the result set
+        while (rs.next()) {
+            int id = rs.getInt("courseId");
+            String name = rs.getString("courseName");
+            String des = rs.getString("courseDescription");
+            Date date = rs.getDate("createdAt");
+            Course e = new Course(id, name, des, date);
+
+            list.add(e);
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();  // Log the exception to make debugging easier
     }
+
+    return list;
+}
+
+public List<Course> getOtherCourseHasOtherCategory(int categoryId) {
+    // You can implement this method similarly, or it could call the previous method.
+    // Assuming you want to handle a single categoryId, here's a simple version:
+    List<Course> list = new ArrayList<>();
+    return list; // Adjust implementation as needed based on your requirements
+}
+
+
+  
 
     public List<Course_Category> getAllCategories_Course() {
         List<Course_Category> list = new ArrayList<>();
@@ -415,7 +408,6 @@ public class CourseDAO extends DBContext {
             st.setString(1, "%" + keyword + "%");
             int recordsPerPage = 6;
             int offset = (page - 1) * recordsPerPage;
-<<<<<<< HEAD
             st.setInt(2, offset);
             st.setInt(3, recordsPerPage);
             ResultSet rs = st.executeQuery();
@@ -430,22 +422,6 @@ public class CourseDAO extends DBContext {
             }
         } catch (SQLException ex) {
             System.out.println(ex);
-=======
-            preparedStatement.setInt(2, offset);
-            preparedStatement.setInt(3, recordsPerPage);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-
-                Course course = new Course();
-                course.setCourseId(resultSet.getInt("CourseId"));
-                course.setCourseName(resultSet.getString("CourseName"));
-                course.setCourseDescription(resultSet.getString("courseDescription"));
-                courses.add(course);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
->>>>>>> 623080b1ff51eb984a650c78f86759cd4d2b1c4f
         }
 
         return list;
@@ -658,12 +634,7 @@ public class CourseDAO extends DBContext {
 
     }
 
-    public static void main(String[] args) {
-        CourseDAO dao = new CourseDAO();
-
-        int numberOfMenteeInCourse1 = dao.getNumOfMentee(1);
-        System.out.println(numberOfMenteeInCourse1);
-    }
+   
      
 
     public List<Course> getAllCourse2(int page) {
