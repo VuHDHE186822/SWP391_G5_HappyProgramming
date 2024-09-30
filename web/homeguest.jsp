@@ -106,9 +106,9 @@
                 <div class="mentor-content-heading">
                     <div class="mentor-heading">SEE OUR MENTORS</div>
                 </div>
-                <c:if test="${not empty sessionScope.mentor}">
+                <c:if test="${not empty sessionScope.choosedMentor}">
                     <div class="mentor-cards">
-                        <c:forEach items="${sessionScope.mentor}" var="m" begin="0" end="3">
+                        <c:forEach items="${sessionScope.choosedMentor}" var="m" begin="0" end="3">
                             <div class="mentor-card">
                                     <img class="mentor-image-icon" alt="" src="data:image/jpeg;base64, ${m.avatarPath}">
                                 <div class="mentor-body">

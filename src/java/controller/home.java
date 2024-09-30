@@ -1,4 +1,4 @@
-                    /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
@@ -72,11 +72,29 @@ public class home extends HttpServlet {
         ParticipateDAO daoP = new ParticipateDAO();
         CategoryDAO daoCt = new CategoryDAO();
         List<User> mentor = daoU.getAllUserByRoleId(2);
+        List<Course> allCourse = daoC.getAll();
         List<Course> course = daoC.getEachCategoryLessThan2Courses();
         List<Category> category = daoCt.getAll();
         List<User> mentee = daoU.getAllUserByRoleId(3);
+        List<User> choosedMentee = new ArrayList<>();
         List<Course> sortedCourse = daoC.getAllCourseOrderByDESCMenteeNum();
         List<Participate> participate = daoP.getAll();
+        for (User m : mentor) {
+            int count = 0;
+            for (Participate p : participate) {
+                if (m.getUsername().equals(p.getUsername())) {
+                    for (Course c : allCourse) {
+                        if (c.getCourseId() == p.getCourseId()) {
+                            count++;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (count >= 2) {
+                choosedMentee.add(m);
+            }
+        }
         int countCourse = daoC.countCourse();
         int countMentor = daoU.countUser(2);
         int countMentee = daoU.countUser(3);
@@ -89,6 +107,7 @@ public class home extends HttpServlet {
         session.setAttribute("mentee", mentee);
         session.setAttribute("participate", participate);
         session.setAttribute("sortedCourses", sortedCourse);
+        session.setAttribute("choosedMentor", choosedMentee);
         PageControl pageControl = new PageControl();
         List<Course> listCourse = findCourseDoGet(request, pageControl);
         session.setAttribute("listCourse", listCourse);

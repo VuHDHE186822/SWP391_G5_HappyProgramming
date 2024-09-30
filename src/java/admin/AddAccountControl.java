@@ -61,7 +61,7 @@ public class AddAccountControl extends HttpServlet {
         }
 
         // Forward the request to the account management page
-        request.getRequestDispatcher("managerAccount").forward(request, response);
+        request.getRequestDispatcher("ManagerAccount").forward(request, response);
     }
 
     @Override
