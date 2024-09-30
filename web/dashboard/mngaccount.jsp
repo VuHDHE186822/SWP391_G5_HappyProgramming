@@ -175,8 +175,8 @@
                                                 <td class="text_page" style="font-weight: 500">${t.dob}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.mail}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.createdDate}</td>
-                                                <td class="text_page" style="font-weight: 500">${t.avatarPath}</td>
-                                                <td class="text_page" style="font-weight: 500">${t.cvPath}</td>
+                                                <td class="text_page" style="font-weight: 500; max-width: 150px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">${t.avatarPath}</td>
+                                                <td class="text_page" style="font-weight: 500; max-width: 150px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">${t.cvPath}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.activeStatus}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.isVerified}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.roleId}</td>
