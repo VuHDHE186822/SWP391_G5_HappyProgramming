@@ -157,9 +157,9 @@
                                                 pagecontrol.setUrlPattern(requestURL + "?");
 
                                         }
-                                       int totalPage = (totalRecord % 5) == 0
-                                                ? (totalRecord / 5)
-                                                : (totalRecord / 5) + 1;
+                                       int totalPage = (totalRecord % 6) == 0
+                                                ? (totalRecord / 6)
+                                                : (totalRecord / 6) + 1;
 
                                         pagecontrol.setPage(page);
                                         pagecontrol.setTotalPage(totalPage);
