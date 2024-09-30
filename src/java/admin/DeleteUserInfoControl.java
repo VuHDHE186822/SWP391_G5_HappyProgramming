@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -45,21 +46,17 @@ public class DeleteUserInfoControl extends HttpServlet {
         } else {
             msg = "Error deactivating user " + username + ".";
         }
-
+        HttpSession session = request.getSession();
+        
         // Set message and forward to the account management page
-        request.setAttribute("mess", msg);
-        request.getRequestDispatcher("ManagerAccount").forward(request, response);
+        session.setAttribute("mess", msg);
+        response.sendRedirect("ManagerAccount");
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-
-        String username = request.getParameter("username");
-        request.setAttribute("username", username);
-        request.getRequestDispatcher("dashboard/deleteAccount.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     @Override
