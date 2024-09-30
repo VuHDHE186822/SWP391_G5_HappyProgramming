@@ -194,7 +194,7 @@ public class UserDAO extends DBContext {
     public boolean resetPassWord(String veriCode, String newPass) {
         boolean f = false;
         try {
-            String sql = "update [User] set password = ? where [verification_code] = ?";
+            String sql = "update [User] set password = ? where [password] = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, newPass);
             ps.setString(2, veriCode);

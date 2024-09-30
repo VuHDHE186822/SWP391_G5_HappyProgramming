@@ -91,7 +91,7 @@ public class verifyServlet extends HttpServlet {
                 return;
             }
 
-            boolean passwordChanged = dao.resetPassWord(foundUser.getVerificationCode(), newPass);
+            boolean passwordChanged = dao.resetPassWord(foundUser.getPassword(), newPass);
             if (passwordChanged) {
                 request.setAttribute("success", "Password has been changed successfully.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
