@@ -167,7 +167,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach items="${requestScope.listUsers}" var="t">
+                                        <c:forEach items="${sessionScope.listUsers}" var="t">
                                             <tr>
                                                 <td class="text_page" style="font-weight: 500">${t.username}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.firstName}</td>
