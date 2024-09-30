@@ -326,7 +326,7 @@ public class UserDAO extends DBContext {
     }
 
     public boolean checkUserNameDuplicate(String username) {
-        String sql = "SELECT * FROM [dbo].[User] WHERE username = ? AND [activeStatus] = 1";
+        String sql = "SELECT * FROM [dbo].[User] WHERE username = ?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, username); // Set the username parameter
@@ -339,7 +339,6 @@ public class UserDAO extends DBContext {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 
