@@ -46,8 +46,10 @@ public class UpdateUserInfoControl extends HttpServlet {
         boolean success = dao.updateUserInfo(username, firstName, lastName, dob, email, avatarPath, cvPath, activeStatus, isVerified, roleId);
         if (success) {
             msg = "User " + username + " updated successfully!";
+            request.setAttribute("mess", msg);
         } else {
             msg = "Error updating user " + username + ".";
+            request.setAttribute("error", msg);
         }
 
         request.setAttribute("mess", msg);
