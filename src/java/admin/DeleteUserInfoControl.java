@@ -37,20 +37,27 @@ public class DeleteUserInfoControl extends HttpServlet {
         String username = request.getParameter("username");
 
         UserDAO dao = new UserDAO();
-        String msg;
+        String msg = null;
 
-        // Call the DAO method to update the active status to 0 (inactive)
-        boolean success = dao.deactivateUser(username);
-        if (success) {
-            msg = "User " + username + " has been deactivated successfully!";
+        boolean check = dao.checkUserDeactivated(username);
+        if (check) {
+            msg = "This user is already deactivated!";
+            request.setAttribute("error", msg);
+
         } else {
-            msg = "Error deactivating user " + username + ".";
+            boolean success = dao.deactivateUser(username);
+            if (success) {
+                // Call the DAO method to update the active status to 0 (inactive)
+                msg = "User " + username + " has been deactivated successfully!";
+                request.setAttribute("mess", msg);
+
+            } else {
+                msg = "Error deactivating user " + username + ".";
+                request.setAttribute("error", msg);
+            }
         }
-        HttpSession session = request.getSession();
         
-        // Set message and forward to the account management page
-        session.setAttribute("mess", msg);
-        response.sendRedirect("ManagerAccount");
+        request.getRequestDispatcher("ManagerAccount").forward(request, response);
     }
 
     @Override
