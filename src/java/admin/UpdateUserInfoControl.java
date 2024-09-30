@@ -51,7 +51,7 @@ public class UpdateUserInfoControl extends HttpServlet {
         }
 
         request.setAttribute("mess", msg);
-        request.getRequestDispatcher("managerAccount").forward(request, response);
+        request.getRequestDispatcher("ManagerAccount").forward(request, response);
     }
 
     @Override
