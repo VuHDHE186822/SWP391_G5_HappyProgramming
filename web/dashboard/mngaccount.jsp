@@ -235,7 +235,7 @@
                             <!-- Date of Birth -->
                             <div class="form-group">
                                 <label>Date of Birth</label>
-                                <input name="dob" type="date" class="form-control" id="updateDob" required>
+                                <input name="dob" type="date" class="form-control" id="updateDob" max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>" required>
                             </div>
                             <!-- Email -->
                             <div class="form-group">
@@ -315,7 +315,7 @@
                             <!-- Date of Birth -->
                             <div class="form-group">
                                 <label>Date of Birth</label>
-                                <input name="dob" type="date" class="form-control" required>
+                                <input name="dob" type="date" class="form-control" max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>" required>
                             </div>
                             <!-- Email -->
                             <div class="form-group">
