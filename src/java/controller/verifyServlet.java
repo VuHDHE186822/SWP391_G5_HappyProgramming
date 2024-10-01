@@ -48,7 +48,7 @@ public class verifyServlet extends HttpServlet {
         List<User> listUser = dao.getAll();
         session.setAttribute("listUser", listUser);
 
-        request.getRequestDispatcher("forgetPass.jsp").forward(request, response);
+        request.getRequestDispatcher("verify.jsp").forward(request, response);
     }
 
     /**
@@ -101,7 +101,7 @@ public class verifyServlet extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "An error occurred. Please try again.");
+            request.setAttribute("error", "");
             request.getRequestDispatcher("verify.jsp").forward(request, response);
         }
     }
