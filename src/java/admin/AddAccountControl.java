@@ -21,8 +21,7 @@ public class AddAccountControl extends HttpServlet {
             throws ServletException, IOException, ParseException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-          
-        
+
         // Retrieve form parameters from the request
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -45,7 +44,7 @@ public class AddAccountControl extends HttpServlet {
         // Role ID: Based on the selected role from the dropdown (1 for Admin, 2 for Mentor, 3 for Mentee)
         int roleId = Integer.parseInt(request.getParameter("roleId"));
 
-        String msg = "";
+        String msg = null;
         UserDAO dao = new UserDAO();
 
         // Check if the username already exists
@@ -59,9 +58,8 @@ public class AddAccountControl extends HttpServlet {
             msg = "Username " + username + " added successfully!";
             request.setAttribute("mess", msg);
         }
-
         // Forward the request to the account management page
-        request.getRequestDispatcher("managerAccount").forward(request, response);
+        request.getRequestDispatcher("ManagerAccount").forward(request, response);
     }
 
     @Override

@@ -14,7 +14,7 @@
     <body>
         <%
             session.removeAttribute("user");
-            response.sendRedirect("homeguest.jsp");
+            response.sendRedirect("home");
         %>
     </body>
 </html>

@@ -167,7 +167,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach items="${requestScope.listUsers}" var="t">
+                                        <c:forEach items="${sessionScope.listUsers}" var="t">
                                             <tr>
                                                 <td class="text_page" style="font-weight: 500">${t.username}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.firstName}</td>
@@ -175,8 +175,8 @@
                                                 <td class="text_page" style="font-weight: 500">${t.dob}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.mail}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.createdDate}</td>
-                                                <td class="text_page" style="font-weight: 500">${t.avatarPath}</td>
-                                                <td class="text_page" style="font-weight: 500">${t.cvPath}</td>
+                                                <td class="text_page" style="font-weight: 500; max-width: 150px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">${t.avatarPath}</td>
+                                                <td class="text_page" style="font-weight: 500; max-width: 150px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">${t.cvPath}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.activeStatus}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.isVerified}</td>
                                                 <td class="text_page" style="font-weight: 500">${t.roleId}</td>
@@ -235,7 +235,7 @@
                             <!-- Date of Birth -->
                             <div class="form-group">
                                 <label>Date of Birth</label>
-                                <input name="dob" type="date" class="form-control" id="updateDob" required>
+                                <input name="dob" type="date" class="form-control" id="updateDob" max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>" required>
                             </div>
                             <!-- Email -->
                             <div class="form-group">
@@ -315,7 +315,7 @@
                             <!-- Date of Birth -->
                             <div class="form-group">
                                 <label>Date of Birth</label>
-                                <input name="dob" type="date" class="form-control" required>
+                                <input name="dob" type="date" class="form-control" max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>" required>
                             </div>
                             <!-- Email -->
                             <div class="form-group">

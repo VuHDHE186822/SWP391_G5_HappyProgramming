@@ -15,6 +15,14 @@
             align-items: center;
             height: 100vh;
         }
+  
+            body {
+                background-color: #f5f5f5;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
 
         .changepass-form {
             background-color: #fff;

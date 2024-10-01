@@ -53,7 +53,7 @@
     </head>
     <body>
         <div id="head_vip" class="header_container sticky-header" style="width: 100%;
-             background-color: black;
+             background-color: #edf2fa;
              padding: 21px;
              margin-bottom: 40px;
              z-index: 1">
