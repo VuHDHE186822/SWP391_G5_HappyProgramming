@@ -40,6 +40,7 @@ public class addcourse extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            HttpSession session = request.getSession();
             String courseName = request.getParameter("courseName");
             String description = request.getParameter("description");
             String[] categoryIds = request.getParameterValues("categoryIds");
@@ -48,14 +49,13 @@ public class addcourse extends HttpServlet {
             c.setCourseDescription(description);
             c.setCreatedAt(new Date());
             CourseDAO dao = new CourseDAO();
-            HttpSession session = request.getSession();
             if (dao.isCourseNameDuplicate(courseName)) {
                 session.setAttribute("failedMsg", "Course name already exists!");
             } else {
                 boolean f = dao.addCourse(c);
                 if (f) {
                     int courseId = dao.getCourseId(c);
-                    for(String categoryId : categoryIds) {
+                    for (String categoryId : categoryIds) {
                         dao.addCourseCategory(Integer.parseInt(categoryId), courseId);
                     }
                     session.setAttribute("succMsg", "Create new course successfully!");
